@@ -11,7 +11,12 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "..",
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@workspace/shared-types": ["../packages/shared-types/src/index.ts"],
+      "@workspace/shared-utils": ["../packages/shared-utils/src/index.ts"]
+    }
   },
-  "include": ["src/**/*", "prisma/**/*", "../packages/shared-config/**/*"]
+  "include": ["src/**/*", "prisma/**/*", "../packages/**/*"]
 }
