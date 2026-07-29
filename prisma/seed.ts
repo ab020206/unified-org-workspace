@@ -303,6 +303,14 @@ async function main() {
     },
   });
 
+  // Helper function to process async array operations in controlled chunks (avoids Prisma pool timeouts)
+  const runInChunks = async <T>(items: T[], chunkSize: number, fn: (item: T, index: number) => Promise<any>) => {
+    for (let i = 0; i < items.length; i += chunkSize) {
+      const chunk = items.slice(i, i + chunkSize);
+      await Promise.all(chunk.map((item, idx) => fn(item, i + idx)));
+    }
+  };
+
   // 5. Seed Tickets (35 realistic tickets)
   console.info('  • Seeding 35+ Realistic Tickets...');
   const ticketTopics = [
@@ -323,7 +331,9 @@ async function main() {
     { title: 'Customer reporting login failure after password change', category: TicketCategory.ACCOUNT, priority: TicketPriority.MEDIUM, status: TicketStatus.RESOLVED },
   ];
 
-  for (let i = 0; i < 35; i++) {
+  const createdTickets: any[] = [];
+  const ticketIndices = Array.from({ length: 35 }, (_, i) => i);
+  await runInChunks(ticketIndices, 10, async (i) => {
     const topic = ticketTopics[i % ticketTopics.length];
     const org = i % 2 === 0 ? acmeOrg : techNovaOrg;
     const creator = i % 2 === 0 ? adminAcme : adminTechNova;
@@ -365,27 +375,28 @@ async function main() {
         },
       },
     });
+    createdTickets.push(ticket);
+  });
 
-    if (i < 5) {
-      await prisma.sharedResource.upsert({
-        where: {
-          resourceType_resourceId_sharedWithOrganizationId: {
-            resourceType: SharedResourceType.TICKET,
-            resourceId: ticket.id,
-            sharedWithOrganizationId: techNovaOrg.id,
-          },
-        },
-        update: {},
-        create: {
+  for (let i = 0; i < Math.min(5, createdTickets.length); i++) {
+    await prisma.sharedResource.upsert({
+      where: {
+        resourceType_resourceId_sharedWithOrganizationId: {
           resourceType: SharedResourceType.TICKET,
-          resourceId: ticket.id,
-          ownerOrganizationId: acmeOrg.id,
+          resourceId: createdTickets[i].id,
           sharedWithOrganizationId: techNovaOrg.id,
-          permission: SharePermission.READ,
-          sharedBy: adminAcme.id,
         },
-      });
-    }
+      },
+      update: {},
+      create: {
+        resourceType: SharedResourceType.TICKET,
+        resourceId: createdTickets[i].id,
+        ownerOrganizationId: acmeOrg.id,
+        sharedWithOrganizationId: techNovaOrg.id,
+        permission: SharePermission.READ,
+        sharedBy: adminAcme.id,
+      },
+    });
   }
 
   // 6. Seed Pull Requests (18 realistic PRs)
@@ -400,7 +411,8 @@ async function main() {
     { title: 'feat(ui): add Framer Motion Bento Grid to landing page', status: PullRequestStatus.CHANGES_REQUESTED },
   ];
 
-  for (let i = 0; i < 18; i++) {
+  const prIndices = Array.from({ length: 18 }, (_, i) => i);
+  await runInChunks(prIndices, 10, async (i) => {
     const prTopic = prTopics[i % prTopics.length];
     const org = i % 2 === 0 ? acmeOrg : techNovaOrg;
     const author = i % 2 === 0 ? dev1Acme : dev2Acme;
@@ -452,11 +464,12 @@ async function main() {
         },
       },
     });
-  }
+  });
 
   // 7. Seed AI Digest History
   console.info('  • Seeding AI Digest History...');
-  for (let i = 0; i < 10; i++) {
+  const digestIndices = Array.from({ length: 10 }, (_, i) => i);
+  await runInChunks(digestIndices, 10, async (i) => {
     await prisma.digest.create({
       data: {
         organizationId: acmeOrg.id,
@@ -469,7 +482,7 @@ async function main() {
         createdAt: new Date(Date.now() - i * 86400000),
       },
     });
-  }
+  });
 
   // 8. Seed Notifications (60+)
   console.info('  • Seeding 60+ Multi-Channel Notifications...');
@@ -481,7 +494,8 @@ async function main() {
     { type: NotificationType.REVIEW_APPROVED, title: '✅ Pull Request Approved', message: 'Deepa Reddy approved PR #43: Security Headers enforce' },
   ];
 
-  for (let i = 0; i < 60; i++) {
+  const notifIndices = Array.from({ length: 60 }, (_, i) => i);
+  await runInChunks(notifIndices, 10, async (i) => {
     const spec = notifSpecs[i % notifSpecs.length];
     const user = i % 2 === 0 ? adminAcme : dev1Acme;
 
@@ -496,14 +510,15 @@ async function main() {
         createdAt: new Date(Date.now() - i * 3600000 * 4),
       },
     });
-  }
+  });
 
   // 9. Seed Audit Logs (220+)
   console.info('  • Seeding 220+ Audit Trail Logs...');
   const auditModules = ['AUTH', 'ORGANIZATION', 'TICKET', 'PULL_REQUEST', 'SECURITY', 'FEATURE_FLAG', 'DIGEST'];
   const auditActions = ['USER_LOGIN', 'MEMBER_INVITED', 'TICKET_CREATED', 'TICKET_STATUS_UPDATED', 'PR_APPROVED', 'FLAG_TOGGLED', 'DIGEST_GENERATED'];
 
-  for (let i = 0; i < 220; i++) {
+  const auditIndices = Array.from({ length: 220 }, (_, i) => i);
+  await runInChunks(auditIndices, 10, async (i) => {
     const moduleName = auditModules[i % auditModules.length];
     const actionName = auditActions[i % auditActions.length];
     const actor = i % 2 === 0 ? adminAcme : securityAcme;
@@ -529,7 +544,7 @@ async function main() {
         },
       },
     });
-  }
+  });
 
   // 10. Seed Anomaly Security Alerts
   console.info('  • Seeding Security Anomaly Alerts...');
@@ -540,7 +555,7 @@ async function main() {
     { type: 'RATE_LIMIT_EXCEEDED', severity: AnomalySeverity.LOW, title: 'API Rate Limit Threshold Hit', description: 'Burst rate limit reached on /api/v1/auth/login endpoint.' },
   ];
 
-  for (const anomaly of anomalies) {
+  await runInChunks(anomalies, 10, async (anomaly) => {
     await prisma.anomalyAlert.create({
       data: {
         organizationId: acmeOrg.id,
@@ -551,7 +566,7 @@ async function main() {
         acknowledged: false,
       },
     });
-  }
+  });
 
   // Final Summary Output
   const orgCount = await prisma.organization.count();

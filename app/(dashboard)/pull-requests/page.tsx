@@ -1,18 +1,39 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { pullRequestApi } from '@/lib/pullRequestApi';
 import { PullRequestDto, PullRequestStatus, Permission } from '@workspace/shared-types';
 import { PRTable } from '@/components/review/PRTable';
 import { CommandBar } from '@/components/ui/CommandBar';
 
-export default function PullRequestsPage() {
+function PullRequestsContent() {
   const { activeOrganization, hasPermission } = useAuth();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [prs, setPrs] = useState<PullRequestDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('ALL');
+
+  const rawStatus = searchParams.get('status');
+  const initialStatus =
+    rawStatus === 'history' || rawStatus === 'MERGED' ? 'MERGED' : rawStatus || 'ALL';
+
+  const [statusFilter, setStatusFilter] = useState<string>(initialStatus);
+
+  // Sync state when URL query parameter changes (e.g., clicking sidebar links)
+  useEffect(() => {
+    const currentParam = searchParams.get('status');
+    if (currentParam === 'history' || currentParam === 'MERGED') {
+      setStatusFilter('MERGED');
+    } else if (currentParam) {
+      setStatusFilter(currentParam);
+    } else {
+      setStatusFilter('ALL');
+    }
+  }, [searchParams]);
 
   const loadPRs = useCallback(async () => {
     if (!activeOrganization?.id) return;
@@ -37,6 +58,18 @@ export default function PullRequestsPage() {
     loadPRs();
   }, [loadPRs]);
 
+  const handleFilterChange = (newFilter: string) => {
+    setStatusFilter(newFilter);
+    const params = new URLSearchParams(searchParams.toString());
+    if (newFilter === 'ALL') {
+      params.delete('status');
+    } else {
+      params.set('status', newFilter);
+    }
+    const queryString = params.toString();
+    router.replace(queryString ? `/pull-requests?${queryString}` : '/pull-requests');
+  };
+
   const canCreatePR = hasPermission(Permission.REVIEW_CREATE);
 
   return (
@@ -52,19 +85,33 @@ export default function PullRequestsPage() {
         filterOptions={[
           { label: 'All PRs', value: 'ALL' },
           { label: 'Under Review', value: 'UNDER_REVIEW' },
-          { label: 'Approved', value: 'APPROVED font-bold text-emerald-500' },
+          { label: 'Approved', value: 'APPROVED' },
           { label: 'Merged', value: 'MERGED' },
           { label: 'Draft', value: 'DRAFT' },
         ]}
         activeFilter={statusFilter}
-        onFilterChange={setStatusFilter}
+        onFilterChange={handleFilterChange}
         primaryActionLabel={canCreatePR ? 'New Pull Request' : undefined}
         onPrimaryAction={() => (window.location.href = '/pull-requests/new')}
         onAiQuickAction={() => (window.location.href = '/digest')}
       />
 
-      {/* PR Table with Purple Accent */}
+      {/* PR Table with Brand Accent */}
       <PRTable pullRequests={prs} isLoading={isLoading} />
     </div>
+  );
+}
+
+export default function PullRequestsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="forge-panel forge-accent-reviews p-6 text-center animate-pulse">
+          <div className="h-6 bg-surface-secondary rounded w-1/4 mb-4 mx-auto" />
+        </div>
+      }
+    >
+      <PullRequestsContent />
+    </Suspense>
   );
 }

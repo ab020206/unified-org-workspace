@@ -3,6 +3,7 @@ import { PullRequestService } from '@/src/services/pullRequest.service';
 import { requireOrgAuth } from '@/src/lib/apiAuth';
 import { handleApiError } from '@/src/lib/errors';
 import { createSuccessResponse } from '@/src/utils/response';
+import { ReviewDecisionType } from '@workspace/shared-types';
 
 const prService = new PullRequestService();
 
@@ -13,9 +14,16 @@ export async function PATCH(
   try {
     const auth = requireOrgAuth(request);
     const { id } = await params;
+    const body = await request.json().catch(() => ({}));
 
-    const merged = await prService.mergePullRequest(auth.organizationId, id, auth.userId);
-    return NextResponse.json(createSuccessResponse(merged, 'Pull request merged successfully'));
+    const updated = await prService.recordDecision(
+      auth.organizationId,
+      id,
+      auth.userId,
+      ReviewDecisionType.CHANGES_REQUESTED,
+      body.comment
+    );
+    return NextResponse.json(createSuccessResponse(updated, 'Changes requested for pull request'));
   } catch (error) {
     return handleApiError(error);
   }

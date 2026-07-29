@@ -15,8 +15,14 @@ export class GeminiAIProvider extends AIProvider {
     }
 
     try {
-      // Lazy load SDK to prevent crashes if not installed
-      const genAIModule: any = await import('@google/generative-ai' as any).catch(() => null);
+      // Lazy load SDK to prevent crashes or bundler errors if not installed
+      let genAIModule: any = null;
+      try {
+        genAIModule = eval('require')('@google/generative-ai');
+      } catch {
+        genAIModule = null;
+      }
+
       if (!genAIModule || !genAIModule.GoogleGenerativeAI) {
         return this.mockFallback.generateCompletion(prompt, options);
       }

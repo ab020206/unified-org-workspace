@@ -19,14 +19,14 @@ export function ApprovalCounter({ approvedCount, requiredApprovals, size = 'md' 
     <div
       className={`inline-flex items-center gap-1.5 font-bold font-mono rounded-md border ${
         isComplete
-          ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
-          : 'bg-amber-500/10 text-amber-500 border-amber-500/20'
+          ? 'bg-success/10 text-success border-success/20'
+          : 'bg-warning/10 text-warning border-warning/20'
       } ${sizeClasses[size]}`}
     >
       {isComplete ? (
-        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+        <CheckCircle2 className="w-3.5 h-3.5 text-success" />
       ) : (
-        <Clock className="w-3.5 h-3.5 text-amber-500" />
+        <Clock className="w-3.5 h-3.5 text-warning" />
       )}
       <span>
         {approvedCount} / {requiredApprovals} Approvals

@@ -77,7 +77,7 @@ export function PRTable({ pullRequests, isLoading }: Props) {
                   </div>
                   {(pr as any).githubUrl && (
                     <div className="flex items-center gap-1.5 text-[10px] text-text-secondary font-mono">
-                      <span className="bg-purple-950/60 text-purple-400 px-1.5 py-0.5 rounded border border-purple-800/40">
+                      <span className="bg-primary/10 text-primary px-1.5 py-0.5 rounded border border-primary/20">
                         {(pr as any).repoOwner}/{(pr as any).repoName}
                       </span>
                       {(pr as any).headBranch && (
@@ -97,12 +97,12 @@ export function PRTable({ pullRequests, isLoading }: Props) {
                   <PRStatusBadge status={pr.status} size="sm" />
                   {(pr as any).githubSyncStatus && (
                     <span
-                      className={`text-[9px] font-mono px-1.5 py-0.2 rounded w-fit font-semibold border ${
+                      className={`text-[9px] font-mono px-1.5 py-0.5 rounded-md w-fit font-semibold border ${
                         (pr as any).githubSyncStatus === 'SYNCED'
-                          ? 'bg-emerald-950/50 text-emerald-400 border-emerald-800/40'
+                          ? 'bg-success/10 text-success border-success/20'
                           : (pr as any).githubSyncStatus === 'PENDING'
-                            ? 'bg-amber-950/50 text-amber-400 border-amber-800/40'
-                            : 'bg-rose-950/50 text-rose-400 border-rose-800/40'
+                            ? 'bg-warning/10 text-warning border-warning/20'
+                            : 'bg-error/10 text-error border-error/20'
                       }`}
                     >
                       {(pr as any).githubSyncStatus === 'SYNCED'
@@ -160,12 +160,12 @@ export function PRTable({ pullRequests, isLoading }: Props) {
                 <div className="flex flex-col items-end gap-0.5">
                   {(pr as any).ciStatus && (
                     <span
-                      className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border ${
+                      className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md border ${
                         (pr as any).ciStatus === 'SUCCESS'
-                          ? 'bg-emerald-950/40 text-emerald-400 border-emerald-800/40'
+                          ? 'bg-success/10 text-success border-success/20'
                           : (pr as any).ciStatus === 'FAILURE'
-                            ? 'bg-rose-950/40 text-rose-400 border-rose-800/40'
-                            : 'bg-amber-950/40 text-amber-400 border-amber-800/40'
+                            ? 'bg-error/10 text-error border-error/20'
+                            : 'bg-warning/10 text-warning border-warning/20'
                       }`}
                     >
                       CI: {(pr as any).ciStatus}

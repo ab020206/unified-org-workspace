@@ -11,6 +11,7 @@ import {
   ReviewDecisionType,
   Permission,
 } from '@workspace/shared-types';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   AlertTriangle,
   ArrowLeft,
@@ -21,7 +22,11 @@ import {
   GitMerge,
   Lock,
   Send,
+  CheckCircle2,
+  XCircle,
+  Info,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { PRStatusBadge } from '@/components/review/PRStatusBadge';
 import { ApprovalCounter } from '@/components/review/ApprovalCounter';
 import { ReviewerAvatar } from '@/components/review/ReviewerAvatar';
@@ -45,6 +50,21 @@ export default function PRDetailPage() {
   const [isEditingContent, setIsEditingContent] = useState(false);
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
+
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'warning' | 'error' | 'info';
+  } | null>(null);
+
+  const showToast = useCallback(
+    (message: string, type: 'success' | 'warning' | 'error' | 'info' = 'success') => {
+      setToast({ message, type });
+      setTimeout(() => {
+        setToast((current) => (current?.message === message ? null : current));
+      }, 4000);
+    },
+    []
+  );
 
   const canApprove = hasPermission(Permission.REVIEW_APPROVE);
   const canReject = hasPermission(Permission.REVIEW_REJECT);
@@ -81,23 +101,26 @@ export default function PRDetailPage() {
           reviewComment.trim() || undefined,
           activeOrganization?.id
         );
+        showToast(`✅ Pull Request #${pr.prNumber} Approved! Decision successfully recorded.`, 'success');
       } else if (decision === ReviewDecisionType.CHANGES_REQUESTED) {
         await pullRequestApi.requestChanges(
           pr.id,
           reviewComment.trim() || undefined,
           activeOrganization?.id
         );
+        showToast(`⚠️ Changes requested on Pull Request #${pr.prNumber}.`, 'warning');
       } else if (decision === ReviewDecisionType.REJECTED) {
         await pullRequestApi.rejectPR(
           pr.id,
           reviewComment.trim() || undefined,
           activeOrganization?.id
         );
+        showToast(`❌ Pull Request #${pr.prNumber} Rejected.`, 'error');
       }
       setReviewComment('');
       await loadPR();
     } catch (err: any) {
-      alert(err.message || 'Failed to submit review decision');
+      showToast(err.message || 'Failed to submit review decision', 'error');
     } finally {
       setIsSubmittingDecision(false);
     }
@@ -109,9 +132,10 @@ export default function PRDetailPage() {
     setIsMerging(true);
     try {
       await pullRequestApi.mergePR(pr.id, activeOrganization?.id);
+      showToast(`🔀 Pull Request #${pr.prNumber} merged successfully into target branch!`, 'success');
       await loadPR();
     } catch (err: any) {
-      alert(err.message || 'Failed to merge Pull Request');
+      showToast(err.message || 'Failed to merge Pull Request', 'error');
     } finally {
       setIsMerging(false);
     }
@@ -122,9 +146,10 @@ export default function PRDetailPage() {
     try {
       await pullRequestApi.addReviewers(pr.id, [selectedReviewerToAdd], activeOrganization?.id);
       setSelectedReviewerToAdd('');
+      showToast('👤 Reviewer assigned successfully', 'success');
       await loadPR();
     } catch (err: any) {
-      alert(err.message || 'Failed to add reviewer');
+      showToast(err.message || 'Failed to add reviewer', 'error');
     }
   };
 
@@ -132,9 +157,10 @@ export default function PRDetailPage() {
     if (!pr) return;
     try {
       await pullRequestApi.removeReviewer(pr.id, reviewerId, activeOrganization?.id);
+      showToast('👤 Reviewer removed', 'info');
       await loadPR();
     } catch (err: any) {
-      alert(err.message || 'Failed to remove reviewer');
+      showToast(err.message || 'Failed to remove reviewer', 'error');
     }
   };
 
@@ -225,7 +251,38 @@ export default function PRDetailPage() {
   const isMerged = pr.status === PullRequestStatus.MERGED;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* Toast Feedback Notification Banner */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className={cn(
+              'fixed top-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg font-medium text-xs backdrop-blur-md',
+              toast.type === 'success' && 'bg-surface border-success/40 text-text-primary shadow-emerald-500/10',
+              toast.type === 'warning' && 'bg-surface border-warning/40 text-text-primary shadow-amber-500/10',
+              toast.type === 'error' && 'bg-surface border-error/40 text-text-primary shadow-rose-500/10',
+              toast.type === 'info' && 'bg-surface border-border text-text-primary shadow-xs'
+            )}
+          >
+            {toast.type === 'success' && <CheckCircle2 className="w-4 h-4 text-success shrink-0" />}
+            {toast.type === 'warning' && <AlertTriangle className="w-4 h-4 text-warning shrink-0" />}
+            {toast.type === 'error' && <XCircle className="w-4 h-4 text-error shrink-0" />}
+            {toast.type === 'info' && <Info className="w-4 h-4 text-primary shrink-0" />}
+            <span>{toast.message}</span>
+            <button
+              onClick={() => setToast(null)}
+              className="ml-2 text-text-secondary hover:text-text-primary p-0.5 rounded cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Top Navigation */}
       <div className="flex items-center justify-between">
         <Link
@@ -349,9 +406,16 @@ export default function PRDetailPage() {
           {/* Review Decision Submission Box */}
           {!isMerged && (canApprove || canReject) && (
             <div className="forge-panel p-6 space-y-4">
-              <div className="flex items-center gap-2 text-sm font-bold text-foreground">
-                <Edit3 className="w-4 h-4 text-purple-500" />
-                <span>Submit Review Decision</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-sm font-bold text-foreground">
+                  <Edit3 className="w-4 h-4 text-primary" />
+                  <span>Submit Review Decision</span>
+                </div>
+                {pr.decisions?.find((d) => d.reviewerId === user?.id) && (
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-success/10 text-success border border-success/20 font-bold">
+                    ✓ Recorded: {pr.decisions.find((d) => d.reviewerId === user?.id)?.decision}
+                  </span>
+                )}
               </div>
 
               <textarea
@@ -405,11 +469,22 @@ export default function PRDetailPage() {
                   <h3 className="text-sm font-extrabold text-foreground">Merge Lifecycle</h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {isApproved
-                      ? 'All required approvals reached. Ready to merge into target workspace branch.'
+                      ? canMerge
+                        ? 'All required approvals reached. Ready to merge into target workspace branch.'
+                        : 'All required approvals reached. Merging requires Organization Admin permissions (REVIEW_MERGE).'
                       : `Approval threshold not reached (${pr.approvalCount || 0} of ${pr.requiredApprovals} approvals).`}
                   </p>
                 </div>
               </div>
+
+              {isApproved && !canMerge && (
+                <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs flex items-center gap-2 font-medium">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>
+                    You are logged in as a <strong>REVIEWER</strong>. Merging requires an <strong>ADMIN</strong> or <strong>SUPER_ADMIN</strong> role.
+                  </span>
+                </div>
+              )}
 
               <button
                 onClick={handleMerge}
@@ -422,10 +497,15 @@ export default function PRDetailPage() {
               >
                 {isMerging ? (
                   <span>Merging Pull Request...</span>
-                ) : isApproved ? (
+                ) : isApproved && canMerge ? (
                   <>
                     <GitMerge className="w-4 h-4" />
                     <span>Merge Pull Request</span>
+                  </>
+                ) : isApproved && !canMerge ? (
+                  <>
+                    <Lock className="w-4 h-4 text-amber-500" />
+                    <span>Merge Restricted (Requires Admin Role)</span>
                   </>
                 ) : (
                   <>

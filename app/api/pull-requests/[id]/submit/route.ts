@@ -14,8 +14,8 @@ export async function PATCH(
     const auth = requireOrgAuth(request);
     const { id } = await params;
 
-    const merged = await prService.mergePullRequest(auth.organizationId, id, auth.userId);
-    return NextResponse.json(createSuccessResponse(merged, 'Pull request merged successfully'));
+    const updated = await prService.submitForReview(auth.organizationId, id, auth.userId);
+    return NextResponse.json(createSuccessResponse(updated, 'Pull request submitted for review'));
   } catch (error) {
     return handleApiError(error);
   }

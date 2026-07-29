@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
@@ -101,6 +101,7 @@ export function Sidebar() {
     }
   };
 
+  const searchParams = useSearchParams();
   const visibleNavItems = getNavItems();
 
   return (
@@ -130,10 +131,31 @@ export function Sidebar() {
 
           {visibleNavItems.map((item) => {
             const Icon = item.icon;
-            const basePath = item.href.split('?')[0];
-            const isActive =
-              pathname === item.href ||
-              (basePath !== '/dashboard' && pathname.startsWith(basePath));
+            const [basePath, itemQuery] = item.href.split('?');
+            const isExactBase = pathname === basePath;
+
+            let isActive = false;
+            if (isExactBase) {
+              if (itemQuery) {
+                const itemParams = new URLSearchParams(itemQuery);
+                isActive = Array.from(itemParams.entries()).every(
+                  ([key, val]) => searchParams.get(key) === val
+                );
+              } else {
+                const siblingWithQueryMatches = visibleNavItems.some((other) => {
+                  if (other === item || !other.href.startsWith(basePath + '?')) return false;
+                  const [, otherQuery] = other.href.split('?');
+                  const otherParams = new URLSearchParams(otherQuery || '');
+                  return Array.from(otherParams.entries()).every(
+                    ([k, v]) => searchParams.get(k) === v
+                  );
+                });
+                isActive = !siblingWithQueryMatches;
+              }
+            } else if (basePath !== '/dashboard' && pathname.startsWith(basePath + '/')) {
+              isActive = !itemQuery;
+            }
+
             return (
               <Link
                 key={item.name}
