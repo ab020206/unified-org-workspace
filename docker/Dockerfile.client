@@ -1,0 +1,43 @@
+# Multi-stage production Dockerfile for Next.js Frontend
+
+# Stage 1: Build & Dependencies
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+COPY packages/shared-types/package.json ./packages/shared-types/
+COPY packages/shared-config/package.json ./packages/shared-config/
+COPY packages/shared-utils/package.json ./packages/shared-utils/
+COPY client/package.json ./client/
+
+RUN npm ci
+
+COPY packages/ ./packages/
+COPY client/ ./client/
+
+RUN npm run build --workspace=packages/shared-types
+RUN npm run build --workspace=packages/shared-utils
+RUN npm run build --workspace=client
+
+# Stage 2: Production Execution Image
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+ENV NODE_ENV=production
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/package.json /app/package-lock.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/client ./client
+
+RUN chown -R nextjs:nodejs /app
+
+USER nextjs
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start", "--workspace=client"]

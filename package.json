@@ -1,0 +1,40 @@
+{
+  "name": "unified-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Production-ready Unified Organization Workspace",
+  "workspaces": [
+    "packages/*",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm run dev --workspace=server",
+    "dev:client": "npm run dev --workspace=client",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "prepare": "husky install || true",
+    "seed:demo": "npm run db:seed --workspace=server",
+    "db:migrate": "npm run db:migrate --workspace=server",
+    "db:seed": "npm run db:seed --workspace=server",
+    "db:generate": "npm run db:generate --workspace=server"
+  },
+  "devDependencies": {
+    "canvas": "^3.2.3",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "ffmpeg-static": "^5.3.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.2",
+    "playwright": "^1.62.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

@@ -1,0 +1,87 @@
+# Full-Stack Assignment Requirements Matrix
+
+This document provides a comprehensive mapping of every requirement specified in the **Froncort.AI Full-Stack Assignment PDF** to its technical implementation in the Unified Workspace codebase, including code evidence, verification status, and applied improvements.
+
+---
+
+## 1. Shared Identity & Authentication Layer
+
+| Requirement | Implementation Component | Status | Code Evidence | Fix / Optimization Applied |
+| :--- | :--- | :---: | :--- | :--- |
+| **Email & Password Auth** | `auth.controller.ts`, `auth.service.ts` | ✅ Fully Implemented | [auth.controller.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/controllers/auth.controller.ts) | Password hashing with bcrypt, JWT token pair issuance, refresh token rotation in Redis/DB. |
+| **Central Identity Service** | `organization.service.ts`, Prisma schema | ✅ Fully Implemented | [schema.prisma](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/prisma/schema.prisma) | Single source of truth across both dashboards (`User`, `Organization`, `OrganizationMember`). |
+| **Session Sync Mechanism** | `AuthContext.tsx`, `api.ts` | ✅ Fully Implemented | [AuthContext.tsx](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/client/context/AuthContext.tsx) | Automatic session refresh across tabs via shared cookie/storage and token rotation. |
+| **Org Switcher** | `PATCH /api/v1/organizations/switch` | ✅ Fully Implemented | [organization.controller.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/controllers/organization.controller.ts) | Seamless context switching; updates active JWT organization context dynamically. |
+| **Logout Everywhere** | `POST /api/v1/auth/logout` | ✅ Fully Implemented | [auth.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/auth.service.ts) | Revokes refresh tokens in DB and invalidates session cache in Redis across both dashboards. |
+
+---
+
+## 2. Dashboard 1 - Support Hub (Ticketing)
+
+| Requirement | Implementation Component | Status | Code Evidence | Fix / Optimization Applied |
+| :--- | :--- | :---: | :--- | :--- |
+| **Ticket CRUD & Attachments** | `ticket.controller.ts`, `ticket.service.ts` | ✅ Fully Implemented | [ticket.controller.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/controllers/ticket.controller.ts) | Complete lifecycle management (Create, Read, Update, Delete, Comment, Attachment upload). |
+| **Query-Layer Tenant Isolation** | Prisma query constraints | ✅ Fully Implemented | [ticket.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/ticket.service.ts) | Direct `where: { organizationId }` query filtering prevents BOLA data leaks. Verified by automated tests. |
+| **Append-Only Audit Logging** | `auditLog.service.ts` | ✅ Fully Implemented | [auditLog.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/auditLog.service.ts) | Immutable log entries created automatically on ticket create, update, delete, and comment mutations. |
+| **Per-Tenant Feature Flags** | `featureFlag.controller.ts` | ✅ Fully Implemented | [featureFlag.controller.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/controllers/featureFlag.controller.ts) | Dynamic feature toggles scoped to organization ID for flexible tenant capability control. |
+| **Cross-Org Ticket Sharing** | `collaboration.controller.ts`, `SharedResource` | ✅ Fully Implemented | [collaboration.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/collaboration.service.ts) | Granular item-level sharing. Shared partner users receive read/comment-only access to specific ticket only. |
+| **Reviewer Support Access** | `ReviewerDashboard.tsx`, RBAC rules | ✅ Fully Implemented | [ReviewerDashboard.tsx](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/client/components/dashboards/ReviewerDashboard.tsx) | Reviewer/Approver role has full visibility and review capabilities in both Support Hub and Review Console. |
+
+---
+
+## 3. Dashboard 2 - Review & Audit Console (PR Workflow)
+
+| Requirement | Implementation Component | Status | Code Evidence | Fix / Optimization Applied |
+| :--- | :--- | :---: | :--- | :--- |
+| **PR Entity & Lifecycle** | `pullRequest.controller.ts` | ✅ Fully Implemented | [pullRequest.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/pullRequest.service.ts) | Full state machine (`DRAFT` → `IN_REVIEW` → `APPROVED`/`REJECTED` → `MERGED`) with assigned reviewers. |
+| **Multi-Reviewer Approval Workflow** | `pullRequest.service.ts` | ✅ Fully Implemented | [pullRequest.controller.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/controllers/pullRequest.controller.ts) | Configurable "requires N approvals" rule enforced prior to transition to `APPROVED` or `MERGED`. |
+| **PR Diff & Versioning** | `PullRequestVersion` model | ✅ Fully Implemented | [PullRequestDiffViewer.tsx](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/client/components/prs/PullRequestDiffViewer.tsx) | Auto-snapshots previous state upon edit after review start; interactive side-by-side diff viewer. |
+| **Unified Audit Viewer** | `audit.controller.ts`, Audit UI | ✅ Fully Implemented | [AuditLogTable.tsx](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/client/components/audit/AuditLogTable.tsx) | Searchable, filterable timeline spanning tickets & PRs with multi-field filters and CSV export. |
+| **Reviewer Unified Access** | `permission.service.ts` | ✅ Fully Implemented | [permission.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/permission.service.ts) | Reviewers granted dual access to PR workflow and Audit Viewer while blocking admin settings. |
+
+---
+
+## 4. Cross-Organization Collaboration
+
+| Requirement | Implementation Component | Status | Code Evidence | Fix / Optimization Applied |
+| :--- | :--- | :---: | :--- | :--- |
+| **Partner Org Connection** | `OrganizationConnection` model | ✅ Fully Implemented | [collaboration.controller.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/controllers/collaboration.controller.ts) | Formal 2-step handshake (Request → Approve/Reject) with mutual revocation ability. |
+| **Item-Level Resource Sharing** | `SharedResource` table | ✅ Fully Implemented | [ShareResourceDialog.tsx](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/client/components/sharing/ShareResourceDialog.tsx) | Explicit sharing of individual tickets/PRs without giving partner full access to workspace. |
+| **External User Scoping** | `permission.service.ts` | ✅ Fully Implemented | [GuestDashboard.tsx](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/client/components/dashboards/GuestDashboard.tsx) | Query-level check restricts external partner users strictly to items explicitly shared with them. |
+| **Restricted Guest Permissions** | RBAC permission rules | ✅ Fully Implemented | [permission.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/permission.service.ts) | Read and comment actions only; edit, delete, and unshared resource access strictly forbidden. |
+
+---
+
+## 5. AI Progress Tracker & Digest Service
+
+| Requirement | Implementation Component | Status | Code Evidence | Fix / Optimization Applied |
+| :--- | :--- | :---: | :--- | :--- |
+| **Personalized User Digest** | `digest.service.ts`, `ai.service.ts` | ✅ Fully Implemented | [digest.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/digest.service.ts) | Generates tailored activity summaries (overdue tickets, pending PR reviews, idle items). |
+| **Scheduled Background Delivery** | `digestWorker.ts` worker queue | ✅ Fully Implemented | [digestWorker.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/workers/digestWorker.ts) | Executed via scheduled background cron job at regular intervals (not on page load). |
+| **In-App Notification Bell** | `NotificationBell.tsx` | ✅ Fully Implemented | [NotificationBell.tsx](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/client/components/notifications/NotificationBell.tsx) | Real-time badge counter and popover list for digests and shared resource updates. |
+| **Zero Data Leakage Boundary** | Scoped query filtering in AI worker | ✅ Fully Implemented | [security.test.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/tests/security/security.test.ts) | AI prompts built exclusively from user's active org data + explicitly shared items. Automated test verified. |
+
+---
+
+## 6. Access Control & Security
+
+| Requirement | Implementation Component | Status | Code Evidence | Fix / Optimization Applied |
+| :--- | :--- | :---: | :--- | :--- |
+| **Distinct Role Scopes (6 Roles)** | `Sidebar.tsx`, Dashboard Dispatcher | ✅ Fully Implemented | [Sidebar.tsx](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/client/components/Sidebar.tsx) | 6 distinct roles (`Org Admin`, `Support Agent`, `Reviewer`, `Guest`, `Platform Super Admin`, `Auditor`) with customized UI navigation and action controls. |
+| **Query-Layer BOLA Enforcement** | Controller & Repository filters | ✅ Fully Implemented | [ticket.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/ticket.service.ts) | Organization isolation enforced on every read/write query. Direct ID tampering attempts return 404/403. |
+| **Append-Only Audit Trail** | `AuditLog` model & DB triggers | ✅ Fully Implemented | [auditLog.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/auditLog.service.ts) | Unified log for both dashboards with database-level append-only constraints (no UPDATE/DELETE permitted). |
+| **Cross-Org Action Auditing** | `collaboration.service.ts` | ✅ Fully Implemented | [collaboration.service.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/src/services/collaboration.service.ts) | Every connection request, approval, resource share, and revocation creates an immutable audit entry. |
+
+---
+
+## 7. Non-Functional & Deliverables
+
+| Requirement | Implementation Component | Status | Code Evidence | Fix / Optimization Applied |
+| :--- | :--- | :---: | :--- | :--- |
+| **Automated BOLA Isolation Test** | `security.test.ts` | ✅ Fully Implemented | [security.test.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/tests/security/security.test.ts) | Automated unit/security test asserting HTTP 404/403 on direct cross-tenant ID queries. |
+| **Automated AI Boundary Test** | `security.test.ts` | ✅ Fully Implemented | [security.test.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/server/tests/security/security.test.ts) | Test confirming AI summaries reject cross-tenant data inclusion. |
+| **Independent Deployability** | Next.js Client + Express Backend | ✅ Fully Implemented | [docker-compose.yml](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/docker-compose.yml) | Decoupled client and server packages with independent container definitions and environment setups. |
+| **Seed Data & Demo Users** | `seed.ts`, `demoUsers.ts` | ✅ Fully Implemented | [demoUsers.ts](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/packages/shared-config/demoUsers.ts) | Pre-populated multi-tenant database with 2 sample orgs, accepted connection, tickets, PRs, and demo accounts. |
+| **Documentation Folder (`/docs`)** | Architecture, Environment, Setup | ✅ Fully Implemented | [docs/](file:///Users/admin%202/windows%20data/Files%20From%20d.localized/froncort/docs) | Complete system diagrams, setup guide, limits, and agentic LLM usage documentation. |
+
+---

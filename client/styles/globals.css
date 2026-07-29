@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Handcrafted Enterprise Light Palette */
+    --background: #F2F2F2;
+    --surface: #FFFFFF;
+    --surface-secondary: #F7F7F7;
+    --card: #FFFFFF;
+    --card-foreground: #1F1F1F;
+    --popover: #FFFFFF;
+    --popover-foreground: #1F1F1F;
+    
+    --primary: #174D38;
+    --primary-hover: #123A2B;
+    --primary-foreground: #FFFFFF;
+    
+    --text-primary: #1F1F1F;
+    --text-secondary: #6B7280;
+    --muted-text: #9CA3AF;
+    --foreground: #1F1F1F;
+    --muted-foreground: #6B7280;
+    
+    --border: #D9D9D9;
+    --divider: #E5E7EB;
+    --ring: #174D38;
+    
+    --success: #15803D;
+    --warning: #D97706;
+    --error: #4D1717;
+    --destructive: #4D1717;
+    --destructive-foreground: #FFFFFF;
+    --info: #2563EB;
+    
+    --radius: 0.625rem; /* 10px */
+  }
+
+  .dark {
+    /* Handcrafted Enterprise Dark Palette (Charcoal Deep) */
+    --background: #0F1115;
+    --surface: #171A1F;
+    --surface-secondary: #1F232A;
+    --card: #171A1F;
+    --card-foreground: #F5F5F5;
+    --popover: #171A1F;
+    --popover-foreground: #F5F5F5;
+    
+    --primary: #3FA07A;
+    --primary-hover: #57B890;
+    --primary-foreground: #0F1115;
+    
+    --text-primary: #F5F5F5;
+    --text-secondary: #B6BDC8;
+    --muted-text: #8A919D;
+    --foreground: #F5F5F5;
+    --muted-foreground: #B6BDC8;
+    
+    --border: #2C313A;
+    --divider: #343A44;
+    --ring: #3FA07A;
+    
+    --success: #4ADE80;
+    --warning: #FBBF24;
+    --error: #EF6B6B;
+    --destructive: #EF6B6B;
+    --destructive-foreground: #0F1115;
+    --info: #60A5FA;
+  }
+}
+
+*, ::before, ::after {
+  transition: background-color 200ms ease-in-out, border-color 200ms ease-in-out, color 200ms ease-in-out;
+}
+
+body {
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Monospace font rules */
+.font-mono,
+code,
+pre,
+kbd,
+.mono-val {
+  font-family: 'Geist Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+/* Card Component Defaults */
+.panel-card,
+.forge-panel,
+.card-enterprise {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+}
+
+/* Primary Button Utilities */
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Secondary Button Utilities */
+.btn-secondary {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.btn-secondary:hover {
+  background-color: var(--surface-secondary);
+  border-color: var(--border);
+}
+
+/* Input Focus Rings */
+.input-enterprise {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  padding: 8px 12px;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 200ms ease-in-out;
+}
+.input-enterprise::placeholder {
+  color: var(--muted-text);
+}
+.input-enterprise:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(63, 160, 122, 0.2);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}

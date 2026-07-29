@@ -1,0 +1,18 @@
+import React from 'react';
+import '@/styles/globals.css';
+import { AppProviders } from '@/providers/AppProviders';
+
+export const metadata = {
+  title: 'Froncort.ai | Unified Workspace',
+  description: 'Production-ready unified organizational platform for Froncort.ai',
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased selection:bg-primary/20">
+        <AppProviders>{children}</AppProviders>
+      </body>
+    </html>
+  );
+}

@@ -1,0 +1,84 @@
+name: Unified Workspace CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  validate-and-test:
+    name: Build, Lint & Automated Test Suite
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgrespassword
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Monorepo Dependencies
+        run: npm ci
+
+      - name: Code Formatting & Lint Check
+        run: |
+          npm run format:check
+          npm run lint
+
+      - name: Generate Prisma Client & Migrate Schema
+        env:
+          DATABASE_URL: postgresql://postgres:postgrespassword@localhost:5432/postgres?schema=public
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          JWT_SECRET: super-secret-ci-key-for-testing-purposes-only
+          NODE_ENV: test
+        run: |
+          npm run db:generate
+          npm run db:migrate --workspace=server
+
+      - name: Execute Master Test Suite (Unit, Integration, Security, Performance, E2E)
+        env:
+          DATABASE_URL: postgresql://postgres:postgrespassword@localhost:5432/postgres?schema=public
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          JWT_SECRET: super-secret-ci-key-for-testing-purposes-only
+          NODE_ENV: test
+          SKIP_RATE_LIMIT: 'true'
+        run: npm run test --workspace=server
+
+      - name: Build Next.js Client Workspace
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:4000/api/v1
+        run: npm run build --workspace=client
+
+      - name: Build Server Distribution Bundle
+        run: npm run build --workspace=server

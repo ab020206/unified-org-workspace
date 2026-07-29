@@ -1,0 +1,618 @@
+// Prisma Schema for Unified Organization Workspace — Phase 2 RBAC & Permission System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  SUPPORT_AGENT
+  REVIEWER
+  GUEST
+  AUDITOR
+}
+
+model User {
+  id            String   @id @default(uuid())
+  firstName     String   @map("first_name")
+  lastName      String   @map("last_name")
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  avatar        String?
+  emailVerified Boolean  @default(false) @map("email_verified")
+  isActive      Boolean  @default(true) @map("is_active")
+  isPlatformUser Boolean @default(false) @map("is_platform_user")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  memberships     OrganizationMember[]
+  sessions        Session[]
+  refreshTokens   RefreshToken[]
+  invitationsSent Invitation[]         @relation("InvitedBy")
+  ticketsCreated    Ticket[]           @relation("TicketCreator")
+  ticketsAssigned   Ticket[]           @relation("TicketAssignee")
+  ticketComments    TicketComment[]
+  ticketAttachments TicketAttachment[]
+  ticketActivities  TicketActivity[]
+
+  prsCreated             PullRequest[]         @relation("PRCreator")
+  prsMerged              PullRequest[]         @relation("PRMerger")
+  prReviewerAssignments  PullRequestReviewer[]
+  prDecisions            ReviewDecision[]
+  prVersions             PullRequestVersion[]
+  prComments             ReviewComment[]
+  prActivities           PullRequestActivity[]
+  auditLogs              AuditLog[]
+  connectionsRequested   OrganizationConnection[] @relation("ConnectionRequester")
+  connectionsApproved    OrganizationConnection[] @relation("ConnectionApprover")
+  resourcesShared        SharedResource[]         @relation("ResourceSharer")
+  sharedAccesses         SharedAccess[]
+  digests                Digest[]
+  notifications          Notification[]
+
+  @@map("users")
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  logo      String?
+  createdBy String   @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  members           OrganizationMember[]
+  invitations       Invitation[]
+  tickets           Ticket[]
+  pullRequests      PullRequest[]
+  auditLogs         AuditLog[]
+  sourceConnections OrganizationConnection[] @relation("SourceConnections")
+  targetConnections OrganizationConnection[] @relation("TargetConnections")
+  ownedShares       SharedResource[]         @relation("OwnedShares")
+  receivedShares    SharedResource[]         @relation("ReceivedShares")
+  digests           Digest[]
+  notifications     Notification[]
+  featureFlags      FeatureFlag[]
+
+  @@map("organizations")
+}
+
+model OrganizationMember {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  userId         String   @map("user_id")
+  role           Role     @default(GUEST)
+  joinedAt       DateTime @default(now()) @map("joined_at")
+  isActive       Boolean  @default(true) @map("is_active")
+
+  organization Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  overrides    PermissionOverride[]
+
+  @@unique([organizationId, userId])
+  @@map("organization_members")
+}
+
+model PermissionOverride {
+  id         String   @id @default(uuid())
+  memberId   String   @map("member_id")
+  permission String
+  allowed    Boolean  @default(true)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  member OrganizationMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, permission])
+  @@map("permission_overrides")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  tokenHash String   @map("token_hash")
+  userId    String   @map("user_id")
+  device    String?
+  expiry    DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  device       String?
+  browser      String?
+  ip           String?
+  lastActivity DateTime @default(now()) @map("last_activity")
+  expiry       DateTime
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Invitation {
+  id             String    @id @default(uuid())
+  organizationId String    @map("organization_id")
+  email          String
+  invitedBy      String    @map("invited_by")
+  role           Role      @default(GUEST)
+  token          String    @unique
+  expiry         DateTime
+  acceptedAt     DateTime? @map("accepted_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  inviter      User         @relation("InvitedBy", fields: [invitedBy], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, email])
+  @@map("invitations")
+}
+
+model MigrationTest {
+  id        String   @id @default(uuid())
+  status    String   @default("ok")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("migration_test")
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_FOR_RESPONSE
+  RESOLVED
+  CLOSED
+  REOPENED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TicketCategory {
+  GENERAL
+  BUG
+  FEATURE_REQUEST
+  BILLING
+  TECHNICAL
+  ACCOUNT
+  OTHER
+}
+
+model Ticket {
+  id             String         @id @default(uuid())
+  organizationId String         @map("organization_id")
+  ticketNumber   Int            @default(autoincrement()) @map("ticket_number")
+  title          String
+  description    String
+  status         TicketStatus   @default(OPEN)
+  priority       TicketPriority @default(MEDIUM)
+  category       TicketCategory @default(GENERAL)
+  createdBy      String         @map("created_by")
+  assignedTo     String?        @map("assigned_to")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  resolvedAt     DateTime?      @map("resolved_at")
+  closedAt       DateTime?      @map("closed_at")
+
+  organization Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator      User               @relation("TicketCreator", fields: [createdBy], references: [id], onDelete: Cascade)
+  assignee     User?              @relation("TicketAssignee", fields: [assignedTo], references: [id], onDelete: SetNull)
+  comments     TicketComment[]
+  attachments  TicketAttachment[]
+  activities   TicketActivity[]
+
+  @@index([organizationId])
+  @@index([organizationId, status])
+  @@index([organizationId, priority])
+  @@index([organizationId, category])
+  @@index([organizationId, assignedTo])
+  @@index([organizationId, createdBy])
+  @@index([organizationId, status, createdAt])
+  @@map("tickets")
+}
+
+model TicketComment {
+  id        String   @id @default(uuid())
+  ticketId  String   @map("ticket_id")
+  userId    String   @map("user_id")
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@map("ticket_comments")
+}
+
+model TicketAttachment {
+  id         String   @id @default(uuid())
+  ticketId   String   @map("ticket_id")
+  uploadedBy String   @map("uploaded_by")
+  fileName   String   @map("file_name")
+  fileUrl    String   @map("file_url")
+  mimeType   String   @map("mime_type")
+  fileSize   Int      @map("file_size")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  uploader User   @relation(fields: [uploadedBy], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@map("ticket_attachments")
+}
+
+model TicketActivity {
+  id        String   @id @default(uuid())
+  ticketId  String   @map("ticket_id")
+  actorId   String   @map("actor_id")
+  action    String
+  oldValue  String?  @map("old_value")
+  newValue  String?  @map("new_value")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  actor  User   @relation(fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@map("ticket_activities")
+}
+
+enum PullRequestStatus {
+  DRAFT
+  READY_FOR_REVIEW
+  UNDER_REVIEW
+  CHANGES_REQUESTED
+  APPROVED
+  REJECTED
+  MERGED
+}
+
+enum ReviewDecisionType {
+  APPROVED
+  CHANGES_REQUESTED
+  REJECTED
+}
+
+model PullRequest {
+  id                String            @id @default(uuid())
+  organizationId    String            @map("organization_id")
+  prNumber          Int               @default(autoincrement()) @map("pr_number")
+  title             String
+  description       String
+  status            PullRequestStatus @default(DRAFT)
+  createdBy         String            @map("created_by")
+  mergedBy          String?           @map("merged_by")
+  requiredApprovals Int               @default(1) @map("required_approvals")
+  mergedAt          DateTime?         @map("merged_at")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+
+  organization Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creator      User                  @relation("PRCreator", fields: [createdBy], references: [id], onDelete: Cascade)
+  merger       User?                 @relation("PRMerger", fields: [mergedBy], references: [id], onDelete: SetNull)
+  reviewers    PullRequestReviewer[]
+  decisions    ReviewDecision[]
+  versions     PullRequestVersion[]
+  comments     ReviewComment[]
+  activities   PullRequestActivity[]
+
+  @@index([organizationId])
+  @@index([organizationId, status])
+  @@index([organizationId, createdBy])
+  @@index([organizationId, status, createdAt])
+  @@map("pull_requests")
+}
+
+model PullRequestReviewer {
+  id            String   @id @default(uuid())
+  pullRequestId String   @map("pull_request_id")
+  reviewerId    String   @map("reviewer_id")
+  assignedAt    DateTime @default(now()) @map("assigned_at")
+
+  pullRequest PullRequest @relation(fields: [pullRequestId], references: [id], onDelete: Cascade)
+  reviewer    User        @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+
+  @@unique([pullRequestId, reviewerId])
+  @@map("pull_request_reviewers")
+}
+
+model ReviewDecision {
+  id            String             @id @default(uuid())
+  pullRequestId String             @map("pull_request_id")
+  reviewerId    String             @map("reviewer_id")
+  decision      ReviewDecisionType
+  comment       String?
+  createdAt     DateTime           @default(now()) @map("created_at")
+
+  pullRequest PullRequest @relation(fields: [pullRequestId], references: [id], onDelete: Cascade)
+  reviewer    User        @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+
+  @@index([pullRequestId])
+  @@map("review_decisions")
+}
+
+model PullRequestVersion {
+  id            String   @id @default(uuid())
+  pullRequestId String   @map("pull_request_id")
+  versionNumber Int      @map("version_number")
+  title         String
+  description   String
+  createdBy     String   @map("created_by")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  pullRequest PullRequest @relation(fields: [pullRequestId], references: [id], onDelete: Cascade)
+  creator     User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
+  @@index([pullRequestId])
+  @@map("pull_request_versions")
+}
+
+model ReviewComment {
+  id            String   @id @default(uuid())
+  pullRequestId String   @map("pull_request_id")
+  reviewerId    String   @map("reviewer_id")
+  message       String
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  pullRequest PullRequest @relation(fields: [pullRequestId], references: [id], onDelete: Cascade)
+  reviewer    User        @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+
+  @@index([pullRequestId])
+  @@map("review_comments")
+}
+
+model PullRequestActivity {
+  id            String   @id @default(uuid())
+  pullRequestId String   @map("pull_request_id")
+  actorId       String   @map("actor_id")
+  action        String
+  metadata      String?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  pullRequest PullRequest @relation(fields: [pullRequestId], references: [id], onDelete: Cascade)
+  actor       User        @relation(fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@index([pullRequestId])
+  @@map("pull_request_activities")
+}
+
+model AuditLog {
+  id             String   @id @default(uuid())
+  organizationId String?  @map("organization_id")
+  actorId        String   @map("actor_id")
+  actorEmail     String   @map("actor_email")
+  actorRole      String   @map("actor_role")
+  module         String
+  action         String
+  entityType     String   @map("entity_type")
+  entityId       String   @map("entity_id")
+  previousState  Json?    @map("previous_state")
+  newState       Json?    @map("new_state")
+  ipAddress      String?  @map("ip_address")
+  userAgent      String?  @map("user_agent")
+  requestId      String?  @map("request_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization?   @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  actor        User            @relation(fields: [actorId], references: [id], onDelete: Cascade)
+  metadata     AuditMetadata[]
+
+  @@index([organizationId])
+  @@index([actorId])
+  @@index([module])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model AuditMetadata {
+  id        String   @id @default(uuid())
+  auditId   String   @map("audit_id")
+  key       String
+  value     String
+
+  auditLog AuditLog @relation(fields: [auditId], references: [id], onDelete: Cascade)
+
+  @@index([auditId])
+  @@map("audit_metadata")
+}
+
+enum OrganizationConnectionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+  REVOKED
+}
+
+enum SharedResourceType {
+  TICKET
+  PULL_REQUEST
+}
+
+enum SharePermission {
+  READ
+  COMMENT
+  REVIEW
+  APPROVE
+  FULL_ACCESS
+}
+
+model OrganizationConnection {
+  id                   String                       @id @default(uuid())
+  sourceOrganizationId String                       @map("source_organization_id")
+  targetOrganizationId String                       @map("target_organization_id")
+  status               OrganizationConnectionStatus @default(PENDING)
+  requestedBy          String                       @map("requested_by")
+  approvedBy           String?                      @map("approved_by")
+  createdAt            DateTime                     @default(now()) @map("created_at")
+  approvedAt           DateTime?                    @map("approved_at")
+
+  sourceOrg Organization @relation("SourceConnections", fields: [sourceOrganizationId], references: [id], onDelete: Cascade)
+  targetOrg Organization @relation("TargetConnections", fields: [targetOrganizationId], references: [id], onDelete: Cascade)
+  requester User         @relation("ConnectionRequester", fields: [requestedBy], references: [id], onDelete: Cascade)
+  approver  User?        @relation("ConnectionApprover", fields: [approvedBy], references: [id], onDelete: SetNull)
+
+  @@unique([sourceOrganizationId, targetOrganizationId])
+  @@index([sourceOrganizationId])
+  @@index([targetOrganizationId])
+  @@map("organization_connections")
+}
+
+model SharedResource {
+  id                       String             @id @default(uuid())
+  resourceType             SharedResourceType @map("resource_type")
+  resourceId               String             @map("resource_id")
+  ownerOrganizationId      String             @map("owner_organization_id")
+  sharedWithOrganizationId String             @map("shared_with_organization_id")
+  permission               SharePermission    @default(READ)
+  expiresAt                DateTime?          @map("expires_at")
+  sharedBy                 String             @map("shared_by")
+  createdAt                DateTime           @default(now()) @map("created_at")
+
+  ownerOrg      Organization   @relation("OwnedShares", fields: [ownerOrganizationId], references: [id], onDelete: Cascade)
+  sharedWithOrg Organization   @relation("ReceivedShares", fields: [sharedWithOrganizationId], references: [id], onDelete: Cascade)
+  sharer        User           @relation("ResourceSharer", fields: [sharedBy], references: [id], onDelete: Cascade)
+  accessLogs    SharedAccess[]
+
+  @@unique([resourceType, resourceId, sharedWithOrganizationId])
+  @@index([ownerOrganizationId])
+  @@index([sharedWithOrganizationId])
+  @@index([resourceId])
+  @@map("shared_resources")
+}
+
+model SharedAccess {
+  id               String          @id @default(uuid())
+  sharedResourceId String          @map("shared_resource_id")
+  guestUserId      String          @map("guest_user_id")
+  permission       SharePermission
+  acceptedAt       DateTime        @default(now()) @map("accepted_at")
+  lastAccessedAt   DateTime        @default(now()) @map("last_accessed_at")
+
+  sharedResource SharedResource @relation(fields: [sharedResourceId], references: [id], onDelete: Cascade)
+  guestUser      User           @relation(fields: [guestUserId], references: [id], onDelete: Cascade)
+
+  @@index([sharedResourceId])
+  @@index([guestUserId])
+  @@map("shared_accesses")
+}
+
+enum DigestStatus {
+  PENDING
+  GENERATING
+  READY
+  FAILED
+  EXPIRED
+}
+
+enum NotificationType {
+  AI_DIGEST
+  TICKET_ASSIGNED
+  REVIEW_ASSIGNED
+  REVIEW_APPROVED
+  SHARE_RECEIVED
+  SYSTEM
+  SECURITY
+}
+
+model Digest {
+  id             String       @id @default(uuid())
+  organizationId String       @map("organization_id")
+  userId         String       @map("user_id")
+  title          String
+  summary        String       @db.Text
+  generatedAt    DateTime     @default(now()) @map("generated_at")
+  expiresAt      DateTime?    @map("expires_at")
+  status         DigestStatus @default(PENDING)
+  modelUsed      String       @default("gemini-2.5-flash") @map("model_used")
+  tokenUsage     Int?         @map("token_usage")
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([status])
+  @@map("digests")
+}
+
+model Notification {
+  id             String           @id @default(uuid())
+  userId         String           @map("user_id")
+  organizationId String           @map("organization_id")
+  type           NotificationType
+  title          String
+  message        String
+  isRead         Boolean          @default(false) @map("is_read")
+  referenceType  String?          @map("reference_type")
+  referenceId    String?          @map("reference_id")
+  createdAt      DateTime         @default(now()) @map("created_at")
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([organizationId])
+  @@index([isRead])
+  @@map("notifications")
+}
+
+model JobHistory {
+  id           String    @id @default(uuid())
+  queue        String
+  jobType      String    @map("job_type")
+  status       String
+  startedAt    DateTime  @default(now()) @map("started_at")
+  completedAt  DateTime? @map("completed_at")
+  retryCount   Int       @default(0) @map("retry_count")
+  errorMessage String?   @map("error_message")
+
+  @@index([queue])
+  @@index([status])
+  @@map("job_histories")
+}
+
+model FeatureFlag {
+  id             String        @id @default(uuid())
+  key            String
+  description    String?
+  enabled        Boolean       @default(true)
+  organizationId String?       @map("organization_id")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([key])
+  @@index([organizationId])
+  @@map("feature_flags")
+}
+
+
+
+
+

@@ -1,0 +1,9 @@
+acme admin : AdminPass!ob72po#2026
+
+nova : AdminPass!l2zgg0#2026
+
+support@acme.demo : UserPass!ewHxNkUAW8
+
+reviewer@acme.demo : ReviewerPass!xaalhl#2026
+
+auditor@acme.demo : TempPass!e2b8ec01#2026
