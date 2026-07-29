@@ -1,5 +1,6 @@
 {
   "framework": "nextjs",
-  "installCommand": "npm install",
-  "buildCommand": "npm run build"
+  "buildCommand": "cd .. && npm run build --workspace=client",
+  "installCommand": "cd .. && npm install",
+  "outputDirectory": ".next"
 }

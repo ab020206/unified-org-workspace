@@ -12,7 +12,9 @@
     "prisma:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "ts-node prisma/seed.ts",
-    "seed:demo": "ts-node prisma/seed.ts"
+    "db:reset": "ts-node prisma/reset.ts",
+    "seed:demo": "ts-node prisma/seed.ts",
+    "seed:reset": "ts-node prisma/reset.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",

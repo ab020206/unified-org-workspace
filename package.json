@@ -18,8 +18,10 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "prepare": "husky install || true",
     "seed:demo": "npm run db:seed --workspace=server",
+    "seed:reset": "npm run db:reset --workspace=server",
     "db:migrate": "npm run db:migrate --workspace=server",
     "db:seed": "npm run db:seed --workspace=server",
+    "db:reset": "npm run db:reset --workspace=server",
     "db:generate": "npm run db:generate --workspace=server"
   },
   "devDependencies": {
