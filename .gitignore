@@ -11,12 +11,11 @@ dist
 build
 *.tsbuildinfo
 
-# Environment variables
+# Environment variables & Secret credentials files
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+creds.txt
 
 # Logs
 logs
@@ -56,5 +55,3 @@ coverage/
 # Uploads
 server/uploads/*
 !server/uploads/.gitkeep
-
-
