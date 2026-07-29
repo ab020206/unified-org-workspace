@@ -1,6 +1,5 @@
 import rateLimit from 'express-rate-limit';
 import { ApiError } from '../utils/apiError';
-import { env } from '../config/env';
 
 // Pause rate limits for manual testing / demo mode
 const skipLimit = true;

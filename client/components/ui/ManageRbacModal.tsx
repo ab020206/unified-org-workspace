@@ -60,7 +60,8 @@ export function ManageRbacModal({ isOpen, onClose, user, onSaveSuccess }: Manage
                 </span>
               </div>
               <p className="text-xs text-text-secondary">
-                Configure role access level and granular permission overrides for <strong className="text-text-primary">{user.name}</strong> ({user.email})
+                Configure role access level and granular permission overrides for{' '}
+                <strong className="text-text-primary">{user.name}</strong> ({user.email})
               </p>
             </div>
           </div>

@@ -12,7 +12,9 @@ import { AuditorDashboard } from '@/components/dashboards/AuditorDashboard';
 
 export default function DashboardPage() {
   const { user, activeOrganization } = useAuth();
-  const role = user?.isPlatformUser ? Role.SUPER_ADMIN : ((activeOrganization?.userRole as Role) || Role.GUEST);
+  const role = user?.isPlatformUser
+    ? Role.SUPER_ADMIN
+    : (activeOrganization?.userRole as Role) || Role.GUEST;
 
   // Dynamically render role-tailored dashboard experience
   switch (role) {

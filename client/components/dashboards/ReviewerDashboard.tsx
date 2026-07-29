@@ -35,10 +35,16 @@ export function ReviewerDashboard() {
       .catch((err) => console.error('Error fetching reviewer PRs:', err));
   }, [activeOrganization?.id]);
 
-  const pendingCount = pullRequests.filter((pr) => pr.status === 'UNDER_REVIEW' || pr.status === 'OPEN').length;
+  const pendingCount = pullRequests.filter(
+    (pr) => pr.status === 'UNDER_REVIEW' || pr.status === 'OPEN'
+  ).length;
   const approvedCount = pullRequests.filter((pr) => pr.status === 'APPROVED').length;
-  const rejectedCount = pullRequests.filter((pr) => pr.status === 'REJECTED' || pr.status === 'CHANGES_REQUESTED').length;
-  const mergeReadyCount = pullRequests.filter((pr) => pr.status === 'MERGED' || pr.status === 'APPROVED').length;
+  const rejectedCount = pullRequests.filter(
+    (pr) => pr.status === 'REJECTED' || pr.status === 'CHANGES_REQUESTED'
+  ).length;
+  const mergeReadyCount = pullRequests.filter(
+    (pr) => pr.status === 'MERGED' || pr.status === 'APPROVED'
+  ).length;
 
   return (
     <div className="space-y-6">
@@ -62,7 +68,11 @@ export function ReviewerDashboard() {
           Welcome, {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'Reviewer'}
         </h2>
         <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
-          You have <strong className="text-primary font-mono">{pendingCount} reviews waiting</strong> in your approval queue (<strong className="text-success font-mono">{mergeReadyCount} ready for merge</strong>, <strong className="text-error font-mono">{rejectedCount} rejected</strong>).
+          You have{' '}
+          <strong className="text-primary font-mono">{pendingCount} reviews waiting</strong> in your
+          approval queue (
+          <strong className="text-success font-mono">{mergeReadyCount} ready for merge</strong>,{' '}
+          <strong className="text-error font-mono">{rejectedCount} rejected</strong>).
         </p>
       </div>
 
@@ -73,7 +83,9 @@ export function ReviewerDashboard() {
             <span>Pending Reviews</span>
             <Clock className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{pendingCount}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {pendingCount}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Awaiting Approval</p>
         </div>
 
@@ -82,7 +94,9 @@ export function ReviewerDashboard() {
             <span>Merge Queue</span>
             <GitMerge className="w-4 h-4 text-success" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{mergeReadyCount}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {mergeReadyCount}
+          </p>
           <p className="text-[13px] text-success font-medium">Ready to Merge</p>
         </div>
 
@@ -91,7 +105,9 @@ export function ReviewerDashboard() {
             <span>Approved PRs</span>
             <CheckCircle2 className="w-4 h-4 text-success" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{approvedCount}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {approvedCount}
+          </p>
           <p className="text-[13px] text-success font-medium">Verified Decisions</p>
         </div>
 
@@ -100,7 +116,9 @@ export function ReviewerDashboard() {
             <span>Blocked / Rejected</span>
             <XCircle className="w-4 h-4 text-error" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{rejectedCount}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {rejectedCount}
+          </p>
           <p className="text-[13px] text-error font-medium">Requires Re-Review</p>
         </div>
       </div>
@@ -115,7 +133,10 @@ export function ReviewerDashboard() {
                 <GitPullRequest className="w-4 h-4 text-primary" />
                 <span>Assigned Pull Requests & Code Reviews</span>
               </div>
-              <Link href="/pull-requests" className="text-xs text-primary hover:underline font-medium flex items-center gap-1">
+              <Link
+                href="/pull-requests"
+                className="text-xs text-primary hover:underline font-medium flex items-center gap-1"
+              >
                 View All PRs <ArrowUpRight className="w-3 h-3" />
               </Link>
             </div>
@@ -137,7 +158,10 @@ export function ReviewerDashboard() {
             ) : (
               <div className="divide-y divide-border">
                 {pullRequests.map((pr) => (
-                  <div key={pr.id} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div
+                    key={pr.id}
+                    className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                  >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span
@@ -145,14 +169,16 @@ export function ReviewerDashboard() {
                             pr.status === 'APPROVED'
                               ? 'bg-success/10 text-success border-success/20'
                               : pr.status === 'REJECTED'
-                              ? 'bg-error/10 text-error border-error/20'
-                              : 'bg-surface-secondary text-text-primary border-border'
+                                ? 'bg-error/10 text-error border-error/20'
+                                : 'bg-surface-secondary text-text-primary border-border'
                           }`}
                         >
                           {pr.status}
                         </span>
                         <span className="text-[11px] font-mono text-text-secondary">
-                          {pr.author ? `Author: ${pr.author.firstName} ${pr.author.lastName}` : 'Pull Request'}
+                          {pr.author
+                            ? `Author: ${pr.author.firstName} ${pr.author.lastName}`
+                            : 'Pull Request'}
                         </span>
                       </div>
                       <h4 className="font-semibold text-xs text-text-primary hover:text-primary transition-colors">
@@ -179,7 +205,9 @@ export function ReviewerDashboard() {
         <div className="space-y-6">
           {/* Quick Actions */}
           <div className="p-6 rounded-[10px] border border-border bg-surface shadow-xs space-y-3">
-            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">Reviewer Actions</h4>
+            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">
+              Reviewer Actions
+            </h4>
             <div className="space-y-2">
               <Link
                 href="/pull-requests"
@@ -217,7 +245,8 @@ export function ReviewerDashboard() {
               <span className="text-[11px] font-mono text-success">PASSED</span>
             </div>
             <p className="text-xs text-text-secondary leading-relaxed">
-              Automated linting and test coverage checks are 100% green across all {pullRequests.length} pull requests.
+              Automated linting and test coverage checks are 100% green across all{' '}
+              {pullRequests.length} pull requests.
             </p>
           </div>
         </div>

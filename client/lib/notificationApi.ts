@@ -51,7 +51,9 @@ export const notificationApi = {
       const res = await fetch(`${API_BASE}/notifications?${params.toString()}`, {
         headers: getHeaders(activeOrgId, token),
       });
-      return await handleResponse<{ items: NotificationDto[]; total: number; unreadCount: number }>(res);
+      return await handleResponse<{ items: NotificationDto[]; total: number; unreadCount: number }>(
+        res
+      );
     } catch {
       return { items: [], total: 0, unreadCount: 0 };
     }

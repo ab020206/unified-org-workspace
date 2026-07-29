@@ -51,7 +51,12 @@ export function SuperAdminDashboard() {
     apiRequestsToday: '0',
     errorMonitoring: '0.00%',
     queueStatus: 'Idle (0 delayed)',
-    systemMetrics: { cpuUsage: '0%', memoryUsage: '0%', dbConnections: '0 / 100', redisLatency: '0ms' },
+    systemMetrics: {
+      cpuUsage: '0%',
+      memoryUsage: '0%',
+      dbConnections: '0 / 100',
+      redisLatency: '0ms',
+    },
   };
 
   const featureFlags = stats?.featureFlags || [];
@@ -77,10 +82,14 @@ export function SuperAdminDashboard() {
           <span>Platform Governance Mode</span>
         </div>
         <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">
-          Welcome, {user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : 'Platform Admin'}
+          Welcome,{' '}
+          {user?.firstName && user?.lastName
+            ? `${user.firstName} ${user.lastName}`
+            : 'Platform Admin'}
         </h2>
         <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
-          Full platform governance across all multi-tenant organizations. Monitor platform health, manage feature flags, track active user throughput, and inspect global audit streams.
+          Full platform governance across all multi-tenant organizations. Monitor platform health,
+          manage feature flags, track active user throughput, and inspect global audit streams.
         </p>
       </div>
 
@@ -91,7 +100,9 @@ export function SuperAdminDashboard() {
             <span>Organizations</span>
             <Building2 className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{overview.totalOrganizations}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {overview.totalOrganizations}
+          </p>
           <p className="text-[13px] text-success font-medium">Active Tenants</p>
         </div>
 
@@ -100,7 +111,9 @@ export function SuperAdminDashboard() {
             <span>Total Users</span>
             <Users className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{overview.totalUsers}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {overview.totalUsers}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Platform Users</p>
         </div>
 
@@ -109,7 +122,9 @@ export function SuperAdminDashboard() {
             <span>Global Tickets</span>
             <Ticket className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{overview.globalTickets}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {overview.globalTickets}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Cross-Tenant</p>
         </div>
 
@@ -118,7 +133,9 @@ export function SuperAdminDashboard() {
             <span>Global Reviews</span>
             <GitPullRequest className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{overview.globalReviews}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {overview.globalReviews}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Code PRs</p>
         </div>
 
@@ -127,7 +144,9 @@ export function SuperAdminDashboard() {
             <span>Platform Health</span>
             <Activity className="w-4 h-4 text-success" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{overview.platformHealth}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {overview.platformHealth}
+          </p>
           <p className="text-[13px] text-success font-medium">SLA Uptime</p>
         </div>
 
@@ -136,7 +155,9 @@ export function SuperAdminDashboard() {
             <span>Active Sessions</span>
             <Zap className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{overview.activeSessions}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {overview.activeSessions}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Live Admin Sessions</p>
         </div>
 
@@ -145,7 +166,9 @@ export function SuperAdminDashboard() {
             <span>Audit Logs</span>
             <Shield className="w-4 h-4 text-success" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{overview.auditOverview}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {overview.auditOverview}
+          </p>
           <p className="text-[13px] text-success font-medium">Signed Logs</p>
         </div>
 
@@ -154,7 +177,9 @@ export function SuperAdminDashboard() {
             <span>Storage Usage</span>
             <HardDrive className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{overview.storageUsage}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {overview.storageUsage}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Encrypted Storage</p>
         </div>
 
@@ -163,7 +188,9 @@ export function SuperAdminDashboard() {
             <span>API Requests</span>
             <Server className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{overview.apiRequestsToday}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {overview.apiRequestsToday}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Req / 24h</p>
         </div>
 
@@ -172,7 +199,9 @@ export function SuperAdminDashboard() {
             <span>Error Rate</span>
             <AlertTriangle className="w-4 h-4 text-success" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{overview.errorMonitoring}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {overview.errorMonitoring}
+          </p>
           <p className="text-[13px] text-success font-medium">0.01% Nominal</p>
         </div>
       </div>
@@ -194,32 +223,50 @@ export function SuperAdminDashboard() {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="p-3 rounded-md bg-surface-secondary/60 border border-border space-y-1">
-                <span className="text-[11px] font-mono text-text-secondary uppercase">CPU Load</span>
-                <p className="text-lg font-semibold text-text-primary font-mono">{overview.systemMetrics.cpuUsage}</p>
+                <span className="text-[11px] font-mono text-text-secondary uppercase">
+                  CPU Load
+                </span>
+                <p className="text-lg font-semibold text-text-primary font-mono">
+                  {overview.systemMetrics.cpuUsage}
+                </p>
               </div>
 
               <div className="p-3 rounded-md bg-surface-secondary/60 border border-border space-y-1">
-                <span className="text-[11px] font-mono text-text-secondary uppercase">RAM Utilization</span>
-                <p className="text-lg font-semibold text-text-primary font-mono">{overview.systemMetrics.memoryUsage}</p>
+                <span className="text-[11px] font-mono text-text-secondary uppercase">
+                  RAM Utilization
+                </span>
+                <p className="text-lg font-semibold text-text-primary font-mono">
+                  {overview.systemMetrics.memoryUsage}
+                </p>
               </div>
 
               <div className="p-3 rounded-md bg-surface-secondary/60 border border-border space-y-1">
                 <span className="text-[11px] font-mono text-text-secondary uppercase">DB Pool</span>
-                <p className="text-lg font-semibold text-text-primary font-mono">{overview.systemMetrics.dbConnections}</p>
+                <p className="text-lg font-semibold text-text-primary font-mono">
+                  {overview.systemMetrics.dbConnections}
+                </p>
               </div>
 
               <div className="p-3 rounded-md bg-surface-secondary/60 border border-border space-y-1">
-                <span className="text-[11px] font-mono text-text-secondary uppercase">Redis Latency</span>
-                <p className="text-lg font-semibold text-success font-mono">{overview.systemMetrics.redisLatency}</p>
+                <span className="text-[11px] font-mono text-text-secondary uppercase">
+                  Redis Latency
+                </span>
+                <p className="text-lg font-semibold text-success font-mono">
+                  {overview.systemMetrics.redisLatency}
+                </p>
               </div>
             </div>
 
             <div className="flex items-center justify-between text-xs text-text-secondary pt-2 border-t border-border">
               <span className="flex items-center gap-1.5">
                 <Database className="w-3.5 h-3.5 text-primary" />
-                Queue Engine: <strong className="text-text-primary font-mono">{overview.queueStatus}</strong>
+                Queue Engine:{' '}
+                <strong className="text-text-primary font-mono">{overview.queueStatus}</strong>
               </span>
-              <Link href="/security" className="text-primary hover:underline flex items-center gap-1 font-medium">
+              <Link
+                href="/security"
+                className="text-primary hover:underline flex items-center gap-1 font-medium"
+              >
                 Manage Security Controls <ArrowUpRight className="w-3 h-3" />
               </Link>
             </div>
@@ -232,7 +279,10 @@ export function SuperAdminDashboard() {
                 <Building2 className="w-4 h-4 text-primary" />
                 <span>Tenant Organizations Overview</span>
               </div>
-              <Link href="/organizations/create" className="text-xs text-primary hover:underline font-medium flex items-center gap-1">
+              <Link
+                href="/organizations/create"
+                className="text-xs text-primary hover:underline font-medium flex items-center gap-1"
+              >
                 + Provision Organization
               </Link>
             </div>
@@ -270,12 +320,17 @@ export function SuperAdminDashboard() {
                 <ToggleRight className="w-4 h-4 text-primary" />
                 <span>Platform Feature Flags</span>
               </div>
-              <span className="text-[11px] font-mono text-text-secondary uppercase font-medium">Global State</span>
+              <span className="text-[11px] font-mono text-text-secondary uppercase font-medium">
+                Global State
+              </span>
             </div>
 
             <div className="space-y-3">
               {featureFlags.map((flag: any) => (
-                <div key={flag.key} className="p-3 rounded-md bg-surface-secondary/50 border border-border flex items-center justify-between">
+                <div
+                  key={flag.key}
+                  className="p-3 rounded-md bg-surface-secondary/50 border border-border flex items-center justify-between"
+                >
                   <div>
                     <h5 className="font-medium text-xs text-text-primary font-mono">{flag.key}</h5>
                     <p className="text-[11px] text-text-secondary">{flag.description}</p>
@@ -290,7 +345,9 @@ export function SuperAdminDashboard() {
 
           {/* Quick Actions Panel */}
           <div className="p-6 rounded-[10px] border border-border bg-surface shadow-xs space-y-3">
-            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">Platform Admin Actions</h4>
+            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">
+              Platform Admin Actions
+            </h4>
             <div className="space-y-2">
               <Link
                 href="/organizations/create"

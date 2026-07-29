@@ -104,7 +104,9 @@ export function AddMemberModal({ isOpen, onClose, onSuccess }: Props) {
             </div>
             <div>
               <h3 className="font-semibold text-base text-text-primary">Add Workspace Member</h3>
-              <p className="text-xs text-text-secondary">Provision user account & assign RBAC permissions</p>
+              <p className="text-xs text-text-secondary">
+                Provision user account & assign RBAC permissions
+              </p>
             </div>
           </div>
 
@@ -206,18 +208,31 @@ export function AddMemberModal({ isOpen, onClose, onSuccess }: Props) {
                 onChange={(e) => setRole(e.target.value as Role)}
                 className="w-full rounded-md border border-border bg-surface p-2.5 text-xs text-text-primary font-mono focus:outline-none focus:border-primary cursor-pointer"
               >
-                <option value={Role.SUPPORT_AGENT}>SUPPORT_AGENT (Customer Support & Ticket Resolver)</option>
+                <option value={Role.SUPPORT_AGENT}>
+                  SUPPORT_AGENT (Customer Support & Ticket Resolver)
+                </option>
                 <option value={Role.REVIEWER}>REVIEWER (Peer Code Reviewer & Approver)</option>
-                <option value={Role.GUEST}>GUEST (External Partner & Shared Resource Collaborator)</option>
-                <option value={Role.AUDITOR}>AUDITOR (Compliance & Audit Log Observer - Read Only)</option>
-                <option value={Role.ADMIN}>ADMIN (Workspace Administrator & User Governance)</option>
+                <option value={Role.GUEST}>
+                  GUEST (External Partner & Shared Resource Collaborator)
+                </option>
+                <option value={Role.AUDITOR}>
+                  AUDITOR (Compliance & Audit Log Observer - Read Only)
+                </option>
+                <option value={Role.ADMIN}>
+                  ADMIN (Workspace Administrator & User Governance)
+                </option>
               </select>
               <p className="text-[11px] text-text-secondary pt-0.5">
-                {role === Role.SUPPORT_AGENT && 'Access to support tickets queue, status updates, comments & attachments.'}
-                {role === Role.REVIEWER && 'Access to pull request review console, approvals, and merges.'}
-                {role === Role.GUEST && 'Access to cross-tenant shared resources and guest workspace view.'}
-                {role === Role.AUDITOR && 'Read-only access to organization audit logs and compliance timeline.'}
-                {role === Role.ADMIN && 'Full access to organization members, settings, and workspace governance.'}
+                {role === Role.SUPPORT_AGENT &&
+                  'Access to support tickets queue, status updates, comments & attachments.'}
+                {role === Role.REVIEWER &&
+                  'Access to pull request review console, approvals, and merges.'}
+                {role === Role.GUEST &&
+                  'Access to cross-tenant shared resources and guest workspace view.'}
+                {role === Role.AUDITOR &&
+                  'Read-only access to organization audit logs and compliance timeline.'}
+                {role === Role.ADMIN &&
+                  'Full access to organization members, settings, and workspace governance.'}
               </p>
             </div>
 

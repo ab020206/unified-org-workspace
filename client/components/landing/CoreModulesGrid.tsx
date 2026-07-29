@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import {
   Lock,
   Headphones,
@@ -75,66 +74,61 @@ export const CoreModulesGrid: React.FC = () => {
   ];
 
   return (
-    <section id="features" className="py-20 border-b border-[#D9D9D9] bg-[#F2F2F2] relative">
+    <section id="features" className="relative z-10 py-20 border-b border-border bg-background">
       <div className="max-w-7xl mx-auto px-6 space-y-12">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#D9D9D9] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-8">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-[#D9D9D9] bg-white text-[#174D38] text-xs font-mono font-medium shadow-xs">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-border bg-surface text-primary text-xs font-mono font-medium shadow-xs">
               Core Platform Capabilities
             </div>
-            <h2 className="text-3xl md:text-4xl font-semibold text-[#1F1F1F] tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-semibold text-text-primary tracking-tight">
               Enterprise-Grade Platform Modules
             </h2>
-            <p className="text-xs md:text-sm text-[#6B7280] leading-relaxed">
-              Eight deeply integrated modules engineered to replace disparate tools with a unified, high-density workspace.
+            <p className="text-xs md:text-sm text-text-secondary leading-relaxed">
+              Eight deeply integrated modules engineered to replace disparate tools with a unified,
+              high-density workspace.
             </p>
           </div>
 
-          <div className="flex items-center gap-3 text-xs font-mono text-[#15803D] shrink-0 font-medium">
-            <span className="w-2 h-2 rounded-full bg-[#15803D]" />
+          <div className="flex items-center gap-3 text-xs font-mono text-success shrink-0 font-medium">
+            <span className="w-2 h-2 rounded-full bg-success" />
             <span>All Modules Production Ready</span>
           </div>
         </div>
 
         {/* Modules Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {modules.map((mod, idx) => {
+          {modules.map((mod) => {
             const Icon = mod.icon;
             return (
-              <motion.div
+              <div
                 key={mod.title}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.18, delay: idx * 0.03 }}
-                className="group p-5 rounded-[10px] border border-[#D9D9D9] bg-white space-y-4 hover:border-[#174D38]/40 shadow-xs transition-all relative overflow-hidden flex flex-col justify-between"
+                className="group p-5 rounded-[10px] border border-border bg-surface space-y-4 hover:border-primary/40 shadow-xs transition-all relative overflow-hidden flex flex-col justify-between"
               >
                 <div className="space-y-3 relative z-10">
                   <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-md bg-[#F2F2F2] border border-[#D9D9D9] flex items-center justify-center text-[#174D38]">
+                    <div className="w-9 h-9 rounded-md bg-surface-secondary border border-border flex items-center justify-center text-primary">
                       <Icon className="w-4.5 h-4.5" />
                     </div>
-                    <span className="text-[9px] font-mono font-medium px-2 py-0.5 rounded bg-[#F2F2F2] text-[#1F1F1F] border border-[#D9D9D9]">
+                    <span className="text-[9px] font-mono font-medium px-2 py-0.5 rounded bg-surface-secondary text-text-primary border border-border">
                       {mod.tag}
                     </span>
                   </div>
 
-                  <h3 className="font-semibold text-sm text-[#1F1F1F] group-hover:text-[#174D38] transition-colors">
+                  <h3 className="font-semibold text-sm text-text-primary group-hover:text-primary transition-colors">
                     {mod.title}
                   </h3>
 
-                  <p className="text-xs text-[#6B7280] leading-relaxed">
-                    {mod.desc}
-                  </p>
+                  <p className="text-xs text-text-secondary leading-relaxed">{mod.desc}</p>
                 </div>
 
                 {/* Quick preview pill */}
-                <div className="pt-3 border-t border-[#D9D9D9] relative z-10 flex items-center justify-between text-[10px] font-mono text-[#6B7280]">
+                <div className="pt-3 border-t border-border relative z-10 flex items-center justify-between text-[10px] font-mono text-text-secondary">
                   <span className="truncate">{mod.preview}</span>
-                  <ArrowUpRight className="w-3 h-3 text-[#6B7280] group-hover:text-[#174D38] transition-colors shrink-0" />
+                  <ArrowUpRight className="w-3 h-3 text-text-secondary group-hover:text-primary transition-colors shrink-0" />
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

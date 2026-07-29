@@ -3,8 +3,6 @@ import { ApiError } from '../utils/apiError';
 import { logger } from '../utils/logger';
 import {
   TicketStatus,
-  TicketPriority,
-  TicketCategory,
   CreateTicketDto,
   UpdateTicketDto,
   TicketListQueryDto,

@@ -96,9 +96,12 @@ export function OrgAdminDashboard() {
   const supportAgentsCount = members?.filter((m) => m.role === 'SUPPORT_AGENT').length || 0;
   const reviewersCount = members?.filter((m) => m.role === 'REVIEWER').length || 0;
   const orgAdminsCount = members?.filter((m) => m.role === 'ADMIN').length || 0;
-  const guestsAuditorsCount = members?.filter((m) => m.role === 'GUEST' || m.role === 'AUDITOR').length || 0;
+  const guestsAuditorsCount =
+    members?.filter((m) => m.role === 'GUEST' || m.role === 'AUDITOR').length || 0;
 
-  const openTicketsCount = tickets.filter((t) => t.status !== 'CLOSED' && t.status !== 'RESOLVED').length;
+  const openTicketsCount = tickets.filter(
+    (t) => t.status !== 'CLOSED' && t.status !== 'RESOLVED'
+  ).length;
   const openPRsCount = pullRequests.filter((pr) => pr.status === 'OPEN').length;
 
   return (
@@ -121,10 +124,20 @@ export function OrgAdminDashboard() {
           <span>Tenant Workspace: {activeOrganization?.name || 'Active Workspace'}</span>
         </div>
         <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">
-          Welcome, {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'Workspace Admin'}
+          Welcome,{' '}
+          {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'Workspace Admin'}
         </h2>
         <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
-          Managing <strong className="text-text-primary">{activeOrganization?.name || 'Active Workspace'}</strong>. You currently have <strong className="text-primary font-mono">{activeMemberCount} Active Members</strong> and <strong className="text-warning font-mono">{invitations.length} Pending Invitations</strong>.
+          Managing{' '}
+          <strong className="text-text-primary">
+            {activeOrganization?.name || 'Active Workspace'}
+          </strong>
+          . You currently have{' '}
+          <strong className="text-primary font-mono">{activeMemberCount} Active Members</strong> and{' '}
+          <strong className="text-warning font-mono">
+            {invitations.length} Pending Invitations
+          </strong>
+          .
         </p>
       </div>
 
@@ -135,7 +148,9 @@ export function OrgAdminDashboard() {
             <span>Org Health</span>
             <Activity className="w-4 h-4 text-success" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">100%</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            100%
+          </p>
           <p className="text-[13px] text-success font-medium">Active Status</p>
         </div>
 
@@ -144,7 +159,9 @@ export function OrgAdminDashboard() {
             <span>Members</span>
             <Users className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{activeMemberCount}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {activeMemberCount}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Active Members</p>
         </div>
 
@@ -153,7 +170,9 @@ export function OrgAdminDashboard() {
             <span>Pending Invites</span>
             <Mail className="w-4 h-4 text-warning" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{invitations.length}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {invitations.length}
+          </p>
           <p className="text-[13px] text-warning font-medium">Invitations Sent</p>
         </div>
 
@@ -162,8 +181,12 @@ export function OrgAdminDashboard() {
             <span>Open Tickets</span>
             <Ticket className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{openTicketsCount}</p>
-          <p className="text-[13px] text-text-secondary font-medium">{tickets.length} Total Tickets</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {openTicketsCount}
+          </p>
+          <p className="text-[13px] text-text-secondary font-medium">
+            {tickets.length} Total Tickets
+          </p>
         </div>
 
         <div className="p-4 rounded-[10px] border border-border bg-surface shadow-xs space-y-1">
@@ -171,8 +194,12 @@ export function OrgAdminDashboard() {
             <span>Open PRs</span>
             <GitPullRequest className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{openPRsCount}</p>
-          <p className="text-[13px] text-text-secondary font-medium">{pullRequests.length} Total PRs</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {openPRsCount}
+          </p>
+          <p className="text-[13px] text-text-secondary font-medium">
+            {pullRequests.length} Total PRs
+          </p>
         </div>
 
         <div className="p-4 rounded-[10px] border border-border bg-surface shadow-xs space-y-1">
@@ -180,7 +207,9 @@ export function OrgAdminDashboard() {
             <span>Shared Items</span>
             <Share2 className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{sharedItems.length}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {sharedItems.length}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Cross-Tenant Shares</p>
         </div>
       </div>
@@ -196,30 +225,49 @@ export function OrgAdminDashboard() {
                 <Users className="w-4 h-4 text-primary" />
                 <span>Department Statistics & Member Distribution</span>
               </div>
-              <Link href="/members" className="text-xs text-primary hover:underline font-medium flex items-center gap-1">
+              <Link
+                href="/members"
+                className="text-xs text-primary hover:underline font-medium flex items-center gap-1"
+              >
                 Manage Directory <ArrowUpRight className="w-3 h-3" />
               </Link>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="p-3 rounded-md bg-surface-secondary/60 border border-border space-y-1">
-                <span className="text-[11px] font-mono text-text-secondary uppercase">Support Agents</span>
-                <p className="text-lg font-semibold text-text-primary font-mono">{supportAgentsCount} Members</p>
+                <span className="text-[11px] font-mono text-text-secondary uppercase">
+                  Support Agents
+                </span>
+                <p className="text-lg font-semibold text-text-primary font-mono">
+                  {supportAgentsCount} Members
+                </p>
               </div>
 
               <div className="p-3 rounded-md bg-surface-secondary/60 border border-border space-y-1">
-                <span className="text-[11px] font-mono text-text-secondary uppercase">Code Reviewers</span>
-                <p className="text-lg font-semibold text-text-primary font-mono">{reviewersCount} Members</p>
+                <span className="text-[11px] font-mono text-text-secondary uppercase">
+                  Code Reviewers
+                </span>
+                <p className="text-lg font-semibold text-text-primary font-mono">
+                  {reviewersCount} Members
+                </p>
               </div>
 
               <div className="p-3 rounded-md bg-surface-secondary/60 border border-border space-y-1">
-                <span className="text-[11px] font-mono text-text-secondary uppercase">Org Admins</span>
-                <p className="text-lg font-semibold text-text-primary font-mono">{orgAdminsCount} Members</p>
+                <span className="text-[11px] font-mono text-text-secondary uppercase">
+                  Org Admins
+                </span>
+                <p className="text-lg font-semibold text-text-primary font-mono">
+                  {orgAdminsCount} Members
+                </p>
               </div>
 
               <div className="p-3 rounded-md bg-surface-secondary/60 border border-border space-y-1">
-                <span className="text-[11px] font-mono text-text-secondary uppercase">Guests & Auditors</span>
-                <p className="text-lg font-semibold text-success font-mono">{guestsAuditorsCount} Members</p>
+                <span className="text-[11px] font-mono text-text-secondary uppercase">
+                  Guests & Auditors
+                </span>
+                <p className="text-lg font-semibold text-success font-mono">
+                  {guestsAuditorsCount} Members
+                </p>
               </div>
             </div>
           </div>
@@ -231,7 +279,10 @@ export function OrgAdminDashboard() {
                 <Mail className="w-4 h-4 text-warning" />
                 <span>Pending Invitations Manager</span>
               </div>
-              <Link href="/members" className="text-xs text-primary hover:underline font-medium flex items-center gap-1">
+              <Link
+                href="/members"
+                className="text-xs text-primary hover:underline font-medium flex items-center gap-1"
+              >
                 + Add / Invite Member
               </Link>
             </div>
@@ -267,7 +318,8 @@ export function OrgAdminDashboard() {
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-[11px] font-mono text-text-secondary flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-text-secondary" /> Expiry: {new Date(inv.expiry).toLocaleDateString()}
+                        <Clock className="w-3 h-3 text-text-secondary" /> Expiry:{' '}
+                        {new Date(inv.expiry).toLocaleDateString()}
                       </span>
                       <button
                         onClick={() => handleRevokeInv(inv.id)}
@@ -288,7 +340,9 @@ export function OrgAdminDashboard() {
         <div className="space-y-6">
           {/* Quick Actions */}
           <div className="p-6 rounded-[10px] border border-border bg-surface shadow-xs space-y-3">
-            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">Organization Admin Actions</h4>
+            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">
+              Organization Admin Actions
+            </h4>
             <div className="space-y-2">
               <Link
                 href="/members"
@@ -323,7 +377,10 @@ export function OrgAdminDashboard() {
                 <Share2 className="w-4 h-4 text-primary" />
                 <span>Shared Resources</span>
               </h4>
-              <Link href="/sharing" className="text-[11px] text-primary hover:underline font-medium">
+              <Link
+                href="/sharing"
+                className="text-[11px] text-primary hover:underline font-medium"
+              >
                 View Shares
               </Link>
             </div>
@@ -333,7 +390,10 @@ export function OrgAdminDashboard() {
               </p>
             ) : (
               <p className="text-xs text-text-secondary leading-relaxed">
-                <strong className="text-primary font-mono">{sharedItems.length} active cross-tenant resources</strong> shared between partner organizations.
+                <strong className="text-primary font-mono">
+                  {sharedItems.length} active cross-tenant resources
+                </strong>{' '}
+                shared between partner organizations.
               </p>
             )}
           </div>

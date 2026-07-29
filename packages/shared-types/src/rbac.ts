@@ -34,6 +34,13 @@ export enum Permission {
 
   // Audit & System Permissions
   AUDIT_READ = 'audit.read',
+  AUDIT_ANALYTICS_READ = 'audit.analytics_read',
+  ANOMALY_ACKNOWLEDGE = 'anomaly.acknowledge',
+
+  // GitHub Integration Permissions
+  GITHUB_READ = 'github.read',
+  GITHUB_MANAGE = 'github.manage',
+
   SHARE_CREATE = 'share.create',
   SHARE_ACCEPT = 'share.accept',
   NOTIFICATION_READ = 'notification.read',
@@ -64,6 +71,10 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     Permission.REVIEW_REJECT,
     Permission.REVIEW_MERGE,
     Permission.AUDIT_READ,
+    Permission.AUDIT_ANALYTICS_READ,
+    Permission.ANOMALY_ACKNOWLEDGE,
+    Permission.GITHUB_READ,
+    Permission.GITHUB_MANAGE,
     Permission.SHARE_CREATE,
     Permission.SHARE_ACCEPT,
     Permission.NOTIFICATION_READ,
@@ -89,6 +100,7 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     Permission.REVIEW_UPDATE,
     Permission.REVIEW_APPROVE,
     Permission.REVIEW_REJECT,
+    Permission.GITHUB_READ,
     Permission.NOTIFICATION_READ,
   ],
 
@@ -102,6 +114,7 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<Role, Permission[]> = {
   [Role.AUDITOR]: [
     Permission.ORG_READ,
     Permission.AUDIT_READ,
+    Permission.AUDIT_ANALYTICS_READ,
     Permission.NOTIFICATION_READ,
   ],
 };

@@ -6,7 +6,8 @@ import { cn } from '@/lib/utils';
 
 export interface CommandBarProps {
   moduleName: string;
-  moduleAccent?: 'support' | 'reviews' | 'audit' | 'ai' | 'security' | 'notifications' | 'collaboration';
+  moduleAccent?:
+    'support' | 'reviews' | 'audit' | 'ai' | 'security' | 'notifications' | 'collaboration';
   breadcrumbs?: string[];
   searchPlaceholder?: string;
   searchValue?: string;
@@ -37,13 +38,20 @@ export function CommandBar({
 }: CommandBarProps) {
   const getBadgeClass = () => {
     switch (moduleAccent) {
-      case 'support': return 'bg-info/10 text-info border-info/20';
-      case 'reviews': return 'bg-surface-secondary text-text-primary border-border';
-      case 'audit': return 'bg-success/10 text-success border-success/20';
-      case 'ai': return 'bg-surface-secondary text-text-primary border-border';
-      case 'security': return 'bg-error/10 text-error border-error/20';
-      case 'notifications': return 'bg-warning/10 text-warning border-warning/20';
-      default: return 'bg-surface-secondary text-text-primary border-border';
+      case 'support':
+        return 'bg-info/10 text-info border-info/20';
+      case 'reviews':
+        return 'bg-surface-secondary text-text-primary border-border';
+      case 'audit':
+        return 'bg-success/10 text-success border-success/20';
+      case 'ai':
+        return 'bg-surface-secondary text-text-primary border-border';
+      case 'security':
+        return 'bg-error/10 text-error border-error/20';
+      case 'notifications':
+        return 'bg-warning/10 text-warning border-warning/20';
+      default:
+        return 'bg-surface-secondary text-text-primary border-border';
     }
   };
 
@@ -54,7 +62,13 @@ export function CommandBar({
         {breadcrumbs.map((crumb, idx) => (
           <React.Fragment key={idx}>
             {idx > 0 && <ChevronRight className="w-3.5 h-3.5 text-text-secondary/50" />}
-            <span className={idx === breadcrumbs.length - 1 ? "text-text-primary font-semibold" : "hover:text-text-primary transition-colors"}>
+            <span
+              className={
+                idx === breadcrumbs.length - 1
+                  ? 'text-text-primary font-semibold'
+                  : 'hover:text-text-primary transition-colors'
+              }
+            >
               {crumb}
             </span>
           </React.Fragment>
@@ -65,7 +79,12 @@ export function CommandBar({
       <div className="p-3.5 rounded-xl border border-border bg-surface shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
         {/* Left: Module Title & Search */}
         <div className="flex items-center gap-3 flex-1 min-w-0">
-          <span className={cn("text-xs font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border", getBadgeClass())}>
+          <span
+            className={cn(
+              'text-xs font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border',
+              getBadgeClass()
+            )}
+          >
             {moduleName}
           </span>
 
@@ -94,10 +113,10 @@ export function CommandBar({
                   key={opt.value}
                   onClick={() => onFilterChange?.(opt.value)}
                   className={cn(
-                    "px-2.5 py-1 text-xs font-medium rounded-md transition-all cursor-pointer",
+                    'px-2.5 py-1 text-xs font-medium rounded-md transition-all cursor-pointer',
                     activeFilter === opt.value
-                      ? "bg-surface text-text-primary shadow-xs font-semibold"
-                      : "text-text-secondary hover:text-text-primary"
+                      ? 'bg-surface text-text-primary shadow-xs font-semibold'
+                      : 'text-text-secondary hover:text-text-primary'
                   )}
                 >
                   {opt.label}

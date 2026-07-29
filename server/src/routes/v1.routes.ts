@@ -12,8 +12,10 @@ import featureFlagRoutes from './featureFlag.routes';
 import securityRoutes from './security.routes';
 import platformRoutes from './platform.routes';
 import { requireFeature } from '../middleware/featureFlag.middleware';
-import { authRateLimiter, aiRateLimiter, inviteRateLimiter } from '../middleware/rateLimiter';
+import { authRateLimiter, aiRateLimiter } from '../middleware/rateLimiter';
 import { FeatureFlagKey } from '@workspace/shared-types';
+
+import githubRoutes from './github.routes';
 
 const router = Router();
 
@@ -24,6 +26,7 @@ router.use('/platform', platformRoutes);
 router.use('/organizations', organizationRoutes);
 router.use('/security', securityRoutes);
 router.use('/feature-flags', featureFlagRoutes);
+router.use('/github', githubRoutes);
 
 // Tickets & Core Workspace
 router.use('/tickets', ticketRouter);

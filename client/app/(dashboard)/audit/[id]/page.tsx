@@ -53,9 +53,7 @@ export default function AuditDetailPage() {
         <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto">
           <AlertTriangle className="w-6 h-6" />
         </div>
-        <h2 className="text-lg font-bold text-foreground">
-          Audit Event Record Not Found
-        </h2>
+        <h2 className="text-lg font-bold text-foreground">Audit Event Record Not Found</h2>
         <p className="text-xs text-muted-foreground">
           {error || 'The audit record does not exist or access is restricted.'}
         </p>

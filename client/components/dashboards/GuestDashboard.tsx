@@ -61,7 +61,16 @@ export function GuestDashboard() {
           Welcome, {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'Guest User'}
         </h2>
         <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
-          Secure partner workspace. You have access to <strong className="text-primary font-mono">{totalShared} shared resources</strong> (<strong className="text-text-primary font-mono">{sharedTicketsCount} shared tickets</strong> and <strong className="text-text-primary font-mono">{sharedReviewsCount} shared reviews</strong>) granted by host organizations.
+          Secure partner workspace. You have access to{' '}
+          <strong className="text-primary font-mono">{totalShared} shared resources</strong> (
+          <strong className="text-text-primary font-mono">
+            {sharedTicketsCount} shared tickets
+          </strong>{' '}
+          and{' '}
+          <strong className="text-text-primary font-mono">
+            {sharedReviewsCount} shared reviews
+          </strong>
+          ) granted by host organizations.
         </p>
       </div>
 
@@ -72,7 +81,9 @@ export function GuestDashboard() {
             <span>Shared Tickets</span>
             <Ticket className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{sharedTicketsCount}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {sharedTicketsCount}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Partner Support Items</p>
         </div>
 
@@ -81,7 +92,9 @@ export function GuestDashboard() {
             <span>Shared Reviews</span>
             <GitPullRequest className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{sharedReviewsCount}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {sharedReviewsCount}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">External Code Reviews</p>
         </div>
 
@@ -90,7 +103,9 @@ export function GuestDashboard() {
             <span>Total Shared</span>
             <Clock className="w-4 h-4 text-warning" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{totalShared}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {totalShared}
+          </p>
           <p className="text-[13px] text-warning font-medium">Available Resources</p>
         </div>
 
@@ -99,7 +114,9 @@ export function GuestDashboard() {
             <span>Access Mode</span>
             <Lock className="w-4 h-4 text-success" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">Scoped</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            Scoped
+          </p>
           <p className="text-[13px] text-success font-medium">Read & Comment Only</p>
         </div>
       </div>
@@ -114,7 +131,10 @@ export function GuestDashboard() {
                 <Share2 className="w-4 h-4 text-primary" />
                 <span>Shared Resources Console</span>
               </div>
-              <Link href="/sharing" className="text-xs text-primary hover:underline font-medium flex items-center gap-1">
+              <Link
+                href="/sharing"
+                className="text-xs text-primary hover:underline font-medium flex items-center gap-1"
+              >
                 Explore All Shares <ArrowUpRight className="w-3 h-3" />
               </Link>
             </div>
@@ -128,7 +148,10 @@ export function GuestDashboard() {
             ) : (
               <div className="space-y-3">
                 {shares.map((s) => (
-                  <div key={s.id} className="p-3.5 rounded-md bg-surface-secondary/50 border border-border flex items-center justify-between">
+                  <div
+                    key={s.id}
+                    className="p-3.5 rounded-md bg-surface-secondary/50 border border-border flex items-center justify-between"
+                  >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-surface text-text-primary border border-border">
@@ -138,7 +161,9 @@ export function GuestDashboard() {
                           Shared by: {s.sourceOrganization?.name || 'Partner Org'}
                         </span>
                       </div>
-                      <h4 className="font-semibold text-xs text-text-primary">Resource #{s.resourceId?.substring(0, 8)}</h4>
+                      <h4 className="font-semibold text-xs text-text-primary">
+                        Resource #{s.resourceId?.substring(0, 8)}
+                      </h4>
                     </div>
                     <Link
                       href="/sharing"
@@ -156,7 +181,9 @@ export function GuestDashboard() {
         {/* Quick Actions & Partner Info */}
         <div className="space-y-6">
           <div className="p-6 rounded-[10px] border border-border bg-surface shadow-xs space-y-3">
-            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">Guest Partner Actions</h4>
+            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">
+              Guest Partner Actions
+            </h4>
             <div className="space-y-2">
               <Link
                 href="/collaboration"

@@ -26,7 +26,7 @@ export class DigestQueue {
   public async add(
     name: string,
     data: DigestJobData,
-    opts?: { attempts?: number; backoff?: number }
+    _opts?: { attempts?: number; backoff?: number }
   ) {
     logger.info(
       { jobName: name, userId: data.userId, orgId: data.organizationId },

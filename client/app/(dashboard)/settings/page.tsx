@@ -21,20 +21,36 @@ import { Role } from '@workspace/shared-types';
 
 export default function SettingsPage() {
   const { activeOrganization, members, updateOrganization } = useAuth();
-  const [activeTab, setActiveTab] = useState<'profile' | 'team' | 'apikeys' | 'security'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'team' | 'apikeys' | 'security'>(
+    'profile'
+  );
 
   // Form states
   const [orgName, setOrgName] = useState(activeOrganization?.name || '');
   const [orgSlug, setOrgSlug] = useState(activeOrganization?.slug || '');
-  const [customDomain, setCustomDomain] = useState(activeOrganization?.slug ? `app.${activeOrganization.slug}.com` : '');
+  const [customDomain, setCustomDomain] = useState(
+    activeOrganization?.slug ? `app.${activeOrganization.slug}.com` : ''
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [error, setError] = useState('');
 
   // API Keys state
   const [apiKeys, setApiKeys] = useState([
-    { id: 'key-1', name: 'Production CI/CD Pipeline', prefix: 'uw_live_8f3a...', created: '2026-06-15', status: 'ACTIVE' },
-    { id: 'key-2', name: 'Audit Log Export Worker', prefix: 'uw_live_1c9b...', created: '2026-07-01', status: 'ACTIVE' },
+    {
+      id: 'key-1',
+      name: 'Production CI/CD Pipeline',
+      prefix: 'uw_live_8f3a...',
+      created: '2026-06-15',
+      status: 'ACTIVE',
+    },
+    {
+      id: 'key-2',
+      name: 'Audit Log Export Worker',
+      prefix: 'uw_live_1c9b...',
+      created: '2026-07-01',
+      status: 'ACTIVE',
+    },
   ]);
   const [newKeyName, setNewKeyName] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -95,7 +111,7 @@ export default function SettingsPage() {
         breadcrumbs={['Workspace', 'Settings & Governance']}
         searchPlaceholder="Search workspace settings, API keys, or security rules..."
         primaryActionLabel="Invite Member"
-        onPrimaryAction={() => window.location.href = '/organizations/invite'}
+        onPrimaryAction={() => (window.location.href = '/organizations/invite')}
       />
 
       {/* Tabs Header */}
@@ -273,19 +289,19 @@ export default function SettingsPage() {
                     <td className="py-3 px-4 font-bold text-foreground">
                       {m.user?.firstName} {m.user?.lastName}
                     </td>
-                    <td className="py-3 px-4 text-muted-foreground font-mono">
-                      {m.user?.email}
-                    </td>
+                    <td className="py-3 px-4 text-muted-foreground font-mono">{m.user?.email}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${
-                        m.role === Role.ADMIN
-                          ? 'bg-rose-500/10 text-rose-500 border-rose-500/20'
-                          : m.role === Role.REVIEWER
-                          ? 'bg-purple-500/10 text-purple-500 border-purple-500/20'
-                          : m.role === Role.SUPPORT_AGENT
-                          ? 'bg-blue-500/10 text-blue-500 border-blue-500/20'
-                          : 'bg-secondary text-muted-foreground border-border'
-                      }`}>
+                      <span
+                        className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${
+                          m.role === Role.ADMIN
+                            ? 'bg-rose-500/10 text-rose-500 border-rose-500/20'
+                            : m.role === Role.REVIEWER
+                              ? 'bg-purple-500/10 text-purple-500 border-purple-500/20'
+                              : m.role === Role.SUPPORT_AGENT
+                                ? 'bg-blue-500/10 text-blue-500 border-blue-500/20'
+                                : 'bg-secondary text-muted-foreground border-border'
+                        }`}
+                      >
                         {m.role}
                       </span>
                     </td>
@@ -305,7 +321,9 @@ export default function SettingsPage() {
         <div className="space-y-6">
           <div className="panel-card p-6 max-w-3xl space-y-4">
             <div>
-              <h3 className="text-base font-bold text-foreground">Generate New Integration API Key</h3>
+              <h3 className="text-base font-bold text-foreground">
+                Generate New Integration API Key
+              </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
                 API keys grant secure programmatic access to tickets, pull requests, and audit logs.
               </p>
@@ -400,7 +418,8 @@ export default function SettingsPage() {
                   Mandatory Two-Factor Authentication (2FA)
                 </h4>
                 <p className="text-xs text-muted-foreground">
-                  Require all organization members to verify 2FA prior to accessing sensitive resources.
+                  Require all organization members to verify 2FA prior to accessing sensitive
+                  resources.
                 </p>
               </div>
               <button

@@ -28,7 +28,11 @@ export class OrganizationController {
     res
       .status(201)
       .json(
-        createSuccessResponse(result, 'Organization and administrator onboarded successfully', appReq.requestId || 'N/A')
+        createSuccessResponse(
+          result,
+          'Organization and administrator onboarded successfully',
+          appReq.requestId || 'N/A'
+        )
       );
   };
 
@@ -86,7 +90,9 @@ export class OrganizationController {
     const org = await this.organizationService.updateOrganization(orgId, appReq.user.id, req.body);
     res
       .status(200)
-      .json(createSuccessResponse(org, 'Organization updated successfully', appReq.requestId || 'N/A'));
+      .json(
+        createSuccessResponse(org, 'Organization updated successfully', appReq.requestId || 'N/A')
+      );
   };
 
   public invite = async (req: Request, res: Response): Promise<void> => {
@@ -151,7 +157,9 @@ export class OrganizationController {
 
     res
       .status(201)
-      .json(createSuccessResponse(result, 'Member created successfully', appReq.requestId || 'N/A'));
+      .json(
+        createSuccessResponse(result, 'Member created successfully', appReq.requestId || 'N/A')
+      );
   };
 
   public updateMember = async (req: Request, res: Response): Promise<void> => {
@@ -168,7 +176,9 @@ export class OrganizationController {
 
     res
       .status(200)
-      .json(createSuccessResponse(result, 'Member updated successfully', appReq.requestId || 'N/A'));
+      .json(
+        createSuccessResponse(result, 'Member updated successfully', appReq.requestId || 'N/A')
+      );
   };
 
   public removeMember = async (req: Request, res: Response): Promise<void> => {
@@ -196,7 +206,13 @@ export class OrganizationController {
 
     res
       .status(200)
-      .json(createSuccessResponse(result, 'Member password reset successfully', appReq.requestId || 'N/A'));
+      .json(
+        createSuccessResponse(
+          result,
+          'Member password reset successfully',
+          appReq.requestId || 'N/A'
+        )
+      );
   };
 
   public listInvitations = async (req: Request, res: Response): Promise<void> => {
@@ -208,7 +224,11 @@ export class OrganizationController {
     res
       .status(200)
       .json(
-        createSuccessResponse(invitations, 'Invitations listed successfully', appReq.requestId || 'N/A')
+        createSuccessResponse(
+          invitations,
+          'Invitations listed successfully',
+          appReq.requestId || 'N/A'
+        )
       );
   };
 
@@ -225,7 +245,13 @@ export class OrganizationController {
 
     res
       .status(200)
-      .json(createSuccessResponse(invitation, 'Invitation resent successfully', appReq.requestId || 'N/A'));
+      .json(
+        createSuccessResponse(
+          invitation,
+          'Invitation resent successfully',
+          appReq.requestId || 'N/A'
+        )
+      );
   };
 
   public cancelInvitation = async (req: Request, res: Response): Promise<void> => {
@@ -241,6 +267,8 @@ export class OrganizationController {
 
     res
       .status(200)
-      .json(createSuccessResponse(null, 'Invitation cancelled successfully', appReq.requestId || 'N/A'));
+      .json(
+        createSuccessResponse(null, 'Invitation cancelled successfully', appReq.requestId || 'N/A')
+      );
   };
 }

@@ -6,7 +6,7 @@ import { NotificationBell } from './notifications/NotificationBell';
 import { ThemeToggle } from './ThemeToggle';
 import { useAuth } from '@/context/AuthContext';
 import { GlobalCommandPalette } from './ui/GlobalCommandPalette';
-import { LogOut, ShieldCheck, Search, Building2, Zap, Lock, Ticket, GitPullRequest, Users } from 'lucide-react';
+import { LogOut, Search, Building2, Zap, Lock, Ticket, GitPullRequest, Users } from 'lucide-react';
 import { Role } from '@workspace/shared-types';
 
 export function Navbar() {
@@ -28,7 +28,9 @@ export function Navbar() {
   const getScopeBadge = () => {
     if (!user) return null;
 
-    const role = user?.isPlatformUser ? Role.SUPER_ADMIN : ((activeOrganization?.userRole as Role) || Role.GUEST);
+    const role = user?.isPlatformUser
+      ? Role.SUPER_ADMIN
+      : (activeOrganization?.userRole as Role) || Role.GUEST;
 
     switch (role) {
       case Role.SUPER_ADMIN:
@@ -85,7 +87,7 @@ export function Navbar() {
             getScopeBadge()
           ) : (
             <div className="flex items-center gap-2 font-mono font-bold text-sm text-text-primary">
-              <ShieldCheck className="w-4 h-4 text-primary" />
+              <img src="/logo.png" alt="Froncort.ai" className="w-5 h-5 object-contain" />
               Froncort.ai Workspace
             </div>
           )}
@@ -120,7 +122,9 @@ export function Navbar() {
                   <p className="text-xs font-semibold leading-none text-text-primary">
                     {user.firstName} {user.lastName}
                   </p>
-                  <p className="text-[11px] text-text-secondary leading-tight font-mono">{user.email}</p>
+                  <p className="text-[11px] text-text-secondary leading-tight font-mono">
+                    {user.email}
+                  </p>
                 </div>
               </div>
               <button
@@ -152,10 +156,7 @@ export function Navbar() {
       </header>
 
       {/* Global ⌘K Command Palette */}
-      <GlobalCommandPalette
-        isOpen={isCmdPaletteOpen}
-        onClose={() => setIsCmdPaletteOpen(false)}
-      />
+      <GlobalCommandPalette isOpen={isCmdPaletteOpen} onClose={() => setIsCmdPaletteOpen(false)} />
     </>
   );
 }

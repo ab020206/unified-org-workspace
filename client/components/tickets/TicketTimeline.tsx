@@ -20,26 +20,66 @@ export function TicketTimeline({ activities }: Props) {
   const getActionBadge = (action: string) => {
     switch (action) {
       case 'CREATED':
-        return { icon: <Sparkles className="w-3.5 h-3.5 text-primary" />, label: 'Ticket created', bg: 'bg-primary/10 text-primary border-primary/20' };
+        return {
+          icon: <Sparkles className="w-3.5 h-3.5 text-primary" />,
+          label: 'Ticket created',
+          bg: 'bg-primary/10 text-primary border-primary/20',
+        };
       case 'STATUS_CHANGED':
-        return { icon: <RefreshCw className="w-3.5 h-3.5 text-warning" />, label: 'Status updated', bg: 'bg-warning/10 text-warning border-warning/20' };
+        return {
+          icon: <RefreshCw className="w-3.5 h-3.5 text-warning" />,
+          label: 'Status updated',
+          bg: 'bg-warning/10 text-warning border-warning/20',
+        };
       case 'PRIORITY_CHANGED':
-        return { icon: <Zap className="w-3.5 h-3.5 text-error" />, label: 'Priority changed', bg: 'bg-error/10 text-error border-error/20' };
+        return {
+          icon: <Zap className="w-3.5 h-3.5 text-error" />,
+          label: 'Priority changed',
+          bg: 'bg-error/10 text-error border-error/20',
+        };
       case 'ASSIGNED':
       case 'REASSIGNED':
-        return { icon: <User className="w-3.5 h-3.5 text-info" />, label: 'Assignee updated', bg: 'bg-info/10 text-info border-info/20' };
+        return {
+          icon: <User className="w-3.5 h-3.5 text-info" />,
+          label: 'Assignee updated',
+          bg: 'bg-info/10 text-info border-info/20',
+        };
       case 'UNASSIGNED':
-        return { icon: <User className="w-3.5 h-3.5 text-text-secondary" />, label: 'Unassigned', bg: 'bg-surface-secondary text-text-secondary border-border' };
+        return {
+          icon: <User className="w-3.5 h-3.5 text-text-secondary" />,
+          label: 'Unassigned',
+          bg: 'bg-surface-secondary text-text-secondary border-border',
+        };
       case 'COMMENT_ADDED':
-        return { icon: <MessageSquare className="w-3.5 h-3.5 text-text-primary" />, label: 'Comment added', bg: 'bg-surface-secondary text-text-primary border-border' };
+        return {
+          icon: <MessageSquare className="w-3.5 h-3.5 text-text-primary" />,
+          label: 'Comment added',
+          bg: 'bg-surface-secondary text-text-primary border-border',
+        };
       case 'ATTACHMENT_UPLOADED':
-        return { icon: <Paperclip className="w-3.5 h-3.5 text-success" />, label: 'Attachment uploaded', bg: 'bg-success/10 text-success border-success/20' };
+        return {
+          icon: <Paperclip className="w-3.5 h-3.5 text-success" />,
+          label: 'Attachment uploaded',
+          bg: 'bg-success/10 text-success border-success/20',
+        };
       case 'CLOSED':
-        return { icon: <Lock className="w-3.5 h-3.5 text-text-secondary" />, label: 'Ticket closed', bg: 'bg-surface-secondary text-text-secondary border-border' };
+        return {
+          icon: <Lock className="w-3.5 h-3.5 text-text-secondary" />,
+          label: 'Ticket closed',
+          bg: 'bg-surface-secondary text-text-secondary border-border',
+        };
       case 'REOPENED':
-        return { icon: <Unlock className="w-3.5 h-3.5 text-warning" />, label: 'Ticket reopened', bg: 'bg-warning/10 text-warning border-warning/20' };
+        return {
+          icon: <Unlock className="w-3.5 h-3.5 text-warning" />,
+          label: 'Ticket reopened',
+          bg: 'bg-warning/10 text-warning border-warning/20',
+        };
       default:
-        return { icon: <Clock className="w-3.5 h-3.5 text-text-secondary" />, label: action, bg: 'bg-surface-secondary text-text-secondary border-border' };
+        return {
+          icon: <Clock className="w-3.5 h-3.5 text-text-secondary" />,
+          label: action,
+          bg: 'bg-surface-secondary text-text-secondary border-border',
+        };
     }
   };
 
@@ -78,14 +118,18 @@ export function TicketTimeline({ activities }: Props) {
                   </div>
 
                   <div className="flex items-center gap-2 pt-1">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${info.bg}`}>
+                    <span
+                      className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${info.bg}`}
+                    >
                       {info.label}
                     </span>
                     {act.oldValue || act.newValue ? (
                       <span className="text-xs text-text-secondary font-mono">
                         {act.oldValue && <span className="line-through">{act.oldValue}</span>}
                         {act.oldValue && act.newValue && ' → '}
-                        {act.newValue && <span className="font-semibold text-text-primary">{act.newValue}</span>}
+                        {act.newValue && (
+                          <span className="font-semibold text-text-primary">{act.newValue}</span>
+                        )}
                       </span>
                     ) : null}
                   </div>

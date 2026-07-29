@@ -6,10 +6,7 @@ import { CommandBar } from '@/components/ui/CommandBar';
 import { AddMemberModal } from '@/components/ui/AddMemberModal';
 import { CredentialHandoverModal } from '@/components/ui/CredentialHandoverModal';
 import { Role, OrganizationMemberDto } from '@workspace/shared-types';
-import {
-  API_BASE_URL,
-  getAuthHeaders,
-} from '@/lib/api';
+import { API_BASE_URL, getAuthHeaders } from '@/lib/api';
 import {
   Users,
   UserPlus,
@@ -36,10 +33,9 @@ export default function MembersPage() {
   const fetchMembers = useCallback(async () => {
     if (!activeOrganization?.id) return;
     try {
-      const res = await fetch(
-        `${API_BASE_URL}/organizations/${activeOrganization.id}/members`,
-        { headers: getAuthHeaders(undefined, activeOrganization.id) }
-      );
+      const res = await fetch(`${API_BASE_URL}/organizations/${activeOrganization.id}/members`, {
+        headers: getAuthHeaders(undefined, activeOrganization.id),
+      });
       const data = await res.json();
       if (data.success) {
         setMembers(data.data || []);
@@ -73,11 +69,14 @@ export default function MembersPage() {
 
   const handleRoleChange = async (memberId: string, newRole: Role) => {
     try {
-      await fetch(`${API_BASE_URL}/organizations/${activeOrganization?.id}/members/${memberId}/role`, {
-        method: 'PATCH',
-        headers: getAuthHeaders(undefined, activeOrganization?.id),
-        body: JSON.stringify({ role: newRole }),
-      });
+      await fetch(
+        `${API_BASE_URL}/organizations/${activeOrganization?.id}/members/${memberId}/role`,
+        {
+          method: 'PATCH',
+          headers: getAuthHeaders(undefined, activeOrganization?.id),
+          body: JSON.stringify({ role: newRole }),
+        }
+      );
       setMessage({ text: `Role updated to ${newRole} successfully.`, type: 'success' });
       fetchMembers();
     } catch {
@@ -87,11 +86,14 @@ export default function MembersPage() {
 
   const handleToggleStatus = async (memberId: string, currentStatus: boolean) => {
     try {
-      await fetch(`${API_BASE_URL}/organizations/${activeOrganization?.id}/members/${memberId}/status`, {
-        method: 'PATCH',
-        headers: getAuthHeaders(undefined, activeOrganization?.id),
-        body: JSON.stringify({ isActive: !currentStatus }),
-      });
+      await fetch(
+        `${API_BASE_URL}/organizations/${activeOrganization?.id}/members/${memberId}/status`,
+        {
+          method: 'PATCH',
+          headers: getAuthHeaders(undefined, activeOrganization?.id),
+          body: JSON.stringify({ isActive: !currentStatus }),
+        }
+      );
       setMessage({
         text: `Member status toggled to ${!currentStatus ? 'ACTIVE' : 'INACTIVE'}.`,
         type: 'success',
@@ -118,10 +120,13 @@ export default function MembersPage() {
 
   const handleResetPassword = async (memberId: string, email: string) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/organizations/${activeOrganization?.id}/members/${memberId}/reset-password`, {
-        method: 'POST',
-        headers: getAuthHeaders(undefined, activeOrganization?.id),
-      });
+      const res = await fetch(
+        `${API_BASE_URL}/organizations/${activeOrganization?.id}/members/${memberId}/reset-password`,
+        {
+          method: 'POST',
+          headers: getAuthHeaders(undefined, activeOrganization?.id),
+        }
+      );
       const data = await res.json();
       setCreatedMemberData({
         email,
@@ -164,7 +169,9 @@ export default function MembersPage() {
     const query = search.toLowerCase();
     const fullName = `${m.user?.firstName || ''} ${m.user?.lastName || ''}`.toLowerCase();
     const email = m.user?.email?.toLowerCase() || '';
-    return fullName.includes(query) || email.includes(query) || m.role.toLowerCase().includes(query);
+    return (
+      fullName.includes(query) || email.includes(query) || m.role.toLowerCase().includes(query)
+    );
   });
 
   const filteredInvitations = invitations.filter((i) => {
@@ -193,9 +200,15 @@ export default function MembersPage() {
             <Users className="w-3.5 h-3.5" />
             <span>Workspace Membership Governance</span>
           </div>
-          <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">Organization Members & Invitations</h2>
+          <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">
+            Organization Members & Invitations
+          </h2>
           <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
-            Manage workspace members for <strong className="text-text-primary">{activeOrganization?.name || 'Current Workspace'}</strong>, assign RBAC roles, reset credentials, and process invitations.
+            Manage workspace members for{' '}
+            <strong className="text-text-primary">
+              {activeOrganization?.name || 'Current Workspace'}
+            </strong>
+            , assign RBAC roles, reset credentials, and process invitations.
           </p>
         </div>
         <button
@@ -216,7 +229,11 @@ export default function MembersPage() {
               : 'bg-error/10 border-error/20 text-error'
           }`}
         >
-          {message.type === 'success' ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
+          {message.type === 'success' ? (
+            <CheckCircle2 className="w-4 h-4" />
+          ) : (
+            <XCircle className="w-4 h-4" />
+          )}
           <span>{message.text}</span>
         </div>
       )}
@@ -288,7 +305,9 @@ export default function MembersPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="py-3 px-3 font-mono text-text-secondary">{m.user?.email || 'user@demo.com'}</td>
+                    <td className="py-3 px-3 font-mono text-text-secondary">
+                      {m.user?.email || 'user@demo.com'}
+                    </td>
                     <td className="py-3 px-3">
                       <select
                         value={m.role}
@@ -320,7 +339,9 @@ export default function MembersPage() {
                         title={m.isActive ? 'Deactivate Member' : 'Activate Member'}
                         className="p-1.5 rounded-md bg-surface hover:bg-surface-secondary text-text-primary border border-border cursor-pointer transition-colors"
                       >
-                        <Power className={`w-3.5 h-3.5 ${m.isActive ? 'text-warning' : 'text-success'}`} />
+                        <Power
+                          className={`w-3.5 h-3.5 ${m.isActive ? 'text-warning' : 'text-success'}`}
+                        />
                       </button>
 
                       <button

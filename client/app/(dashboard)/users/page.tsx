@@ -47,15 +47,20 @@ export default function UsersDirectoryPage() {
           <Users className="w-3.5 h-3.5" />
           <span>Platform User Management</span>
         </div>
-        <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">Platform Users Directory</h2>
+        <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">
+          Platform Users Directory
+        </h2>
         <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
-          Inspect all platform users across tenant organizations, verify assigned RBAC roles, and manage permission overrides.
+          Inspect all platform users across tenant organizations, verify assigned RBAC roles, and
+          manage permission overrides.
         </p>
       </div>
 
       <div className="p-5 rounded-[10px] border border-border bg-surface space-y-4 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-3">
-          <h3 className="font-semibold text-sm text-text-primary">Registered Users ({filteredUsers.length})</h3>
+          <h3 className="font-semibold text-sm text-text-primary">
+            Registered Users ({filteredUsers.length})
+          </h3>
           <div className="flex items-center gap-2">
             <div className="relative">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-text-secondary" />

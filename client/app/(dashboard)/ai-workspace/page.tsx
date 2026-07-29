@@ -134,17 +134,22 @@ export default function AIWorkspacePage() {
               </h2>
             </div>
             <p className="text-xs text-muted-foreground">
-              AI Assistant is monitoring {activeOrganization?.name || 'Workspace'}. All modules operate at 99.99% reliability.
+              AI Assistant is monitoring {activeOrganization?.name || 'Workspace'}. All modules
+              operate at 99.99% reliability.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="px-3.5 py-1.5 rounded-xl bg-card border border-border text-center">
-              <span className="block text-[10px] font-mono text-muted-foreground uppercase">Risk Index</span>
+              <span className="block text-[10px] font-mono text-muted-foreground uppercase">
+                Risk Index
+              </span>
               <span className="text-sm font-extrabold text-emerald-500 font-mono">LOW (1.2%)</span>
             </div>
             <div className="px-3.5 py-1.5 rounded-xl bg-card border border-border text-center">
-              <span className="block text-[10px] font-mono text-muted-foreground uppercase">Velocity</span>
+              <span className="block text-[10px] font-mono text-muted-foreground uppercase">
+                Velocity
+              </span>
               <span className="text-sm font-extrabold text-cyan-400 font-mono">+18% High</span>
             </div>
           </div>
@@ -163,7 +168,9 @@ export default function AIWorkspacePage() {
                 Gemini Model
               </span>
             </div>
-            <span className="text-[11px] font-mono text-muted-foreground">Press ⌘K for Command Bar</span>
+            <span className="text-[11px] font-mono text-muted-foreground">
+              Press ⌘K for Command Bar
+            </span>
           </div>
 
           {/* Messages Stream */}
@@ -285,21 +292,31 @@ export default function AIWorkspacePage() {
 
             <div className="space-y-3 text-xs">
               <div className="p-3 rounded-xl border border-border bg-muted/20 space-y-1">
-                <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase">Today's Work</span>
+                <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase">
+                  Today&apos;s Work
+                </span>
                 <p className="font-semibold text-foreground">14 Tickets Triage • 3 PRs Merged</p>
-                <p className="text-muted-foreground text-[11px]">All customer SLAs met with zero escalations.</p>
+                <p className="text-muted-foreground text-[11px]">
+                  All customer SLAs met with zero escalations.
+                </p>
               </div>
 
               <div className="p-3 rounded-xl border border-border bg-muted/20 space-y-1">
-                <span className="text-[10px] font-mono font-bold text-purple-400 uppercase">Pending Code Reviews</span>
+                <span className="text-[10px] font-mono font-bold text-purple-400 uppercase">
+                  Pending Code Reviews
+                </span>
                 <p className="font-semibold text-foreground">2 PRs awaiting secondary approval</p>
                 <p className="text-muted-foreground text-[11px]">Average review time: 1.4 hours.</p>
               </div>
 
               <div className="p-3 rounded-xl border border-border bg-muted/20 space-y-1">
-                <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase">Security Compliance</span>
+                <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase">
+                  Security Compliance
+                </span>
                 <p className="font-semibold text-foreground">SOC 2 Audit Trail Active</p>
-                <p className="text-muted-foreground text-[11px]">Zero unauthorized access attempts.</p>
+                <p className="text-muted-foreground text-[11px]">
+                  Zero unauthorized access attempts.
+                </p>
               </div>
             </div>
           </div>

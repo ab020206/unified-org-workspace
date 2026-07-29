@@ -55,6 +55,8 @@ model User {
   sharedAccesses         SharedAccess[]
   digests                Digest[]
   notifications          Notification[]
+  notificationPreference NotificationPreference?
+  pushSubscriptions      PushSubscription[]
 
   @@map("users")
 }
@@ -80,6 +82,8 @@ model Organization {
   digests           Digest[]
   notifications     Notification[]
   featureFlags      FeatureFlag[]
+  githubIntegrations GitHubIntegration[]
+  anomalyAlerts     AnomalyAlert[]
 
   @@map("organizations")
 }
@@ -308,6 +312,24 @@ model PullRequest {
   createdAt         DateTime          @default(now()) @map("created_at")
   updatedAt         DateTime          @updatedAt @map("updated_at")
 
+  // GitHub Synchronization Fields
+  githubPrId          Int?              @map("github_pr_id")
+  githubNodeId        String?           @map("github_node_id")
+  repoOwner           String?           @map("repo_owner")
+  repoName            String?           @map("repo_name")
+  headBranch          String?           @map("head_branch")
+  baseBranch          String?           @map("base_branch")
+  commitSha           String?           @map("commit_sha")
+  githubMergeable     Boolean?          @map("github_mergeable")
+  githubMergeState    String?           @map("github_merge_state")
+  ciStatus            String?           @map("ci_status")
+  checksStatus        String?           @map("checks_status")
+  githubSyncStatus    String?           @default("SYNCED") @map("github_sync_status")
+  githubUrl           String?           @map("github_url")
+  authorAvatar        String?           @map("author_avatar")
+  authorGithubHandle  String?           @map("author_github_handle")
+  labels              Json?             @default("[]")
+
   organization Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   creator      User                  @relation("PRCreator", fields: [createdBy], references: [id], onDelete: Cascade)
   merger       User?                 @relation("PRMerger", fields: [mergedBy], references: [id], onDelete: SetNull)
@@ -424,6 +446,10 @@ model AuditLog {
   @@index([module])
   @@index([action])
   @@index([createdAt])
+  @@index([organizationId, createdAt])
+  @@index([actorId, createdAt])
+  @@index([action, createdAt])
+  @@index([entityType, createdAt])
   @@map("audit_logs")
 }
 
@@ -570,6 +596,8 @@ model Notification {
   isRead         Boolean          @default(false) @map("is_read")
   referenceType  String?          @map("reference_type")
   referenceId    String?          @map("reference_id")
+  channel        String           @default("IN_APP")
+  deliveryStatus String           @default("DELIVERED") @map("delivery_status")
   createdAt      DateTime         @default(now()) @map("created_at")
 
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -611,6 +639,101 @@ model FeatureFlag {
   @@index([organizationId])
   @@map("feature_flags")
 }
+
+enum GitHubSyncStatus {
+  SYNCED
+  PENDING
+  FAILED
+}
+
+model GitHubIntegration {
+  id             String           @id @default(uuid())
+  organizationId String           @map("organization_id")
+  repoOwner      String           @map("repo_owner")
+  repoName       String           @map("repo_name")
+  githubRepoId   String?          @map("github_repo_id")
+  installationId String?          @map("installation_id")
+  accessToken    String           @map("access_token") // Encrypted
+  refreshToken   String?          @map("refresh_token") // Encrypted
+  tokenExpiresAt DateTime?        @map("token_expires_at")
+  webhookSecret  String           @map("webhook_secret") // Encrypted
+  syncStatus     GitHubSyncStatus @default(SYNCED) @map("sync_status")
+  lastSyncedAt   DateTime?        @map("last_synced_at")
+  createdBy      String           @map("created_by")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, repoOwner, repoName])
+  @@index([organizationId])
+  @@map("github_integrations")
+}
+
+enum DigestFrequency {
+  DAILY
+  WEEKLY
+  NEVER
+}
+
+model NotificationPreference {
+  id                   String          @id @default(uuid())
+  userId               String          @unique @map("user_id")
+  emailDigestFrequency DigestFrequency @default(DAILY) @map("email_digest_frequency")
+  emailInstantEvents   Boolean         @default(true) @map("email_instant_events")
+  pushEnabled          Boolean         @default(false) @map("push_enabled")
+  eventPreferences     Json            @default("{}") @map("event_preferences")
+  createdAt            DateTime        @default(now()) @map("created_at")
+  updatedAt            DateTime        @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_preferences")
+}
+
+model PushSubscription {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("push_subscriptions")
+}
+
+enum AnomalySeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model AnomalyAlert {
+  id             String          @id @default(uuid())
+  organizationId String?         @map("organization_id")
+  type           String
+  severity       AnomalySeverity @default(MEDIUM)
+  title          String
+  description    String
+  metadata       Json?
+  acknowledged   Boolean         @default(false)
+  acknowledgedBy String?         @map("acknowledged_by")
+  acknowledgedAt DateTime?       @map("acknowledged_at")
+  createdAt      DateTime        @default(now()) @map("created_at")
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([acknowledged])
+  @@index([createdAt])
+  @@map("anomaly_alerts")
+}
+
 
 
 

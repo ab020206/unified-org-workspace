@@ -17,7 +17,9 @@ export function SharedTable({ shares, isOutgoing = false, onRevoke }: Props) {
         <div className="w-10 h-10 rounded-full bg-surface-secondary text-text-primary mx-auto flex items-center justify-center font-bold border border-border">
           <Share2 className="w-5 h-5" />
         </div>
-        <p className="text-xs text-text-secondary font-medium">No shared resources found in this feed.</p>
+        <p className="text-xs text-text-secondary font-medium">
+          No shared resources found in this feed.
+        </p>
       </div>
     );
   }
@@ -43,10 +45,7 @@ export function SharedTable({ shares, isOutgoing = false, onRevoke }: Props) {
                 : `/pull-requests/${share.resourceId}`;
 
             return (
-              <tr
-                key={share.id}
-                className="hover:bg-surface-secondary/40 transition-colors group"
-              >
+              <tr key={share.id} className="hover:bg-surface-secondary/40 transition-colors group">
                 <td className="py-3 px-4">
                   <Link href={linkHref} className="block">
                     <div className="flex items-center gap-2">

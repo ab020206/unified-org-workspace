@@ -19,7 +19,8 @@ export function DigestCard({ digest, isGenerating = false, onRefresh }: Props) {
         </div>
         <h3 className="text-base font-bold">Generating Your Personalized AI Digest...</h3>
         <p className="text-xs text-slate-300">
-          Our background worker is analyzing assigned tickets, pending code reviews, activity logs, and shared tenant resources.
+          Our background worker is analyzing assigned tickets, pending code reviews, activity logs,
+          and shared tenant resources.
         </p>
       </div>
     );
@@ -31,9 +32,7 @@ export function DigestCard({ digest, isGenerating = false, onRefresh }: Props) {
         <div className="w-10 h-10 rounded-full bg-cyan-500/10 text-cyan-500 mx-auto flex items-center justify-center">
           <Sparkles className="w-5 h-5" />
         </div>
-        <h3 className="text-sm font-bold text-foreground">
-          No AI Digest Generated Yet
-        </h3>
+        <h3 className="text-sm font-bold text-foreground">No AI Digest Generated Yet</h3>
         <p className="text-xs text-muted-foreground max-w-sm mx-auto">
           Click below to trigger your first personalized background digest generation.
         </p>

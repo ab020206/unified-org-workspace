@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Layers } from 'lucide-react';
 import { FormInput } from '@/components/ui/FormInput';
 import { PasswordInput } from '@/components/ui/PasswordInput';
 import { LoadingButton } from '@/components/ui/LoadingButton';
@@ -45,15 +44,17 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F2F2F2] flex flex-col justify-center items-center p-6 text-[#1F1F1F]">
+    <div className="min-h-screen bg-background flex flex-col justify-center items-center p-6 text-text-primary">
       <div className="w-full max-w-md space-y-6">
         {/* Header Branding */}
         <div className="text-center space-y-2">
-          <div className="w-10 h-10 rounded-lg bg-[#174D38] text-white flex items-center justify-center font-bold mx-auto shadow-xs">
-            <Layers className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-lg bg-surface border border-border flex items-center justify-center overflow-hidden mx-auto shadow-xs">
+            <img src="/logo.png" alt="Froncort.ai" className="w-full h-full object-contain p-1" />
           </div>
-          <h1 className="text-[24px] font-semibold text-[#1F1F1F] tracking-tight">Create your account</h1>
-          <p className="text-xs text-[#6B7280]">
+          <h1 className="text-[24px] font-semibold text-text-primary tracking-tight">
+            Create your account
+          </h1>
+          <p className="text-xs text-text-secondary">
             Get started with your unified organization workspace
           </p>
         </div>
@@ -61,10 +62,10 @@ export default function RegisterPage() {
         {/* Register Form Card */}
         <form
           onSubmit={handleSubmit}
-          className="p-8 rounded-[10px] border border-[#D9D9D9] bg-white shadow-xs space-y-4"
+          className="p-8 rounded-[10px] border border-border bg-surface shadow-xs space-y-4"
         >
           {error && (
-            <div className="p-3 rounded-md bg-[#4D1717]/10 border border-[#4D1717]/20 text-[#4D1717] text-xs font-medium">
+            <div className="p-3 rounded-md bg-error/10 border border-error/20 text-error text-xs font-medium">
               {error}
             </div>
           )}
@@ -113,15 +114,19 @@ export default function RegisterPage() {
             onChange={(e) => setOrganizationName(e.target.value)}
           />
 
-          <LoadingButton type="submit" isLoading={isLoading} className="w-full bg-[#174D38] hover:bg-[#123A2B] text-white font-medium py-2.5 rounded-md shadow-xs">
+          <LoadingButton
+            type="submit"
+            isLoading={isLoading}
+            className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium py-2.5 rounded-md shadow-xs"
+          >
             Register Account
           </LoadingButton>
         </form>
 
         {/* Sign in prompt */}
-        <p className="text-center text-xs text-[#6B7280]">
+        <p className="text-center text-xs text-text-secondary">
           Already have an account?{' '}
-          <Link href="/login" className="text-[#174D38] font-medium hover:underline">
+          <Link href="/login" className="text-primary font-medium hover:underline">
             Sign in here
           </Link>
         </p>

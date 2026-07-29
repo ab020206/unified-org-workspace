@@ -36,12 +36,16 @@ export function SupportAgentDashboard() {
   }, []);
 
   const filteredTickets = tickets.filter((t) => {
-    const matchesSearch = t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      t.category.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesPriority = filterPriority === 'ALL' || t.priority === filterPriority;
     return matchesSearch && matchesPriority;
   });
 
-  const urgentCount = tickets.filter((t) => t.priority === 'URGENT' || t.priority === 'HIGH').length;
+  const urgentCount = tickets.filter(
+    (t) => t.priority === 'URGENT' || t.priority === 'HIGH'
+  ).length;
   const openCount = tickets.filter((t) => t.status === 'OPEN' || t.status === 'IN_PROGRESS').length;
 
   return (
@@ -66,7 +70,9 @@ export function SupportAgentDashboard() {
           Welcome, {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'Support Agent'}
         </h2>
         <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
-          You have <strong className="text-primary font-mono">{openCount} active tickets</strong> assigned to your queue (<strong className="text-warning font-mono">{urgentCount} high/urgent priority</strong>).
+          You have <strong className="text-primary font-mono">{openCount} active tickets</strong>{' '}
+          assigned to your queue (
+          <strong className="text-warning font-mono">{urgentCount} high/urgent priority</strong>).
         </p>
       </div>
 
@@ -77,7 +83,9 @@ export function SupportAgentDashboard() {
             <span>Assigned Tickets</span>
             <Ticket className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{tickets.length}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {tickets.length}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">Total Workspace Tickets</p>
         </div>
 
@@ -86,7 +94,9 @@ export function SupportAgentDashboard() {
             <span>My Open Tickets</span>
             <Clock className="w-4 h-4 text-text-secondary" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{openCount}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {openCount}
+          </p>
           <p className="text-[13px] text-text-secondary font-medium">In Progress / Open</p>
         </div>
 
@@ -95,7 +105,9 @@ export function SupportAgentDashboard() {
             <span>High Priority / Urgent</span>
             <Flame className="w-4 h-4 text-error" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{urgentCount}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {urgentCount}
+          </p>
           <p className="text-[13px] text-error font-medium">Requires Priority Action</p>
         </div>
 
@@ -104,7 +116,9 @@ export function SupportAgentDashboard() {
             <span>Queue Health</span>
             <CheckCircle2 className="w-4 h-4 text-success" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">100%</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            100%
+          </p>
           <p className="text-[13px] text-success font-medium">Operational Target Met</p>
         </div>
       </div>
@@ -163,7 +177,10 @@ export function SupportAgentDashboard() {
             ) : (
               <div className="divide-y divide-border">
                 {filteredTickets.map((t) => (
-                  <div key={t.id} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div
+                    key={t.id}
+                    className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                  >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span
@@ -175,8 +192,12 @@ export function SupportAgentDashboard() {
                         >
                           {t.priority}
                         </span>
-                        <span className="text-[11px] font-mono text-text-secondary uppercase">{t.category}</span>
-                        <span className="text-[11px] font-mono text-text-secondary">#{t.id.substring(0, 8)}</span>
+                        <span className="text-[11px] font-mono text-text-secondary uppercase">
+                          {t.category}
+                        </span>
+                        <span className="text-[11px] font-mono text-text-secondary">
+                          #{t.id.substring(0, 8)}
+                        </span>
                       </div>
                       <h4 className="font-semibold text-xs text-text-primary hover:text-primary transition-colors">
                         <Link href={`/tickets?id=${t.id}`}>{t.title}</Link>
@@ -205,7 +226,9 @@ export function SupportAgentDashboard() {
         <div className="space-y-6">
           {/* Quick Support Actions */}
           <div className="p-6 rounded-[10px] border border-border bg-surface shadow-xs space-y-3">
-            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">Support Agent Quick Actions</h4>
+            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">
+              Support Agent Quick Actions
+            </h4>
             <div className="space-y-2">
               <Link
                 href="/tickets"

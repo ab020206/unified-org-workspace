@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Layers, ShieldCheck, ChevronDown, ChevronUp, KeyRound } from 'lucide-react';
+import { ShieldCheck, ChevronDown, ChevronUp, KeyRound } from 'lucide-react';
 import { FormInput } from '@/components/ui/FormInput';
 import { PasswordInput } from '@/components/ui/PasswordInput';
 import { LoadingButton } from '@/components/ui/LoadingButton';
@@ -48,8 +48,7 @@ export default function LoginPage() {
       await login({ email: loginEmail, password: loginPassword });
       router.push('/dashboard');
     } catch (err: unknown) {
-      const errorMsg =
-        err instanceof Error ? err.message : 'Authentication failed.';
+      const errorMsg = err instanceof Error ? err.message : 'Authentication failed.';
       setError(errorMsg);
     } finally {
       setIsLoading(false);
@@ -61,8 +60,8 @@ export default function LoginPage() {
       {/* Brand Header & Theme Toggle */}
       <header className="w-full max-w-md flex items-center justify-between pt-6 pb-4 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-xs">
-            <Layers className="w-5 h-5" />
+          <div className="w-9 h-9 rounded-lg bg-surface border border-border flex items-center justify-center overflow-hidden shadow-xs shrink-0">
+            <img src="/logo.png" alt="Froncort.ai" className="w-full h-full object-contain p-1" />
           </div>
           <div>
             <span className="font-semibold text-base tracking-tight text-text-primary block">
@@ -84,8 +83,12 @@ export default function LoginPage() {
           className="p-8 rounded-[10px] border border-border bg-surface shadow-xs space-y-5"
         >
           <div className="space-y-1 text-center pb-3 border-b border-border">
-            <h1 className="text-[20px] font-semibold text-text-primary tracking-tight">Sign in to workspace</h1>
-            <p className="text-xs text-text-secondary">Enter your credentials or choose a quick demo account</p>
+            <h1 className="text-[20px] font-semibold text-text-primary tracking-tight">
+              Sign in to workspace
+            </h1>
+            <p className="text-xs text-text-secondary">
+              Enter your credentials or choose a quick demo account
+            </p>
           </div>
 
           {error && (
@@ -153,7 +156,11 @@ export default function LoginPage() {
                 <KeyRound className="w-3.5 h-3.5 text-primary" />
                 <span>Other Demo Accounts ({DEMO_USERS.length})</span>
               </span>
-              {showDemoRoles ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              {showDemoRoles ? (
+                <ChevronUp className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5" />
+              )}
             </button>
 
             {showDemoRoles && (

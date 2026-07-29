@@ -164,7 +164,8 @@ export class OrganizationService {
 
     if (authMode === 'DIRECT') {
       if (!adminUser) {
-        tempPassword = data.adminPassword || `AdminPass!${Math.random().toString(36).substring(2, 8)}#2026`;
+        tempPassword =
+          data.adminPassword || `AdminPass!${Math.random().toString(36).substring(2, 8)}#2026`;
         const passwordHash = await bcrypt.hash(tempPassword, 10);
 
         adminUser = await this.userRepository.create({
@@ -318,11 +319,16 @@ export class OrganizationService {
     }
 
     const membership = await this.memberRepository.findMembership(organizationId, userId);
-    if (!user.isPlatformUser && (!membership || !membership.isActive || membership.role !== Role.ADMIN)) {
-      throw ApiError.forbidden('Only organization admins or platform super admins can update organization details');
+    if (
+      !user.isPlatformUser &&
+      (!membership || !membership.isActive || membership.role !== Role.ADMIN)
+    ) {
+      throw ApiError.forbidden(
+        'Only organization admins or platform super admins can update organization details'
+      );
     }
 
-    let slug = data.slug;
+    const slug = data.slug;
     if (slug && slug !== org.slug) {
       const existing = await this.organizationRepository.findBySlug(slug);
       if (existing && existing.id !== organizationId) {
@@ -353,7 +359,6 @@ export class OrganizationService {
 
     return this.getOrganizationDetails(organizationId, userId);
   }
-
 
   public async inviteMember(
     organizationId: string,
@@ -526,13 +531,19 @@ export class OrganizationService {
     if (!actor) throw ApiError.notFound('Actor user not found');
 
     const actorMembership = await this.memberRepository.findMembership(organizationId, actorId);
-    if (!actor.isPlatformUser && (!actorMembership || !actorMembership.isActive || actorMembership.role !== Role.ADMIN)) {
+    if (
+      !actor.isPlatformUser &&
+      (!actorMembership || !actorMembership.isActive || actorMembership.role !== Role.ADMIN)
+    ) {
       throw ApiError.forbidden('Only Organization Admins can add members');
     }
 
     let user = await this.userRepository.findByEmail(data.email);
     if (user) {
-      const existingMembership = await this.memberRepository.findMembership(organizationId, user.id);
+      const existingMembership = await this.memberRepository.findMembership(
+        organizationId,
+        user.id
+      );
       if (existingMembership) {
         throw ApiError.conflict('User is already a member of this organization');
       }
@@ -544,7 +555,8 @@ export class OrganizationService {
 
     if (authMode === 'DIRECT') {
       if (!user) {
-        tempPassword = data.password || `UserPass!${Math.random().toString(36).substring(2, 8)}#2026`;
+        tempPassword =
+          data.password || `UserPass!${Math.random().toString(36).substring(2, 8)}#2026`;
         const passwordHash = await bcrypt.hash(tempPassword, 10);
         user = await this.userRepository.create({
           firstName: data.firstName,
@@ -728,7 +740,11 @@ export class OrganizationService {
     };
   }
 
-  public async removeMember(organizationId: string, actorId: string, memberId: string): Promise<void> {
+  public async removeMember(
+    organizationId: string,
+    actorId: string,
+    memberId: string
+  ): Promise<void> {
     const actor = await this.userRepository.findById(actorId);
     if (!actor) throw ApiError.notFound('Actor not found');
 

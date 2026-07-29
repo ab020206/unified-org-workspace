@@ -37,7 +37,8 @@ export function PRTable({ pullRequests, isLoading }: Props) {
         </div>
         <h3 className="text-sm font-bold text-text-primary">No Pull Requests found</h3>
         <p className="text-xs text-text-secondary max-w-sm mx-auto">
-          No pull requests match your search query or status filter. Create a new pull request to start reviewing.
+          No pull requests match your search query or status filter. Create a new pull request to
+          start reviewing.
         </p>
       </div>
     );
@@ -65,20 +66,71 @@ export function PRTable({ pullRequests, isLoading }: Props) {
               className="hover:bg-surface-secondary/60 transition-colors group cursor-pointer"
             >
               <td className="py-3 px-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold text-text-primary bg-surface-secondary px-2 py-0.5 rounded border border-border">
-                    #{pr.prNumber}
-                  </span>
-                  <span className="font-semibold text-text-primary group-hover:text-primary transition-colors line-clamp-1">
-                    {pr.title}
-                  </span>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono font-bold text-text-primary bg-surface-secondary px-2 py-0.5 rounded border border-border">
+                      #{pr.prNumber}
+                    </span>
+                    <span className="font-semibold text-text-primary group-hover:text-primary transition-colors line-clamp-1">
+                      {pr.title}
+                    </span>
+                  </div>
+                  {(pr as any).githubUrl && (
+                    <div className="flex items-center gap-1.5 text-[10px] text-text-secondary font-mono">
+                      <span className="bg-purple-950/60 text-purple-400 px-1.5 py-0.5 rounded border border-purple-800/40">
+                        {(pr as any).repoOwner}/{(pr as any).repoName}
+                      </span>
+                      {(pr as any).headBranch && (
+                        <span className="text-text-secondary">{(pr as any).headBranch}</span>
+                      )}
+                      {(pr as any).commitSha && (
+                        <span className="text-primary font-bold">
+                          @{(pr as any).commitSha.substring(0, 7)}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
               </td>
               <td className="py-3 px-4">
-                <PRStatusBadge status={pr.status} size="sm" />
+                <div className="flex flex-col gap-1">
+                  <PRStatusBadge status={pr.status} size="sm" />
+                  {(pr as any).githubSyncStatus && (
+                    <span
+                      className={`text-[9px] font-mono px-1.5 py-0.2 rounded w-fit font-semibold border ${
+                        (pr as any).githubSyncStatus === 'SYNCED'
+                          ? 'bg-emerald-950/50 text-emerald-400 border-emerald-800/40'
+                          : (pr as any).githubSyncStatus === 'PENDING'
+                            ? 'bg-amber-950/50 text-amber-400 border-amber-800/40'
+                            : 'bg-rose-950/50 text-rose-400 border-rose-800/40'
+                      }`}
+                    >
+                      {(pr as any).githubSyncStatus === 'SYNCED'
+                        ? '✓ Synced'
+                        : (pr as any).githubSyncStatus === 'PENDING'
+                          ? '⏳ Pending Sync'
+                          : '❌ Sync Failed'}
+                    </span>
+                  )}
+                </div>
               </td>
               <td className="py-3 px-4 text-xs text-text-secondary">
-                {pr.creator ? `${pr.creator.firstName} ${pr.creator.lastName}` : 'User'}
+                <div className="flex items-center gap-1.5">
+                  {(pr as any).authorAvatar ? (
+                    <img
+                      src={(pr as any).authorAvatar}
+                      alt="Avatar"
+                      className="w-4 h-4 rounded-full border border-border"
+                    />
+                  ) : null}
+                  <span>
+                    {(pr as any).authorGithubHandle
+                      ? `@${(pr as any).authorGithubHandle}`
+                      : pr.creator
+                        ? `${pr.creator.firstName} ${pr.creator.lastName}`
+                        : 'User'}
+                  </span>
+                </div>
               </td>
               <td className="py-3 px-4">
                 <ApprovalCounter
@@ -105,13 +157,31 @@ export function PRTable({ pullRequests, isLoading }: Props) {
                 </div>
               </td>
               <td className="py-3 px-4 text-right text-xs text-text-secondary font-mono">
-                {new Date(pr.updatedAt).toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                <div className="flex flex-col items-end gap-0.5">
+                  {(pr as any).ciStatus && (
+                    <span
+                      className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border ${
+                        (pr as any).ciStatus === 'SUCCESS'
+                          ? 'bg-emerald-950/40 text-emerald-400 border-emerald-800/40'
+                          : (pr as any).ciStatus === 'FAILURE'
+                            ? 'bg-rose-950/40 text-rose-400 border-rose-800/40'
+                            : 'bg-amber-950/40 text-amber-400 border-amber-800/40'
+                      }`}
+                    >
+                      CI: {(pr as any).ciStatus}
+                    </span>
+                  )}
+                  <span>
+                    {new Date(pr.updatedAt).toLocaleDateString(undefined, {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </span>
+                </div>
               </td>
+
               <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center justify-end gap-1">
                   <button

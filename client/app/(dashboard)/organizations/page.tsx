@@ -32,7 +32,9 @@ export default function OrganizationsPage() {
   }, []);
 
   const filteredOrgs = organizations.filter(
-    (o) => o.name.toLowerCase().includes(search.toLowerCase()) || o.slug.toLowerCase().includes(search.toLowerCase())
+    (o) =>
+      o.name.toLowerCase().includes(search.toLowerCase()) ||
+      o.slug.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -51,9 +53,12 @@ export default function OrganizationsPage() {
             <Building2 className="w-3.5 h-3.5" />
             <span>Platform Governance</span>
           </div>
-          <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">Multi-Tenant Organizations</h2>
+          <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">
+            Multi-Tenant Organizations
+          </h2>
           <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
-            Manage platform tenants, inspect organization memberships, provision workspace scope, and monitor tenant health.
+            Manage platform tenants, inspect organization memberships, provision workspace scope,
+            and monitor tenant health.
           </p>
         </div>
         <Link
@@ -67,7 +72,9 @@ export default function OrganizationsPage() {
       {/* Search Bar & Table */}
       <div className="p-5 rounded-[10px] border border-border bg-surface space-y-4 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-3">
-          <h3 className="font-semibold text-sm text-text-primary">Registered Organizations ({filteredOrgs.length})</h3>
+          <h3 className="font-semibold text-sm text-text-primary">
+            Registered Organizations ({filteredOrgs.length})
+          </h3>
           <div className="relative">
             <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-text-secondary" />
             <input
@@ -103,7 +110,9 @@ export default function OrganizationsPage() {
                     </div>
                   </td>
                   <td className="py-3 px-3 font-mono text-text-secondary">{org.slug}</td>
-                  <td className="py-3 px-3 font-mono text-text-primary">{org.memberCount || 1} Active Members</td>
+                  <td className="py-3 px-3 font-mono text-text-primary">
+                    {org.memberCount || 1} Active Members
+                  </td>
                   <td className="py-3 px-3">
                     <span className="px-2 py-0.5 rounded bg-success/10 border border-success/20 text-success font-mono text-[10px] font-bold">
                       HEALTHY

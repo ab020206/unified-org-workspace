@@ -148,7 +148,8 @@ export const DEMO_USERS: DemoUserConfig[] = [
     organizationName: 'Acme Technologies',
     organizationSlug: 'acme-tech',
     roleBadge: 'ADMIN',
-    description: 'Simulated AI worker account for background summaries and automated ticket scoring.',
+    description:
+      'Simulated AI worker account for background summaries and automated ticket scoring.',
     redirectRoute: '/dashboard',
     themeColor: 'cyan',
     iconName: 'Sparkles',

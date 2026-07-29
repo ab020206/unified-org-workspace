@@ -1,6 +1,10 @@
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
 
-export function getAuthHeaders(token?: string, orgId?: string, isJson = true): Record<string, string> {
+export function getAuthHeaders(
+  token?: string,
+  orgId?: string,
+  isJson = true
+): Record<string, string> {
   const headers: Record<string, string> = {};
   if (isJson) headers['Content-Type'] = 'application/json';
 
@@ -18,4 +22,3 @@ export function getAuthHeaders(token?: string, orgId?: string, isJson = true): R
 
   return headers;
 }
-

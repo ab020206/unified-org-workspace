@@ -83,7 +83,11 @@ async function main() {
     userMap[userConfig.email] = user.id;
 
     // Global Super Admin and Auditor accounts govern the platform globally and do not belong to a specific tenant
-    if (userConfig.organizationSlug !== 'global-platform' && userConfig.roleBadge !== 'SUPER_ADMIN' && userConfig.roleBadge !== 'AUDITOR') {
+    if (
+      userConfig.organizationSlug !== 'global-platform' &&
+      userConfig.roleBadge !== 'SUPER_ADMIN' &&
+      userConfig.roleBadge !== 'AUDITOR'
+    ) {
       const targetOrgId = userConfig.organizationSlug === 'nova-health' ? novaOrg.id : acmeOrg.id;
       const roleEnum = Role[userConfig.roleBadge as keyof typeof Role] || Role.GUEST;
 
@@ -156,8 +160,12 @@ async function main() {
   }
 
   const totalUserCount = await prisma.user.count();
-  const acmeMemberCount = await prisma.organizationMember.count({ where: { organizationId: acmeOrg.id } });
-  console.info(`  ✔ ${totalUserCount} Platform Users created | ${acmeMemberCount} Acme Members created`);
+  const acmeMemberCount = await prisma.organizationMember.count({
+    where: { organizationId: acmeOrg.id },
+  });
+  console.info(
+    `  ✔ ${totalUserCount} Platform Users created | ${acmeMemberCount} Acme Members created`
+  );
 
   // 4. Feature Flags
   const flagKeys = [
@@ -180,9 +188,28 @@ async function main() {
   }
 
   // 5. Seed Exactly 20 Tickets (All assigned to Support Agent Rohan Gupta)
-  const categories = [TicketCategory.GENERAL, TicketCategory.BUG, TicketCategory.FEATURE_REQUEST, TicketCategory.BILLING, TicketCategory.TECHNICAL, TicketCategory.ACCOUNT];
-  const priorities = [TicketPriority.LOW, TicketPriority.MEDIUM, TicketPriority.HIGH, TicketPriority.URGENT];
-  const statuses = [TicketStatus.OPEN, TicketStatus.IN_PROGRESS, TicketStatus.WAITING_FOR_RESPONSE, TicketStatus.RESOLVED, TicketStatus.CLOSED, TicketStatus.REOPENED];
+  const categories = [
+    TicketCategory.GENERAL,
+    TicketCategory.BUG,
+    TicketCategory.FEATURE_REQUEST,
+    TicketCategory.BILLING,
+    TicketCategory.TECHNICAL,
+    TicketCategory.ACCOUNT,
+  ];
+  const priorities = [
+    TicketPriority.LOW,
+    TicketPriority.MEDIUM,
+    TicketPriority.HIGH,
+    TicketPriority.URGENT,
+  ];
+  const statuses = [
+    TicketStatus.OPEN,
+    TicketStatus.IN_PROGRESS,
+    TicketStatus.WAITING_FOR_RESPONSE,
+    TicketStatus.RESOLVED,
+    TicketStatus.CLOSED,
+    TicketStatus.REOPENED,
+  ];
 
   let ticketCount = await prisma.ticket.count({ where: { organizationId: acmeOrg.id } });
   if (ticketCount < 20) {
@@ -289,8 +316,24 @@ async function main() {
   // 7. Seed Exactly 100 Audit Logs
   let auditCount = await prisma.auditLog.count({ where: { organizationId: acmeOrg.id } });
   if (auditCount < 100) {
-    const modules = ['AUTHENTICATION', 'SUPPORT_HUB', 'REVIEW_CONSOLE', 'AUDIT_STREAM', 'SECURITY', 'TENANT_CONFIG'];
-    const actions = ['USER_LOGIN', 'TICKET_CREATE', 'PR_APPROVE', 'SCOPE_GRANT', 'FLAG_TOGGLE', 'SESSION_REVOKE', 'PERMISSION_CHANGE', 'LOG_EXPORT'];
+    const modules = [
+      'AUTHENTICATION',
+      'SUPPORT_HUB',
+      'REVIEW_CONSOLE',
+      'AUDIT_STREAM',
+      'SECURITY',
+      'TENANT_CONFIG',
+    ];
+    const actions = [
+      'USER_LOGIN',
+      'TICKET_CREATE',
+      'PR_APPROVE',
+      'SCOPE_GRANT',
+      'FLAG_TOGGLE',
+      'SESSION_REVOKE',
+      'PERMISSION_CHANGE',
+      'LOG_EXPORT',
+    ];
 
     const auditData = [];
     for (let i = auditCount + 1; i <= 100; i++) {
@@ -331,7 +374,10 @@ async function main() {
     });
   }
 
-  const sampleTickets = await prisma.ticket.findMany({ where: { organizationId: acmeOrg.id }, take: 5 });
+  const sampleTickets = await prisma.ticket.findMany({
+    where: { organizationId: acmeOrg.id },
+    take: 5,
+  });
   for (let i = 0; i < sampleTickets.length; i++) {
     const t = sampleTickets[i];
     const existingShare = await prisma.sharedResource.findFirst({

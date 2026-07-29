@@ -61,9 +61,15 @@ export class PlatformController {
       })),
     };
 
-    res.status(200).json(
-      createSuccessResponse(platformStats, 'Platform stats retrieved successfully', req.requestId || 'N/A')
-    );
+    res
+      .status(200)
+      .json(
+        createSuccessResponse(
+          platformStats,
+          'Platform stats retrieved successfully',
+          req.requestId || 'N/A'
+        )
+      );
   };
 
   static getPlatformUsers = async (req: AppRequest, res: Response) => {
@@ -83,14 +89,22 @@ export class PlatformController {
         name: `${u.firstName} ${u.lastName}`,
         email: u.email,
         role: u.isPlatformUser ? 'SUPER_ADMIN' : activeMember?.role || 'USER',
-        org: u.isPlatformUser ? 'Global Platform' : activeMember?.organization?.name || 'Unassigned',
+        org: u.isPlatformUser
+          ? 'Global Platform'
+          : activeMember?.organization?.name || 'Unassigned',
         status: u.isActive ? 'ACTIVE' : 'INACTIVE',
         createdAt: u.createdAt.toISOString(),
       };
     });
 
-    res.status(200).json(
-      createSuccessResponse(formattedUsers, 'Platform users retrieved successfully', req.requestId || 'N/A')
-    );
+    res
+      .status(200)
+      .json(
+        createSuccessResponse(
+          formattedUsers,
+          'Platform users retrieved successfully',
+          req.requestId || 'N/A'
+        )
+      );
   };
 }

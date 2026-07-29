@@ -302,4 +302,26 @@ export class PullRequestRepository {
       recentPRs,
     };
   }
+
+  async findPullRequestByGithubId(organizationId: string, githubPrId: number) {
+    return prisma.pullRequest.findFirst({
+      where: {
+        organizationId,
+        githubPrId,
+      },
+    });
+  }
+
+  async updateCIStatusByCommitSha(organizationId: string, commitSha: string, ciStatus: string) {
+    return prisma.pullRequest.updateMany({
+      where: {
+        organizationId,
+        commitSha,
+      },
+      data: {
+        ciStatus,
+        checksStatus: ciStatus === 'SUCCESS' ? 'PASSED' : 'FAILED',
+      },
+    });
+  }
 }

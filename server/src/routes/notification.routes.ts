@@ -28,6 +28,30 @@ notificationRouter.patch(
   asyncHandler(NotificationController.markAsRead)
 );
 
+notificationRouter.get(
+  '/preferences',
+  requirePermission(Permission.NOTIFICATION_READ),
+  asyncHandler(NotificationController.getPreferences)
+);
+
+notificationRouter.put(
+  '/preferences',
+  requirePermission(Permission.NOTIFICATION_READ),
+  asyncHandler(NotificationController.updatePreferences)
+);
+
+notificationRouter.post(
+  '/push/subscribe',
+  requirePermission(Permission.NOTIFICATION_READ),
+  asyncHandler(NotificationController.subscribePush)
+);
+
+notificationRouter.post(
+  '/push/unsubscribe',
+  requirePermission(Permission.NOTIFICATION_READ),
+  asyncHandler(NotificationController.unsubscribePush)
+);
+
 notificationRouter.delete(
   '/:id',
   requirePermission(Permission.NOTIFICATION_READ),

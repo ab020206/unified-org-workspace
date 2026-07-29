@@ -63,18 +63,19 @@ export const WorkflowDiagram: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 border-b border-[#D9D9D9] bg-[#F2F2F2] relative overflow-hidden text-[#1F1F1F]">
+    <section className="py-20 border-b border-border bg-background relative overflow-hidden text-text-primary">
       <div className="max-w-7xl mx-auto px-6 space-y-12">
         {/* Header */}
         <div className="text-center space-y-3 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-[#D9D9D9] bg-white text-[#174D38] text-xs font-mono font-medium shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-border bg-surface text-primary text-xs font-mono font-medium shadow-xs">
             Platform Architecture Flow
           </div>
-          <h2 className="text-2xl md:text-4xl font-semibold text-[#1F1F1F] tracking-tight">
+          <h2 className="text-2xl md:text-4xl font-semibold text-text-primary tracking-tight">
             Seamless End-to-End Enterprise Pipeline
           </h2>
-          <p className="text-xs md:text-sm text-[#6B7280] leading-relaxed">
-            Every request travels through an integrated, audit-ready architecture designed for multi-tenant isolation and security.
+          <p className="text-xs md:text-sm text-text-secondary leading-relaxed">
+            Every request travels through an integrated, audit-ready architecture designed for
+            multi-tenant isolation and security.
           </p>
         </div>
 
@@ -91,28 +92,32 @@ export const WorkflowDiagram: React.FC = () => {
                   transition={{ duration: 0.15 }}
                   className={`cursor-pointer p-4 rounded-[10px] border text-center space-y-3 transition-all h-full flex flex-col items-center justify-between shadow-xs ${
                     isSelected
-                      ? 'border-[#174D38] bg-white ring-1 ring-[#174D38]'
-                      : 'border-[#D9D9D9] bg-white hover:bg-[#F2F2F2]/50'
+                      ? 'border-primary bg-surface ring-1 ring-primary'
+                      : 'border-border bg-surface hover:bg-surface-secondary/50'
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
-                    <span className="text-[10px] font-mono font-medium text-[#6B7280]">0{idx + 1}</span>
-                    {isSelected && <CheckCircle className="w-3 h-3 text-[#174D38]" />}
+                    <span className="text-[10px] font-mono font-medium text-text-secondary">
+                      0{idx + 1}
+                    </span>
+                    {isSelected && <CheckCircle className="w-3 h-3 text-primary" />}
                   </div>
 
-                  <div className="w-9 h-9 rounded-md flex items-center justify-center bg-[#F2F2F2] text-[#174D38] border border-[#D9D9D9]">
+                  <div className="w-9 h-9 rounded-md flex items-center justify-center bg-surface-secondary text-primary border border-border">
                     <Icon className="w-4 h-4" />
                   </div>
 
                   <div className="space-y-1 w-full">
-                    <h3 className="font-semibold text-xs text-[#1F1F1F] line-clamp-1">{step.title}</h3>
-                    <p className="text-[10px] text-[#6B7280] line-clamp-2">{step.desc}</p>
+                    <h3 className="font-semibold text-xs text-text-primary line-clamp-1">
+                      {step.title}
+                    </h3>
+                    <p className="text-[10px] text-text-secondary line-clamp-2">{step.desc}</p>
                   </div>
                 </motion.div>
 
                 {/* Connector Arrow (desktop only) */}
                 {idx < steps.length - 1 && (
-                  <div className="hidden md:flex absolute -right-2 top-1/2 -translate-y-1/2 z-10 text-[#6B7280]">
+                  <div className="hidden md:flex absolute -right-2 top-1/2 -translate-y-1/2 z-10 text-text-secondary">
                     <ArrowRight className="w-3.5 h-3.5" />
                   </div>
                 )}
@@ -127,26 +132,26 @@ export const WorkflowDiagram: React.FC = () => {
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.18 }}
-          className="p-5 rounded-[10px] border border-[#D9D9D9] bg-white max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 shadow-xs"
+          className="p-5 rounded-[10px] border border-border bg-surface max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 shadow-xs"
         >
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-[#F2F2F2] text-[#174D38] border border-[#D9D9D9]">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-surface-secondary text-primary border border-border">
                 STAGE 0{activeStep + 1}
               </span>
-              <h4 className="font-semibold text-sm text-[#1F1F1F]">{steps[activeStep].title}</h4>
+              <h4 className="font-semibold text-sm text-text-primary">{steps[activeStep].title}</h4>
             </div>
-            <p className="text-xs text-[#6B7280]">{steps[activeStep].desc}</p>
+            <p className="text-xs text-text-secondary">{steps[activeStep].desc}</p>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-mono text-[#6B7280] shrink-0 border-t md:border-t-0 md:border-l border-[#D9D9D9] pt-3 md:pt-0 md:pl-6">
+          <div className="flex items-center gap-4 text-xs font-mono text-text-secondary shrink-0 border-t md:border-t-0 md:border-l border-border pt-3 md:pt-0 md:pl-6">
             <div>
-              <span className="block text-[10px] text-[#6B7280]">Latency Overhead</span>
-              <span className="text-[#15803D] font-bold">&lt; 2ms</span>
+              <span className="block text-[10px] text-text-secondary">Latency Overhead</span>
+              <span className="text-success font-bold">&lt; 2ms</span>
             </div>
             <div>
-              <span className="block text-[10px] text-[#6B7280]">Compliance Scope</span>
-              <span className="text-[#1F1F1F] font-bold">SOC2 / ISO27001</span>
+              <span className="block text-[10px] text-text-secondary">Compliance Scope</span>
+              <span className="text-text-primary font-bold">SOC2 / ISO27001</span>
             </div>
           </div>
         </motion.div>

@@ -1,5 +1,15 @@
 import React from 'react';
-import { BarChart3, CheckCircle2, User, Zap, Key, Ticket, Search, Package, Tag } from 'lucide-react';
+import {
+  BarChart3,
+  CheckCircle2,
+  User,
+  Zap,
+  Key,
+  Ticket,
+  Search,
+  Package,
+  Tag,
+} from 'lucide-react';
 
 interface Props {
   title: string;
@@ -14,16 +24,26 @@ export function StatCard({ title, value, icon, gradient, subtitle, onClick }: Pr
   const renderIcon = () => {
     if (typeof icon !== 'string') return icon;
     switch (icon) {
-      case '📊': return <BarChart3 className="w-5 h-5" />;
-      case '🟢': return <CheckCircle2 className="w-5 h-5" />;
-      case '👤': return <User className="w-5 h-5" />;
-      case '⚡': return <Zap className="w-5 h-5" />;
-      case '🔑': return <Key className="w-5 h-5" />;
-      case '🎫': return <Ticket className="w-5 h-5" />;
-      case '🔍': return <Search className="w-5 h-5" />;
-      case '📦': return <Package className="w-5 h-5" />;
-      case '🏷️': return <Tag className="w-5 h-5" />;
-      default: return null;
+      case '📊':
+        return <BarChart3 className="w-5 h-5" />;
+      case '🟢':
+        return <CheckCircle2 className="w-5 h-5" />;
+      case '👤':
+        return <User className="w-5 h-5" />;
+      case '⚡':
+        return <Zap className="w-5 h-5" />;
+      case '🔑':
+        return <Key className="w-5 h-5" />;
+      case '🎫':
+        return <Ticket className="w-5 h-5" />;
+      case '🔍':
+        return <Search className="w-5 h-5" />;
+      case '📦':
+        return <Package className="w-5 h-5" />;
+      case '🏷️':
+        return <Tag className="w-5 h-5" />;
+      default:
+        return null;
     }
   };
 
@@ -46,9 +66,7 @@ export function StatCard({ title, value, icon, gradient, subtitle, onClick }: Pr
             <p className="text-xs text-muted-foreground mt-0.5 font-medium">{subtitle}</p>
           )}
         </div>
-        <div
-          className={`flex h-10 w-10 items-center justify-center rounded-lg ${gradient}`}
-        >
+        <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${gradient}`}>
           {renderIcon()}
         </div>
       </div>

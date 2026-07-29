@@ -48,7 +48,7 @@ export function GlobalCommandPalette({
   const { user, activeOrganization } = useAuth();
   const role = user?.isPlatformUser
     ? Role.SUPER_ADMIN
-    : ((activeOrganization?.userRole as Role) || Role.GUEST);
+    : (activeOrganization?.userRole as Role) || Role.GUEST;
 
   // Role-gated command items strictly restricted to allowed features per role
   const getCommandItems = (): CommandItem[] => {
@@ -470,16 +470,22 @@ export function GlobalCommandPalette({
         <div className="p-3 border-t border-border bg-surface-secondary text-[11px] text-text-secondary font-mono flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-surface border border-border text-[10px] text-text-primary">↑↓</kbd>{' '}
+              <kbd className="px-1.5 py-0.5 rounded bg-surface border border-border text-[10px] text-text-primary">
+                ↑↓
+              </kbd>{' '}
               Navigate
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-surface border border-border text-[10px] text-text-primary">↵</kbd>{' '}
+              <kbd className="px-1.5 py-0.5 rounded bg-surface border border-border text-[10px] text-text-primary">
+                ↵
+              </kbd>{' '}
               Select
             </span>
           </div>
           <span className="flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 rounded bg-surface border border-border text-[10px] text-text-primary">ESC</kbd>{' '}
+            <kbd className="px-1.5 py-0.5 rounded bg-surface border border-border text-[10px] text-text-primary">
+              ESC
+            </kbd>{' '}
             Close
           </span>
         </div>

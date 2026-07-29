@@ -12,13 +12,29 @@ export function ReviewerAvatar({ reviewer, decision, onRemove }: Props) {
   const getDecisionBadge = () => {
     switch (decision) {
       case ReviewDecisionType.APPROVED:
-        return { icon: <Check className="w-2.5 h-2.5 text-white" />, bg: 'bg-emerald-500', title: 'Approved' };
+        return {
+          icon: <Check className="w-2.5 h-2.5 text-white" />,
+          bg: 'bg-emerald-500',
+          title: 'Approved',
+        };
       case ReviewDecisionType.CHANGES_REQUESTED:
-        return { icon: <AlertTriangle className="w-2.5 h-2.5 text-white" />, bg: 'bg-amber-500', title: 'Changes Requested' };
+        return {
+          icon: <AlertTriangle className="w-2.5 h-2.5 text-white" />,
+          bg: 'bg-amber-500',
+          title: 'Changes Requested',
+        };
       case ReviewDecisionType.REJECTED:
-        return { icon: <X className="w-2.5 h-2.5 text-white" />, bg: 'bg-rose-500', title: 'Rejected' };
+        return {
+          icon: <X className="w-2.5 h-2.5 text-white" />,
+          bg: 'bg-rose-500',
+          title: 'Rejected',
+        };
       default:
-        return { icon: <Clock className="w-2.5 h-2.5 text-white" />, bg: 'bg-slate-500', title: 'Pending Review' };
+        return {
+          icon: <Clock className="w-2.5 h-2.5 text-white" />,
+          bg: 'bg-slate-500',
+          title: 'Pending Review',
+        };
     }
   };
 

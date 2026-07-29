@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ShieldCheck, Layers } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -11,8 +11,12 @@ export const Footer: React.FC = () => {
         {/* Left Section: Branding & System Health */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2 font-medium text-text-primary">
-            <div className="w-6 h-6 rounded bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs">
-              <Layers className="w-3.5 h-3.5" />
+            <div className="w-6 h-6 rounded bg-surface border border-border flex items-center justify-center overflow-hidden shrink-0">
+              <img
+                src="/logo.png"
+                alt="Froncort.ai"
+                className="w-full h-full object-contain p-0.5"
+              />
             </div>
             <span className="font-semibold text-xs tracking-tight">Froncort.ai Workspace</span>
           </div>

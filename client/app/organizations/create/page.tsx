@@ -167,9 +167,12 @@ Confidential - Keep Secure
 
       {/* Title */}
       <div className="space-y-1">
-        <h1 className="text-2xl font-extrabold text-white tracking-tight">Provision New Organization</h1>
+        <h1 className="text-2xl font-extrabold text-white tracking-tight">
+          Provision New Organization
+        </h1>
         <p className="text-xs text-slate-400">
-          Set up a multi-tenant enterprise workspace and provision its primary Organization Administrator.
+          Set up a multi-tenant enterprise workspace and provision its primary Organization
+          Administrator.
         </p>
       </div>
 
@@ -180,8 +183,8 @@ Confidential - Keep Secure
             currentStep === 1
               ? 'bg-indigo-600 text-white font-bold shadow-md'
               : currentStep > 1
-              ? 'bg-emerald-500/10 text-emerald-400 font-semibold'
-              : 'text-slate-500'
+                ? 'bg-emerald-500/10 text-emerald-400 font-semibold'
+                : 'text-slate-500'
           }`}
         >
           {currentStep > 1 ? (
@@ -197,8 +200,8 @@ Confidential - Keep Secure
             currentStep === 2
               ? 'bg-indigo-600 text-white font-bold shadow-md'
               : currentStep > 2
-              ? 'bg-emerald-500/10 text-emerald-400 font-semibold'
-              : 'text-slate-500'
+                ? 'bg-emerald-500/10 text-emerald-400 font-semibold'
+                : 'text-slate-500'
           }`}
         >
           {currentStep > 2 ? (
@@ -234,7 +237,9 @@ Confidential - Keep Secure
         >
           <div className="border-b border-slate-800 pb-3 flex items-center gap-2">
             <Building2 className="w-4 h-4 text-indigo-400" />
-            <h3 className="font-extrabold text-sm text-white">Step 1: Organization Profile & Branding</h3>
+            <h3 className="font-extrabold text-sm text-white">
+              Step 1: Organization Profile & Branding
+            </h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -335,7 +340,9 @@ Confidential - Keep Secure
           <div className="border-b border-slate-800 pb-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <UserCheck className="w-4 h-4 text-indigo-400" />
-              <h3 className="font-extrabold text-sm text-white">Step 2: Create First Organization Administrator</h3>
+              <h3 className="font-extrabold text-sm text-white">
+                Step 2: Create First Organization Administrator
+              </h3>
             </div>
             <span className="text-[10px] font-mono font-bold text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded border border-blue-500/20">
               Role: Organization Admin
@@ -481,7 +488,13 @@ Confidential - Keep Secure
                 Enterprise Organization Provisioned Successfully!
               </h2>
               <p className="text-xs text-text-secondary">
-                Workspace <strong className="text-text-primary">{resultData.organization.name}</strong> and primary Administrator <strong className="text-text-primary">{resultData.administrator.firstName} {resultData.administrator.lastName}</strong> are ready for immediate authentication.
+                Workspace{' '}
+                <strong className="text-text-primary">{resultData.organization.name}</strong> and
+                primary Administrator{' '}
+                <strong className="text-text-primary">
+                  {resultData.administrator.firstName} {resultData.administrator.lastName}
+                </strong>{' '}
+                are ready for immediate authentication.
               </p>
             </div>
           </div>
@@ -499,9 +512,15 @@ Confidential - Keep Secure
                 </span>
               </div>
               <div className="space-y-1 pt-1">
-                <p className="text-base font-bold text-text-primary">{resultData.organization.name}</p>
-                <p className="text-xs font-mono text-text-secondary">Slug: {resultData.organization.slug}</p>
-                <p className="text-[11px] font-mono text-muted-text truncate">ID: {resultData.organization.id}</p>
+                <p className="text-base font-bold text-text-primary">
+                  {resultData.organization.name}
+                </p>
+                <p className="text-xs font-mono text-text-secondary">
+                  Slug: {resultData.organization.slug}
+                </p>
+                <p className="text-[11px] font-mono text-muted-text truncate">
+                  ID: {resultData.organization.id}
+                </p>
               </div>
             </div>
 
@@ -519,8 +538,12 @@ Confidential - Keep Secure
                 <p className="text-base font-bold text-text-primary">
                   {resultData.administrator.firstName} {resultData.administrator.lastName}
                 </p>
-                <p className="text-xs font-mono text-text-secondary">{resultData.administrator.email}</p>
-                <p className="text-[11px] font-mono text-muted-text">Status: Active Credentials Generated</p>
+                <p className="text-xs font-mono text-text-secondary">
+                  {resultData.administrator.email}
+                </p>
+                <p className="text-[11px] font-mono text-muted-text">
+                  Status: Active Credentials Generated
+                </p>
               </div>
             </div>
           </div>
@@ -530,7 +553,9 @@ Confidential - Keep Secure
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <Key className="w-4 h-4 text-amber-400" />
-                <h3 className="font-extrabold text-sm text-white">Authentication & Handover Credentials</h3>
+                <h3 className="font-extrabold text-sm text-white">
+                  Authentication & Handover Credentials
+                </h3>
               </div>
               <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                 SECURE
@@ -548,14 +573,20 @@ Confidential - Keep Secure
                   onClick={() => copyToClipboard(`${window.location.origin}/login`, 'url')}
                   className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[11px] flex items-center gap-1 cursor-pointer transition-colors"
                 >
-                  {copiedField === 'url' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedField === 'url' ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
                   <span>{copiedField === 'url' ? 'Copied!' : 'Copy Link'}</span>
                 </button>
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900 border border-slate-800">
                 <div>
-                  <span className="text-slate-400 text-[10px] block">Administrator Account Email</span>
+                  <span className="text-slate-400 text-[10px] block">
+                    Administrator Account Email
+                  </span>
                   <span className="text-white font-bold">{resultData.administrator.email}</span>
                 </div>
                 <button
@@ -563,7 +594,11 @@ Confidential - Keep Secure
                   onClick={() => copyToClipboard(resultData.administrator.email, 'email')}
                   className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[11px] flex items-center gap-1 cursor-pointer transition-colors"
                 >
-                  {copiedField === 'email' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedField === 'email' ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
                   <span>{copiedField === 'email' ? 'Copied!' : 'Copy Email'}</span>
                 </button>
               </div>
@@ -571,15 +606,23 @@ Confidential - Keep Secure
               {resultData.temporaryPassword && (
                 <div className="flex items-center justify-between p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
                   <div>
-                    <span className="text-amber-400 text-[10px] block font-bold">Temporary Account Password</span>
-                    <span className="text-white font-extrabold text-sm">{resultData.temporaryPassword}</span>
+                    <span className="text-amber-400 text-[10px] block font-bold">
+                      Temporary Account Password
+                    </span>
+                    <span className="text-white font-extrabold text-sm">
+                      {resultData.temporaryPassword}
+                    </span>
                   </div>
                   <button
                     type="button"
                     onClick={() => copyToClipboard(resultData.temporaryPassword!, 'pass')}
                     className="px-2.5 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold text-[11px] flex items-center gap-1 cursor-pointer transition-colors"
                   >
-                    {copiedField === 'pass' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedField === 'pass' ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                     <span>{copiedField === 'pass' ? 'Copied Password!' : 'Copy Password'}</span>
                   </button>
                 </div>
@@ -588,7 +631,9 @@ Confidential - Keep Secure
               {resultData.invitationToken && (
                 <div className="flex items-center justify-between p-3 rounded-lg bg-indigo-500/10 border border-indigo-500/20">
                   <div>
-                    <span className="text-indigo-400 text-[10px] block font-bold">Invitation Token Link</span>
+                    <span className="text-indigo-400 text-[10px] block font-bold">
+                      Invitation Token Link
+                    </span>
                     <span className="text-white font-bold text-xs truncate max-w-sm block">
                       {window.location.origin}/accept?token={resultData.invitationToken}
                     </span>
@@ -596,11 +641,18 @@ Confidential - Keep Secure
                   <button
                     type="button"
                     onClick={() =>
-                      copyToClipboard(`${window.location.origin}/accept?token=${resultData.invitationToken}`, 'invite')
+                      copyToClipboard(
+                        `${window.location.origin}/accept?token=${resultData.invitationToken}`,
+                        'invite'
+                      )
                     }
                     className="px-2.5 py-1 rounded bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 font-bold text-[11px] flex items-center gap-1 cursor-pointer transition-colors"
                   >
-                    {copiedField === 'invite' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedField === 'invite' ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                     <span>{copiedField === 'invite' ? 'Copied Link!' : 'Copy Invite Link'}</span>
                   </button>
                 </div>

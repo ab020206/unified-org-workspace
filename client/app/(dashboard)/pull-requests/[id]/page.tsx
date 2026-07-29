@@ -11,7 +11,17 @@ import {
   ReviewDecisionType,
   Permission,
 } from '@workspace/shared-types';
-import { AlertTriangle, ArrowLeft, Trash2, Edit3, Check, X, GitMerge, Lock, Send } from 'lucide-react';
+import {
+  AlertTriangle,
+  ArrowLeft,
+  Trash2,
+  Edit3,
+  Check,
+  X,
+  GitMerge,
+  Lock,
+  Send,
+} from 'lucide-react';
 import { PRStatusBadge } from '@/components/review/PRStatusBadge';
 import { ApprovalCounter } from '@/components/review/ApprovalCounter';
 import { ReviewerAvatar } from '@/components/review/ReviewerAvatar';
@@ -392,9 +402,7 @@ export default function PRDetailPage() {
             <div className="forge-panel forge-accent-reviews p-6 space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-extrabold text-foreground">
-                    Merge Lifecycle
-                  </h3>
+                  <h3 className="text-sm font-extrabold text-foreground">Merge Lifecycle</h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {isApproved
                       ? 'All required approvals reached. Ready to merge into target workspace branch.'

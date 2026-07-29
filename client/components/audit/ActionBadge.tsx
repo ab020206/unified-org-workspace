@@ -8,7 +8,12 @@ interface Props {
 export function ActionBadge({ action, size = 'md' }: Props) {
   const getStyle = () => {
     const act = action.toUpperCase();
-    if (act.includes('CREATE') || act.includes('ACCEPT') || act.includes('APPROVE') || act.includes('MERGE')) {
+    if (
+      act.includes('CREATE') ||
+      act.includes('ACCEPT') ||
+      act.includes('APPROVE') ||
+      act.includes('MERGE')
+    ) {
       return 'bg-success/10 text-success border-success/20';
     }
     if (act.includes('DELETE') || act.includes('REMOVE') || act.includes('REVOKE')) {

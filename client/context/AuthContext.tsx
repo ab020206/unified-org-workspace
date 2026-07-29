@@ -39,7 +39,10 @@ interface AuthContextType {
   logout: () => Promise<void>;
   switchOrganization: (orgId: string) => Promise<void>;
   createOrganization: (data: CreateOrganizationRequest) => Promise<OrganizationDetailsDto>;
-  updateOrganization: (orgId: string, data: UpdateOrganizationRequest) => Promise<OrganizationDetailsDto>;
+  updateOrganization: (
+    orgId: string,
+    data: UpdateOrganizationRequest
+  ) => Promise<OrganizationDetailsDto>;
   onboardOrganization: (data: OnboardOrganizationRequest) => Promise<OnboardOrganizationResponse>;
   createMemberDirect: (data: CreateMemberDirectRequest) => Promise<CreateMemberResponse>;
   updateMember: (memberId: string, data: UpdateMemberRequest) => Promise<OrganizationMemberDto>;
@@ -273,7 +276,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (json.success) {
       setActiveOrganization(json.data);
       localStorage.setItem('activeOrgId', json.data.id);
-      const token = accessToken || (typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null);
+      const token =
+        accessToken || (typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null);
       if (token) {
         await fetchActiveOrgAndMembers(token, json.data.id);
       }
@@ -305,7 +309,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       setUserOrganizations((prev) =>
         prev.map((o) =>
-          o.id === orgId ? { ...o, name: json.data.name, slug: json.data.slug, logo: json.data.logo } : o
+          o.id === orgId
+            ? { ...o, name: json.data.name, slug: json.data.slug, logo: json.data.logo }
+            : o
         )
       );
       return json.data;
@@ -314,10 +320,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const onboardOrganization = async (data: OnboardOrganizationRequest) => {
-    const json: ApiResponse<OnboardOrganizationResponse> = await authFetch('/organizations/onboard', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    const json: ApiResponse<OnboardOrganizationResponse> = await authFetch(
+      '/organizations/onboard',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }
+    );
 
     if (json.success) {
       await refreshContext();
@@ -327,10 +336,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const createMemberDirect = async (data: CreateMemberDirectRequest) => {
-    const json: ApiResponse<CreateMemberResponse> = await authFetch('/organizations/members/create', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    const json: ApiResponse<CreateMemberResponse> = await authFetch(
+      '/organizations/members/create',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }
+    );
 
     if (json.success) {
       await refreshContext();
@@ -340,10 +352,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateMember = async (memberId: string, data: UpdateMemberRequest) => {
-    const json: ApiResponse<OrganizationMemberDto> = await authFetch(`/organizations/members/${memberId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-    });
+    const json: ApiResponse<OrganizationMemberDto> = await authFetch(
+      `/organizations/members/${memberId}`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      }
+    );
 
     if (json.success) {
       await refreshContext();

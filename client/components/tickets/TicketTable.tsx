@@ -101,7 +101,9 @@ export function TicketTable({ tickets, isLoading }: Props) {
                 )}
               </td>
               <td className="py-3 px-4 text-xs text-text-secondary">
-                {ticket.creator ? `${ticket.creator.firstName} ${ticket.creator.lastName}` : 'System'}
+                {ticket.creator
+                  ? `${ticket.creator.firstName} ${ticket.creator.lastName}`
+                  : 'System'}
               </td>
               <td className="py-3 px-4 text-right text-xs text-text-secondary font-mono">
                 {new Date(ticket.updatedAt).toLocaleDateString(undefined, {

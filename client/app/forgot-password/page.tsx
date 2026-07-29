@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { KeyRound, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { FormInput } from '@/components/ui/FormInput';
 import { LoadingButton } from '@/components/ui/LoadingButton';
 
@@ -21,25 +21,25 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F2F2F2] flex flex-col justify-center items-center p-6 text-[#1F1F1F]">
+    <div className="min-h-screen bg-background flex flex-col justify-center items-center p-6 text-text-primary">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-10 h-10 rounded-lg bg-[#174D38] text-white flex items-center justify-center font-bold mx-auto shadow-xs">
-            <KeyRound className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-lg bg-surface border border-border flex items-center justify-center overflow-hidden mx-auto shadow-xs">
+            <img src="/logo.png" alt="Froncort.ai" className="w-full h-full object-contain p-1" />
           </div>
-          <h1 className="text-[24px] font-semibold text-[#1F1F1F] tracking-tight">Forgot Password</h1>
-          <p className="text-xs text-[#6B7280]">
+          <h1 className="text-[24px] font-semibold text-text-primary tracking-tight">
+            Forgot Password
+          </h1>
+          <p className="text-xs text-text-secondary">
             Enter your email to receive password reset instructions
           </p>
         </div>
 
-        <div className="p-8 rounded-[10px] border border-[#D9D9D9] bg-white shadow-xs space-y-4">
+        <div className="p-8 rounded-[10px] border border-border bg-surface shadow-xs space-y-4">
           {submitted ? (
-            <div className="p-4 rounded-md bg-[#15803D]/10 border border-[#15803D]/20 text-center space-y-2">
-              <p className="text-sm font-semibold text-[#15803D]">
-                Reset Link Sent
-              </p>
-              <p className="text-xs text-[#6B7280]">
+            <div className="p-4 rounded-md bg-success/10 border border-success/20 text-center space-y-2">
+              <p className="text-sm font-semibold text-success">Reset Link Sent</p>
+              <p className="text-xs text-text-secondary">
                 If an account exists for {email}, password reset instructions have been sent.
               </p>
             </div>
@@ -53,7 +53,11 @@ export default function ForgotPasswordPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <LoadingButton type="submit" isLoading={isLoading} className="w-full bg-[#174D38] hover:bg-[#123A2B] text-white font-medium py-2.5 rounded-md shadow-xs">
+              <LoadingButton
+                type="submit"
+                isLoading={isLoading}
+                className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium py-2.5 rounded-md shadow-xs"
+              >
                 Send Reset Link
               </LoadingButton>
             </form>
@@ -63,7 +67,7 @@ export default function ForgotPasswordPage() {
         <div className="text-center">
           <Link
             href="/login"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-[#6B7280] hover:text-[#174D38] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-text-secondary hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to Sign In

@@ -53,7 +53,8 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
 
   const filteredUsers = DEMO_USERS.filter((u: DemoUserConfig) => {
     if (activeTab === 'ADMIN') return u.roleBadge === 'SUPER_ADMIN' || u.roleBadge === 'ADMIN';
-    if (activeTab === 'WORKER') return u.roleBadge === 'SUPPORT_AGENT' || u.roleBadge === 'REVIEWER';
+    if (activeTab === 'WORKER')
+      return u.roleBadge === 'SUPPORT_AGENT' || u.roleBadge === 'REVIEWER';
     if (activeTab === 'GUEST') return u.roleBadge === 'GUEST' || u.roleBadge === 'AUDITOR';
     return true;
   });
@@ -78,7 +79,9 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
             type="button"
             onClick={() => setActiveTab('ALL')}
             className={`px-2 py-0.5 rounded transition-all font-semibold cursor-pointer ${
-              activeTab === 'ALL' ? 'bg-primary text-primary-foreground' : 'text-text-secondary hover:text-text-primary'
+              activeTab === 'ALL'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             All (8)
@@ -87,7 +90,9 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
             type="button"
             onClick={() => setActiveTab('ADMIN')}
             className={`px-2 py-0.5 rounded transition-all font-semibold cursor-pointer ${
-              activeTab === 'ADMIN' ? 'bg-primary text-primary-foreground' : 'text-text-secondary hover:text-text-primary'
+              activeTab === 'ADMIN'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             Admins
@@ -96,7 +101,9 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
             type="button"
             onClick={() => setActiveTab('WORKER')}
             className={`px-2 py-0.5 rounded transition-all font-semibold cursor-pointer ${
-              activeTab === 'WORKER' ? 'bg-primary text-primary-foreground' : 'text-text-secondary hover:text-text-primary'
+              activeTab === 'WORKER'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             Support/PR
@@ -105,7 +112,9 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
             type="button"
             onClick={() => setActiveTab('GUEST')}
             className={`px-2 py-0.5 rounded transition-all font-semibold cursor-pointer ${
-              activeTab === 'GUEST' ? 'bg-primary text-primary-foreground' : 'text-text-secondary hover:text-text-primary'
+              activeTab === 'GUEST'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             Guest/Audit
@@ -153,9 +162,7 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
 
                 {/* Email text */}
                 <div className="flex items-center justify-between text-[10px] font-mono text-text-secondary pt-0.5">
-                  <span className="truncate text-text-secondary">
-                    {user.email}
-                  </span>
+                  <span className="truncate text-text-secondary">{user.email}</span>
 
                   <button
                     type="button"
@@ -163,7 +170,11 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
                     className="hover:text-text-primary transition-colors p-0.5 cursor-pointer ml-1"
                     title="Copy Email"
                   >
-                    {isCopied ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3" />}
+                    {isCopied ? (
+                      <Check className="w-3 h-3 text-success" />
+                    ) : (
+                      <Copy className="w-3 h-3" />
+                    )}
                   </button>
                 </div>
               </div>

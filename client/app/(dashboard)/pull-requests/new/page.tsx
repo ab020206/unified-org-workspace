@@ -70,9 +70,7 @@ export default function CreatePRPage() {
 
       <div className="forge-panel forge-accent-reviews p-8 space-y-6">
         <div>
-          <h1 className="text-xl font-bold text-foreground">
-            Create New Pull Request
-          </h1>
+          <h1 className="text-xl font-bold text-foreground">Create New Pull Request</h1>
           <p className="text-xs text-muted-foreground mt-1">
             Submit changes for review in{' '}
             <span className="font-semibold text-primary">{activeOrganization?.name}</span>

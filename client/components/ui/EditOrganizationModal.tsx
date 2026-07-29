@@ -77,7 +77,9 @@ export const EditOrganizationModal: React.FC<EditOrganizationModalProps> = ({
             </div>
             <div>
               <h3 className="font-semibold text-base text-text-primary">Edit Organization</h3>
-              <p className="text-xs text-text-secondary">Update organization details & routing slug</p>
+              <p className="text-xs text-text-secondary">
+                Update organization details & routing slug
+              </p>
             </div>
           </div>
 

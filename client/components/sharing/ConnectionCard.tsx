@@ -50,7 +50,9 @@ export function ConnectionCard({
           </div>
         </div>
 
-        <span className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded border ${getStatusBadge()}`}>
+        <span
+          className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded border ${getStatusBadge()}`}
+        >
           {connection.status}
         </span>
       </div>
@@ -59,7 +61,9 @@ export function ConnectionCard({
         <span>
           {isIncoming ? 'Incoming Request from' : 'Requested by'}:{' '}
           <span className="font-semibold text-text-primary">
-            {connection.requester ? `${connection.requester.firstName} ${connection.requester.lastName}` : 'User'}
+            {connection.requester
+              ? `${connection.requester.firstName} ${connection.requester.lastName}`
+              : 'User'}
           </span>
         </span>
         <span className="font-mono text-[10px]">

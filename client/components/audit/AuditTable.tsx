@@ -78,7 +78,9 @@ export function AuditTable({ logs, isLoading }: Props) {
                     <span className="font-semibold text-foreground block">
                       {log.actor ? `${log.actor.firstName} ${log.actor.lastName}` : log.actorEmail}
                     </span>
-                    <span className="text-[10px] text-muted-foreground font-mono">{log.actorRole}</span>
+                    <span className="text-[10px] text-muted-foreground font-mono">
+                      {log.actorRole}
+                    </span>
                   </div>
                 </div>
               </td>

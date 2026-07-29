@@ -20,13 +20,13 @@ export const TechStackGrid: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 border-b border-[#D9D9D9] bg-[#F2F2F2] relative text-[#1F1F1F]">
+    <section className="py-20 border-b border-border bg-background relative text-text-primary">
       <div className="max-w-7xl mx-auto px-6 space-y-10">
         <div className="text-center space-y-2 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-[#D9D9D9] bg-white text-[#174D38] text-xs font-mono font-medium shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-border bg-surface text-primary text-xs font-mono font-medium shadow-xs">
             Production Technology Stack
           </div>
-          <h2 className="text-2xl md:text-3xl font-semibold text-[#1F1F1F] tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-semibold text-text-primary tracking-tight">
             Built on Industry-Standard Technology
           </h2>
         </div>
@@ -37,10 +37,10 @@ export const TechStackGrid: React.FC = () => {
               key={item.name}
               whileHover={{ y: -2 }}
               transition={{ duration: 0.15 }}
-              className="p-3.5 rounded-[10px] border border-[#D9D9D9] bg-white text-center space-y-1 hover:border-[#174D38]/40 shadow-xs transition-colors"
+              className="p-3.5 rounded-[10px] border border-border bg-surface text-center space-y-1 hover:border-primary/40 shadow-xs transition-colors"
             >
-              <div className="font-semibold text-xs text-[#1F1F1F]">{item.name}</div>
-              <div className="text-[10px] font-mono text-[#6B7280]">{item.category}</div>
+              <div className="font-semibold text-xs text-text-primary">{item.name}</div>
+              <div className="text-[10px] font-mono text-text-secondary">{item.category}</div>
             </motion.div>
           ))}
         </div>

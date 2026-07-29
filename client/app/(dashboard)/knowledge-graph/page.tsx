@@ -2,15 +2,7 @@
 
 import React, { useState } from 'react';
 import { CommandBar } from '@/components/ui/CommandBar';
-import {
-  Network,
-  Building2,
-  Ticket,
-  GitPullRequest,
-  Shield,
-  User,
-  ArrowRight,
-} from 'lucide-react';
+import { Network, Building2, Ticket, GitPullRequest, Shield, User, ArrowRight } from 'lucide-react';
 
 interface GraphNode {
   id: string;
@@ -109,9 +101,13 @@ export default function KnowledgeGraphPage() {
           <div className="flex items-center justify-between pb-4 border-b border-border z-10">
             <div className="flex items-center gap-2">
               <Network className="w-4 h-4 text-purple-400" />
-              <span className="font-bold text-sm text-foreground">Interactive Knowledge Topology</span>
+              <span className="font-bold text-sm text-foreground">
+                Interactive Knowledge Topology
+              </span>
             </div>
-            <span className="text-[10px] font-mono text-muted-foreground">Click entity node to inspect links</span>
+            <span className="text-[10px] font-mono text-muted-foreground">
+              Click entity node to inspect links
+            </span>
           </div>
 
           {/* Node Grid Visualization */}
@@ -130,7 +126,9 @@ export default function KnowledgeGraphPage() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
-                      {node.type === 'organization' && <Building2 className="w-4 h-4 text-blue-400" />}
+                      {node.type === 'organization' && (
+                        <Building2 className="w-4 h-4 text-blue-400" />
+                      )}
                       {node.type === 'ticket' && <Ticket className="w-4 h-4 text-rose-400" />}
                       {node.type === 'pr' && <GitPullRequest className="w-4 h-4 text-purple-400" />}
                       {node.type === 'audit' && <Shield className="w-4 h-4 text-emerald-400" />}
@@ -141,14 +139,16 @@ export default function KnowledgeGraphPage() {
                         node.status === 'risk'
                           ? 'bg-rose-500 animate-ping'
                           : node.status === 'active'
-                          ? 'bg-cyan-400'
-                          : 'bg-emerald-500'
+                            ? 'bg-cyan-400'
+                            : 'bg-emerald-500'
                       }`}
                     />
                   </div>
                   <div>
                     <h4 className="font-bold text-xs text-foreground truncate">{node.label}</h4>
-                    <p className="text-[10px] font-mono text-muted-foreground truncate">{node.subtext}</p>
+                    <p className="text-[10px] font-mono text-muted-foreground truncate">
+                      {node.subtext}
+                    </p>
                   </div>
                 </div>
               );
@@ -164,13 +164,17 @@ export default function KnowledgeGraphPage() {
         {/* Node Inspector Side Panel (1 Col) */}
         <div className="panel-card module-accent-reviews p-6 space-y-4">
           <div className="pb-3 border-b border-border">
-            <span className="text-[10px] font-mono font-bold uppercase text-purple-400">Inspecting Entity</span>
+            <span className="text-[10px] font-mono font-bold uppercase text-purple-400">
+              Inspecting Entity
+            </span>
             <h3 className="text-base font-bold text-foreground mt-0.5">{selectedNode.label}</h3>
             <p className="text-xs text-muted-foreground font-mono mt-0.5">{selectedNode.subtext}</p>
           </div>
 
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-foreground uppercase font-mono">Direct Connections ({connectedNodes.length})</h4>
+            <h4 className="text-xs font-bold text-foreground uppercase font-mono">
+              Direct Connections ({connectedNodes.length})
+            </h4>
             <div className="space-y-2">
               {connectedNodes.map((conn) => (
                 <div
@@ -180,7 +184,9 @@ export default function KnowledgeGraphPage() {
                 >
                   <div className="space-y-0.5">
                     <span className="font-semibold text-foreground">{conn.label}</span>
-                    <p className="text-[10px] text-muted-foreground font-mono">{conn.type.toUpperCase()}</p>
+                    <p className="text-[10px] text-muted-foreground font-mono">
+                      {conn.type.toUpperCase()}
+                    </p>
                   </div>
                   <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
                 </div>

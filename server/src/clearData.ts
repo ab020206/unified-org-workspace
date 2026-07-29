@@ -39,26 +39,25 @@ async function clearDataKeepSuperAdmin() {
     // 2. Clear sessions and refresh tokens for non-superadmin users
     const superAdminUser = await prisma.user.findFirst({
       where: {
-        OR: [
-          { isPlatformUser: true },
-          { email: 'superadmin@platform.demo' }
-        ]
-      }
+        OR: [{ isPlatformUser: true }, { email: 'superadmin@platform.demo' }],
+      },
     });
 
     if (superAdminUser) {
-      console.log(`✅ Preserving Platform Super Admin: ${superAdminUser.email} (${superAdminUser.id})`);
+      console.log(
+        `✅ Preserving Platform Super Admin: ${superAdminUser.email} (${superAdminUser.id})`
+      );
 
       await prisma.session.deleteMany({
-        where: { userId: { not: superAdminUser.id } }
+        where: { userId: { not: superAdminUser.id } },
       });
       await prisma.refreshToken.deleteMany({
-        where: { userId: { not: superAdminUser.id } }
+        where: { userId: { not: superAdminUser.id } },
       });
 
       // Delete all non-superadmin users
       const deleteResult = await prisma.user.deleteMany({
-        where: { id: { not: superAdminUser.id } }
+        where: { id: { not: superAdminUser.id } },
       });
       console.log(`🗑️ Deleted ${deleteResult.count} non-superadmin user accounts.`);
     } else {

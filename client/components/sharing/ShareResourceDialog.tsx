@@ -74,7 +74,10 @@ export function ShareResourceDialog({
             <Share2 className="w-4 h-4 text-primary" />
             Share Resource Externally
           </h3>
-          <button onClick={onClose} className="p-1 rounded text-muted-foreground hover:text-foreground">
+          <button
+            onClick={onClose}
+            className="p-1 rounded text-muted-foreground hover:text-foreground"
+          >
             <X className="w-4 h-4" />
           </button>
         </div>

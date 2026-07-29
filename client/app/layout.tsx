@@ -5,6 +5,11 @@ import { AppProviders } from '@/providers/AppProviders';
 export const metadata = {
   title: 'Froncort.ai | Unified Workspace',
   description: 'Production-ready unified organizational platform for Froncort.ai',
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/favicon.ico',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

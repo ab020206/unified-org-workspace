@@ -37,9 +37,12 @@ export default function PlatformHealthPage() {
             <Activity className="w-3.5 h-3.5" />
             <span>Infrastructure SLA: 99.99% Nominal ({healthData?.status || 'ONLINE'})</span>
           </div>
-          <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">System Infrastructure Telemetry</h2>
+          <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">
+            System Infrastructure Telemetry
+          </h2>
           <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
-            Real-time Subsystem Metrics: CPU load, RAM utilization, PostgreSQL Prisma connection pool, Redis latency, and BullMQ queue status.
+            Real-time Subsystem Metrics: CPU load, RAM utilization, PostgreSQL Prisma connection
+            pool, Redis latency, and BullMQ queue status.
           </p>
         </div>
         <button
@@ -54,38 +57,54 @@ export default function PlatformHealthPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-4 rounded-[10px] border border-border bg-surface shadow-xs space-y-1">
           <span className="text-[11px] font-mono text-text-secondary uppercase">System Uptime</span>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">99.99%</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            99.99%
+          </p>
           <p className="text-[13px] text-success font-medium">Nominal Uptime</p>
         </div>
 
         <div className="p-4 rounded-[10px] border border-border bg-surface shadow-xs space-y-1">
-          <span className="text-[11px] font-mono text-text-secondary uppercase">CPU Utilization</span>
+          <span className="text-[11px] font-mono text-text-secondary uppercase">
+            CPU Utilization
+          </span>
           <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">14%</p>
           <p className="text-[13px] text-text-secondary font-medium">4 Cores Active</p>
         </div>
 
         <div className="p-4 rounded-[10px] border border-border bg-surface shadow-xs space-y-1">
-          <span className="text-[11px] font-mono text-text-secondary uppercase">Prisma DB Pool</span>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">12 / 100</p>
+          <span className="text-[11px] font-mono text-text-secondary uppercase">
+            Prisma DB Pool
+          </span>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            12 / 100
+          </p>
           <p className="text-[13px] text-success font-medium">PostgreSQL Healthy</p>
         </div>
 
         <div className="p-4 rounded-[10px] border border-border bg-surface shadow-xs space-y-1">
           <span className="text-[11px] font-mono text-text-secondary uppercase">Redis Latency</span>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">1.2 ms</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            1.2 ms
+          </p>
           <p className="text-[13px] text-success font-medium">In-Memory Cache</p>
         </div>
       </div>
 
       <div className="p-5 rounded-[10px] border border-border bg-surface space-y-4 shadow-xs">
-        <h3 className="font-semibold text-sm text-text-primary border-b border-border pb-3">Subsystem Services Status</h3>
+        <h3 className="font-semibold text-sm text-text-primary border-b border-border pb-3">
+          Subsystem Services Status
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="p-3.5 rounded-md bg-surface-secondary/60 border border-border flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Database className="w-4 h-4 text-primary" />
               <div>
-                <h4 className="font-semibold text-xs text-text-primary">PostgreSQL Database Service</h4>
-                <p className="text-[11px] text-text-secondary font-mono">Status: Connected (v16.2)</p>
+                <h4 className="font-semibold text-xs text-text-primary">
+                  PostgreSQL Database Service
+                </h4>
+                <p className="text-[11px] text-text-secondary font-mono">
+                  Status: Connected (v16.2)
+                </p>
               </div>
             </div>
             <span className="px-2 py-0.5 rounded bg-success/10 border border-success/20 text-success text-[10px] font-mono font-bold">
@@ -97,8 +116,12 @@ export default function PlatformHealthPage() {
             <div className="flex items-center gap-3">
               <Server className="w-4 h-4 text-primary" />
               <div>
-                <h4 className="font-semibold text-xs text-text-primary">Redis Cache & Pub/Sub Engine</h4>
-                <p className="text-[11px] text-text-secondary font-mono">Status: Connected (v7.0)</p>
+                <h4 className="font-semibold text-xs text-text-primary">
+                  Redis Cache & Pub/Sub Engine
+                </h4>
+                <p className="text-[11px] text-text-secondary font-mono">
+                  Status: Connected (v7.0)
+                </p>
               </div>
             </div>
             <span className="px-2 py-0.5 rounded bg-success/10 border border-success/20 text-success text-[10px] font-mono font-bold">

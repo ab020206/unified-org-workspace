@@ -30,7 +30,17 @@ const config: Config = {
         primary: {
           DEFAULT: 'var(--primary)',
           hover: 'var(--primary-hover)',
+          dark: 'var(--primary-dark)',
           foreground: 'var(--primary-foreground)',
+        },
+        brand: {
+          primary: '#8A004F',
+          hover: '#6E003F',
+          dark: '#5A0034',
+          secondary: '#B2166B',
+          light: '#D94C94',
+          silver: '#A8A8A8',
+          gray: '#4A4A4A',
         },
         text: {
           primary: 'var(--text-primary)',
@@ -44,6 +54,8 @@ const config: Config = {
         },
         accent: {
           DEFAULT: 'var(--primary)',
+          secondary: 'var(--secondary-accent)',
+          light: 'var(--light-accent)',
           foreground: 'var(--primary-foreground)',
         },
         border: 'var(--border)',

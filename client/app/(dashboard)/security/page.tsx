@@ -255,7 +255,9 @@ export default function SecurityDashboardPage() {
           </div>
 
           {sessionsLoading ? (
-            <div className="p-6 text-center text-xs text-muted-foreground animate-pulse">Loading active sessions...</div>
+            <div className="p-6 text-center text-xs text-muted-foreground animate-pulse">
+              Loading active sessions...
+            </div>
           ) : sessions.length > 0 ? (
             <div className="space-y-3">
               {sessions.map((session) => (
@@ -280,7 +282,9 @@ export default function SecurityDashboardPage() {
           </p>
 
           {flagsLoading ? (
-            <div className="p-6 text-center text-xs text-muted-foreground animate-pulse">Loading feature flags...</div>
+            <div className="p-6 text-center text-xs text-muted-foreground animate-pulse">
+              Loading feature flags...
+            </div>
           ) : flags.length > 0 ? (
             <div className="space-y-3">
               {flags.map((flag) => (

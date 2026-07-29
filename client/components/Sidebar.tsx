@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
   Building2,
@@ -21,7 +22,6 @@ import {
   Clock,
   Share2,
   FileSpreadsheet,
-  Layers,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext';
@@ -36,9 +36,10 @@ interface NavItem {
 export function Sidebar() {
   const pathname = usePathname();
   const { user, activeOrganization } = useAuth();
-  const role = user?.isPlatformUser ? Role.SUPER_ADMIN : ((activeOrganization?.userRole as Role) || Role.GUEST);
+  const role = user?.isPlatformUser
+    ? Role.SUPER_ADMIN
+    : (activeOrganization?.userRole as Role) || Role.GUEST;
 
-  // Build role-tailored navigation items strictly based on user role permissions
   const getNavItems = (): NavItem[] => {
     switch (role) {
       case Role.SUPER_ADMIN:
@@ -107,12 +108,14 @@ export function Sidebar() {
       <div>
         {/* Brand Logo */}
         <div className="h-16 border-b border-border flex items-center px-5 gap-3">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-xs">
-            <Layers className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-lg bg-surface border border-border flex items-center justify-center overflow-hidden shadow-xs shrink-0">
+            <img src="/logo.png" alt="Froncort.ai" className="w-full h-full object-contain p-1" />
           </div>
           <div>
             <h1 className="font-bold text-sm tracking-tight text-text-primary">Froncort.ai</h1>
-            <p className="text-[11px] text-text-secondary font-mono tracking-tight">Unified Workspace</p>
+            <p className="text-[11px] text-text-secondary font-mono tracking-tight">
+              Unified Workspace
+            </p>
           </div>
         </div>
 
@@ -128,25 +131,34 @@ export function Sidebar() {
           {visibleNavItems.map((item) => {
             const Icon = item.icon;
             const basePath = item.href.split('?')[0];
-            const isActive = pathname === item.href || (basePath !== '/dashboard' && pathname.startsWith(basePath));
+            const isActive =
+              pathname === item.href ||
+              (basePath !== '/dashboard' && pathname.startsWith(basePath));
             return (
               <Link
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  'flex items-center gap-3 px-3 py-2.5 rounded-md text-[14px] font-medium transition-all group border-l-2',
+                  'relative flex items-center gap-3 px-3 py-2.5 rounded-md text-[14px] font-medium transition-colors group',
                   isActive
-                    ? 'bg-primary/10 text-primary border-l-primary font-semibold'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-secondary border-l-transparent'
+                    ? 'bg-primary/10 text-primary font-semibold'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-secondary'
                 )}
               >
+                {isActive && (
+                  <motion.div
+                    layoutId="sidebarActiveIndicator"
+                    className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-primary rounded-r-full"
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  />
+                )}
                 <Icon
                   className={cn(
-                    'w-4 h-4 transition-colors',
+                    'w-4 h-4 transition-colors z-10',
                     isActive ? 'text-primary' : 'text-text-secondary group-hover:text-text-primary'
                   )}
                 />
-                <span>{item.name}</span>
+                <span className="z-10">{item.name}</span>
               </Link>
             );
           })}
@@ -157,15 +169,17 @@ export function Sidebar() {
       <div className="p-3 border-t border-border bg-surface-secondary/50">
         <div className="rounded-lg p-3 bg-surface border border-border text-xs space-y-1.5 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono text-text-secondary uppercase tracking-wider">Current Scope</span>
+            <span className="text-[11px] font-mono text-text-secondary uppercase tracking-wider">
+              Current Scope
+            </span>
             <span className="w-2 h-2 rounded-full bg-success" />
           </div>
           <p className="font-semibold text-text-primary text-xs truncate">
             {role === Role.SUPER_ADMIN
               ? 'Global Platform Scope'
               : role === Role.AUDITOR
-              ? 'Global Compliance Scope'
-              : activeOrganization?.name || 'Active Workspace'}
+                ? 'Global Compliance Scope'
+                : activeOrganization?.name || 'Active Workspace'}
           </p>
         </div>
       </div>

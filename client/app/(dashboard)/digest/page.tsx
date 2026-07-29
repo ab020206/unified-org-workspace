@@ -83,7 +83,7 @@ export default function DigestPage() {
 
         {history.length === 0 ? (
           <div className="forge-panel p-6 text-xs text-muted-foreground italic font-mono">
-            No previous digest briefings generated. Click "Generate Fresh Digest" above.
+            No previous digest briefings generated. Click &quot;Generate Fresh Digest&quot; above.
           </div>
         ) : (
           <div className="space-y-2">
@@ -99,7 +99,8 @@ export default function DigestPage() {
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">
-                      Briefing #{h.id.slice(0, 8)} • <span className="font-mono text-emerald-500">READY</span>
+                      Briefing #{h.id.slice(0, 8)} •{' '}
+                      <span className="font-mono text-emerald-500">READY</span>
                     </p>
                     <p className="text-[10px] text-muted-foreground font-mono">
                       Model: {h.modelUsed} • {new Date(h.createdAt).toLocaleString()}

@@ -1,7 +1,17 @@
 import React from 'react';
 import Link from 'next/link';
 import { NotificationDto, NotificationType } from '@workspace/shared-types';
-import { Sparkles, Ticket, GitPullRequest, Share2, Shield, Bell, Check, Trash2, ExternalLink } from 'lucide-react';
+import {
+  Sparkles,
+  Ticket,
+  GitPullRequest,
+  Share2,
+  Shield,
+  Bell,
+  Check,
+  Trash2,
+  ExternalLink,
+} from 'lucide-react';
 
 interface Props {
   notification: NotificationDto;
@@ -52,18 +62,12 @@ export function NotificationCard({ notification, onMarkRead, onDelete }: Props) 
       }`}
     >
       <div className="flex items-start gap-3">
-        <div className="p-2 rounded-md bg-surface border border-border">
-          {renderIcon()}
-        </div>
+        <div className="p-2 rounded-md bg-surface border border-border">{renderIcon()}</div>
 
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h4 className="text-xs font-semibold text-text-primary">
-              {notification.title}
-            </h4>
-            {!notification.isRead && (
-              <span className="h-2 w-2 rounded-full bg-primary" />
-            )}
+            <h4 className="text-xs font-semibold text-text-primary">{notification.title}</h4>
+            {!notification.isRead && <span className="h-2 w-2 rounded-full bg-primary" />}
           </div>
           <p className="text-xs text-text-secondary leading-relaxed">{notification.message}</p>
 

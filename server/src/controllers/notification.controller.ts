@@ -59,4 +59,46 @@ export class NotificationController {
         createSuccessResponse(result, 'Notification deleted successfully', req.requestId || 'N/A')
       );
   };
+
+  static getPreferences = async (req: AppRequest, res: Response) => {
+    const userId = req.user!.id;
+    const pref = await notifService.getPreferences(userId);
+    res
+      .status(200)
+      .json(createSuccessResponse(pref, 'Preferences retrieved', req.requestId || 'N/A'));
+  };
+
+  static updatePreferences = async (req: AppRequest, res: Response) => {
+    const userId = req.user!.id;
+    const pref = await notifService.updatePreferences(userId, req.body);
+    res
+      .status(200)
+      .json(
+        createSuccessResponse(pref, 'Preferences updated successfully', req.requestId || 'N/A')
+      );
+  };
+
+  static subscribePush = async (req: AppRequest, res: Response) => {
+    const userId = req.user!.id;
+    const sub = await notifService.savePushSubscription(userId, req.body);
+    res
+      .status(200)
+      .json(
+        createSuccessResponse(sub, 'Push notification subscription saved', req.requestId || 'N/A')
+      );
+  };
+
+  static unsubscribePush = async (req: AppRequest, res: Response) => {
+    const { endpoint } = req.body;
+    await notifService.removePushSubscription(endpoint);
+    res
+      .status(200)
+      .json(
+        createSuccessResponse(
+          { success: true },
+          'Unsubscribed from push notifications',
+          req.requestId || 'N/A'
+        )
+      );
+  };
 }

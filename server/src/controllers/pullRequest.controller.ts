@@ -7,7 +7,6 @@ import {
   createPRSchema,
   updatePRSchema,
   assignReviewersSchema,
-  submitReviewDecisionSchema,
   createPRCommentSchema,
   updatePRCommentSchema,
   prListQuerySchema,

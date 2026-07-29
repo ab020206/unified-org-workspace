@@ -8,3 +8,6 @@ export * from './audit.js';
 export * from './collaboration.js';
 export * from './digest.js';
 export * from './featureFlag.js';
+export * from './github.js';
+export * from './notificationPreferences.js';
+export * from './auditAnalytics.js';

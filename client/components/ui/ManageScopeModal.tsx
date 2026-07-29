@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Building2, X, Users, Sliders, ToggleLeft, ToggleRight, Zap, CheckCircle2 } from 'lucide-react';
+import {
+  Building2,
+  X,
+  Users,
+  Sliders,
+  ToggleLeft,
+  ToggleRight,
+  Zap,
+  CheckCircle2,
+} from 'lucide-react';
 
 interface ManageScopeModalProps {
   isOpen: boolean;
@@ -14,7 +23,12 @@ interface ManageScopeModalProps {
   onSaveSuccess?: () => void;
 }
 
-export function ManageScopeModal({ isOpen, onClose, organization, onSaveSuccess }: ManageScopeModalProps) {
+export function ManageScopeModal({
+  isOpen,
+  onClose,
+  organization,
+  onSaveSuccess,
+}: ManageScopeModalProps) {
   const [maxMembers, setMaxMembers] = useState(50);
   const [features, setFeatures] = useState({
     AI_DIGEST: true,
@@ -116,7 +130,8 @@ export function ManageScopeModal({ isOpen, onClose, organization, onSaveSuccess 
                     <span className="font-mono text-xs font-semibold text-text-primary">{key}</span>
                     <p className="text-[10px] text-text-secondary">
                       {key === 'AI_DIGEST' && 'Automated LLM executive summary worker'}
-                      {key === 'CROSS_ORG_SHARING' && 'Cross-tenant resource sharing & guest access'}
+                      {key === 'CROSS_ORG_SHARING' &&
+                        'Cross-tenant resource sharing & guest access'}
                       {key === 'REVIEW_CONSOLE' && 'Peer code review and approval console'}
                       {key === 'NOTIFICATIONS' && 'Real-time WebSocket & email notification engine'}
                       {key === 'ADVANCED_ANALYTICS' && 'Executive analytics & SLA audit reporting'}
@@ -135,7 +150,10 @@ export function ManageScopeModal({ isOpen, onClose, organization, onSaveSuccess 
           {/* Scope Status */}
           <div className="p-3 rounded-md border border-border bg-surface-secondary text-xs text-text-primary flex items-center gap-2">
             <Zap className="w-4 h-4 text-primary shrink-0" />
-            <span>Scope changes apply instantly to all connected tenant sessions without service interruption.</span>
+            <span>
+              Scope changes apply instantly to all connected tenant sessions without service
+              interruption.
+            </span>
           </div>
         </div>
 

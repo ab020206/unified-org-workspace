@@ -86,7 +86,9 @@ export function AuditorDashboard() {
         breadcrumbs={['Audit & Compliance', 'System Audit Stream']}
         searchPlaceholder="Search audit event IDs, actor emails, or entity diffs..."
         primaryActionLabel="Export Audit Stream"
-        onPrimaryAction={() => alert(`Exporting ${filteredLogs.length} immutable audit log records...`)}
+        onPrimaryAction={() =>
+          alert(`Exporting ${filteredLogs.length} immutable audit log records...`)
+        }
       />
 
       {/* Read-Only Banner */}
@@ -96,10 +98,13 @@ export function AuditorDashboard() {
           <span>Read-Only Compliance Mode Active</span>
         </div>
         <h2 className="text-[24px] font-semibold text-text-primary tracking-tight">
-          Compliance & Governance Hub — Welcome, {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'Auditor'}
+          Compliance & Governance Hub — Welcome,{' '}
+          {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'Auditor'}
         </h2>
         <p className="text-sm text-text-secondary max-w-2xl leading-relaxed">
-          Immutable system audit log stream. You have read-only inspection access to <strong className="text-primary font-mono">{auditLogs.length} audit entries</strong>, security event traces, and state JSON diffs.
+          Immutable system audit log stream. You have read-only inspection access to{' '}
+          <strong className="text-primary font-mono">{auditLogs.length} audit entries</strong>,
+          security event traces, and state JSON diffs.
         </p>
       </div>
 
@@ -110,7 +115,9 @@ export function AuditorDashboard() {
             <span>Audit Entries</span>
             <Shield className="w-4 h-4 text-success" />
           </div>
-          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">{auditLogs.length}</p>
+          <p className="text-[32px] font-semibold text-text-primary font-mono leading-tight">
+            {auditLogs.length}
+          </p>
           <p className="text-[13px] text-success font-medium">Immutable Signed Logs</p>
         </div>
 
@@ -184,7 +191,9 @@ export function AuditorDashboard() {
                         <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded uppercase bg-surface-secondary text-text-primary border border-border">
                           {log.module}
                         </span>
-                        <span className="text-[11px] font-mono text-text-secondary">{log.action}</span>
+                        <span className="text-[11px] font-mono text-text-secondary">
+                          {log.action}
+                        </span>
                       </div>
                       <h4 className="font-semibold text-xs text-text-primary">
                         {log.actorEmail} — {log.entityType} ({log.entityId})
@@ -192,7 +201,9 @@ export function AuditorDashboard() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className="text-[11px] font-mono text-text-secondary">{log.ipAddress}</span>
+                      <span className="text-[11px] font-mono text-text-secondary">
+                        {log.ipAddress}
+                      </span>
                       <button className="px-2.5 py-1 rounded-md bg-surface border border-border text-primary hover:bg-surface-secondary text-[11px] font-medium flex items-center gap-1 cursor-pointer">
                         <Code className="w-3 h-3" /> State Diff
                       </button>
@@ -207,7 +218,9 @@ export function AuditorDashboard() {
         {/* Auditor Quick Actions & State Inspector */}
         <div className="space-y-6">
           <div className="p-6 rounded-[10px] border border-border bg-surface shadow-xs space-y-3">
-            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">Auditor Quick Actions</h4>
+            <h4 className="font-mono text-xs text-text-secondary uppercase tracking-wider font-medium">
+              Auditor Quick Actions
+            </h4>
             <div className="space-y-2">
               <button
                 onClick={() => alert('Exporting full audit logs in CSV format...')}
@@ -237,11 +250,19 @@ export function AuditorDashboard() {
               <div className="space-y-2 text-xs font-mono">
                 <p className="text-[11px] text-text-secondary">Log ID: {selectedLog.id}</p>
                 <div className="p-3 rounded-md bg-surface-secondary border border-border text-[11px] text-text-primary overflow-x-auto">
-                  <pre>{JSON.stringify({ previousState: selectedLog.previousState, newState: selectedLog.newState }, null, 2)}</pre>
+                  <pre>
+                    {JSON.stringify(
+                      { previousState: selectedLog.previousState, newState: selectedLog.newState },
+                      null,
+                      2
+                    )}
+                  </pre>
                 </div>
               </div>
             ) : (
-              <p className="text-xs text-text-secondary">Select any audit stream event to inspect immutable before & after state diffs.</p>
+              <p className="text-xs text-text-secondary">
+                Select any audit stream event to inspect immutable before & after state diffs.
+              </p>
             )}
           </div>
         </div>
