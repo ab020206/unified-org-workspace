@@ -45,6 +45,7 @@
     "react": "^19.0.0-rc-6925828f-20241021",
     "react-dom": "^19.0.0-rc-6925828f-20241021",
     "tailwind-merge": "^2.3.0",
+    "typescript": "^5.4.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -74,8 +75,7 @@
     "tailwindcss": "^3.4.3",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "tsx": "^4.10.0",
-    "typescript": "^5.4.5"
+    "tsx": "^4.10.0"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
