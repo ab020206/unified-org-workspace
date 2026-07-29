@@ -29,7 +29,19 @@ app.use(
 
 app.use(
   cors({
-    origin: [env.CLIENT_URL],
+    origin: (requestOrigin, callback) => {
+      if (
+        !requestOrigin ||
+        requestOrigin.includes('vercel.app') ||
+        requestOrigin.includes('localhost') ||
+        requestOrigin === env.CLIENT_URL ||
+        env.CLIENT_URL === '*'
+      ) {
+        callback(null, true);
+      } else {
+        callback(null, true);
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Organization-Id', 'X-Request-Id'],

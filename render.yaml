@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: froncort-api
+    env: node
+    rootDir: server
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CLIENT_URL
+        value: "*"
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_yKn2g0QpakZW@ep-proud-hill-avvhb8fi-pooler.c-11.us-east-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require
+      - key: REDIS_URL
+        value: rediss://default:gQAAAAAAAuyAAAIgcDFkNTcwMWEzZTY4NTM0Y2I2ODIxMDIzYzFhZGQxMzRjYQ@enhanced-koi-191616.upstash.io:6379
+      - key: JWT_SECRET
+        value: 9e8f4c2b7d1a5e3f8b0c6d2a4e9f1b7c3d5e8f0a2b4c6d8e1f3a5b7c9d1e3f5a
+      - key: JWT_REFRESH_SECRET
+        value: 3a5b7c9d1e3f5a7b9c1d3e5f7a9b1c3d5e7f9a1b3c5d7e9f1a3b5c7d9e1f3a5b
+      - key: SKIP_RATE_LIMIT
+        value: "true"
