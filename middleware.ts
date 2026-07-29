@@ -41,7 +41,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Public path bypass
-  const isPublic = PUBLIC_PATHS.some((path) => pathname === path);
+  const isPublic = PUBLIC_PATHS.some((path) => pathname === path) || pathname.startsWith('/docs');
   if (isPublic) {
     return response;
   }

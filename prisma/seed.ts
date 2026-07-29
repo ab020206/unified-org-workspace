@@ -21,6 +21,26 @@ const prisma = new PrismaClient();
 async function main() {
   console.info('🌱 Starting Production-Grade Idempotent Demo Seeding with Indian Names...');
 
+  // Clean existing dynamic demo data to ensure zero duplicates
+  console.info('  • Cleaning existing dynamic records to prevent duplicates...');
+  await prisma.auditMetadata.deleteMany({});
+  await prisma.auditLog.deleteMany({});
+  await prisma.notification.deleteMany({});
+  await prisma.digest.deleteMany({});
+  await prisma.sharedAccess.deleteMany({});
+  await prisma.sharedResource.deleteMany({});
+  await prisma.pullRequestActivity.deleteMany({});
+  await prisma.reviewComment.deleteMany({});
+  await prisma.pullRequestVersion.deleteMany({});
+  await prisma.reviewDecision.deleteMany({});
+  await prisma.pullRequestReviewer.deleteMany({});
+  await prisma.pullRequest.deleteMany({});
+  await prisma.ticketActivity.deleteMany({});
+  await prisma.ticketAttachment.deleteMany({});
+  await prisma.ticketComment.deleteMany({});
+  await prisma.ticket.deleteMany({});
+  await prisma.anomalyAlert.deleteMany({});
+
   // Password for every demo account: Demo@123
   const demoPasswordHash = await bcrypt.hash('Demo@123', 10);
 
