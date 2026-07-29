@@ -88,7 +88,7 @@ export class CollaborationController {
     const userId = req.user!.id;
     const validated = createShareSchema.parse(req.body);
 
-    const share = await collabService.shareResource(orgId, userId, validated);
+    const share = await collabService.shareResource(orgId, userId, validated as any);
     res
       .status(201)
       .json(createSuccessResponse(share, 'Resource shared successfully', req.requestId || 'N/A'));

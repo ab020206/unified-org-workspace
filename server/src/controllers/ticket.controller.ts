@@ -21,7 +21,7 @@ export class TicketController {
     const userId = req.user!.id;
     const validated = createTicketSchema.parse(req.body);
 
-    const ticket = await ticketService.createTicket(orgId, userId, validated);
+    const ticket = await ticketService.createTicket(orgId, userId, validated as any);
     res
       .status(201)
       .json(createSuccessResponse(ticket, 'Ticket created successfully', req.requestId || 'N/A'));

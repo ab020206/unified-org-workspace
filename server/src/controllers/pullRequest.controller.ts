@@ -20,7 +20,7 @@ export class PullRequestController {
     const userId = req.user!.id;
     const validated = createPRSchema.parse(req.body);
 
-    const pr = await prService.createPullRequest(orgId, userId, validated);
+    const pr = await prService.createPullRequest(orgId, userId, validated as any);
     res
       .status(201)
       .json(createSuccessResponse(pr, 'Pull Request created successfully', req.requestId || 'N/A'));
