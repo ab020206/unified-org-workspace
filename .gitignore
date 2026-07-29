@@ -3,8 +3,10 @@ node_modules
 .pnpm-store
 
 # Next.js
+.next/
 client/.next/
 client/out/
+out/
 
 # Build outputs
 dist
@@ -22,7 +24,6 @@ logs
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
@@ -53,5 +54,7 @@ coverage/
 .temp_demo_frames/
 
 # Uploads
+uploads/*
+!uploads/.gitkeep
 server/uploads/*
 !server/uploads/.gitkeep
