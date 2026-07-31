@@ -8,6 +8,8 @@ import { PasswordInput } from '@/components/ui/PasswordInput';
 import { LoadingButton } from '@/components/ui/LoadingButton';
 import { useAuth } from '@/context/AuthContext';
 
+import { ArrowLeft } from 'lucide-react';
+
 export default function RegisterPage() {
   const { register: registerUser } = useAuth();
   const router = useRouter();
@@ -44,13 +46,25 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-center items-center p-6 text-text-primary">
+    <div className="min-h-screen bg-background flex flex-col justify-center items-center p-6 text-text-primary relative">
+      <button
+        type="button"
+        onClick={() => router.back()}
+        className="absolute top-6 left-6 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-secondary text-xs font-mono text-text-secondary hover:text-text-primary transition-all cursor-pointer shadow-xs"
+        title="Go to previous page"
+      >
+        <ArrowLeft className="w-3.5 h-3.5" />
+        <span>Back</span>
+      </button>
+
       <div className="w-full max-w-md space-y-6">
         {/* Header Branding */}
         <div className="text-center space-y-2">
-          <div className="w-10 h-10 rounded-lg bg-surface border border-border flex items-center justify-center overflow-hidden mx-auto shadow-xs">
-            <img src="/logo.png" alt="Froncort.ai" className="w-full h-full object-contain p-1" />
-          </div>
+          <Link href="/" title="Go to Home Landing Page" className="inline-block group cursor-pointer hover:opacity-90 transition-opacity">
+            <div className="w-10 h-10 rounded-lg bg-surface border border-border flex items-center justify-center overflow-hidden mx-auto shadow-xs group-hover:border-primary/50 transition-colors">
+              <img src="/logo.png" alt="Froncort.Ai" className="w-full h-full object-contain p-1" />
+            </div>
+          </Link>
           <h1 className="text-[24px] font-semibold text-text-primary tracking-tight">
             Create your account
           </h1>

@@ -15,3 +15,11 @@ export async function PUT(request: NextRequest) {
     return handleApiError(error);
   }
 }
+
+export async function PATCH(request: NextRequest) {
+  return PUT(request);
+}
+
+export async function POST(request: NextRequest) {
+  return PUT(request);
+}

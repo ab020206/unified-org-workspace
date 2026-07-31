@@ -23,6 +23,7 @@ import {
   Permission,
 } from '@workspace/shared-types';
 
+import { generateAccessToken } from '../auth';
 import { auditService } from './audit.service';
 
 import { prisma } from '../config/prisma';
@@ -75,6 +76,11 @@ export class OrganizationService {
       slug = `${baseSlug}-${randomUUID().slice(0, 6)}`;
     }
 
+    const creator = await this.userRepository.findById(userId);
+    if (!creator || !creator.isPlatformUser) {
+      throw ApiError.forbidden('Only Platform Super Admins are authorized to create new organizations');
+    }
+
     const org = await this.organizationRepository.create({
       name: data.name,
       slug,
@@ -82,19 +88,13 @@ export class OrganizationService {
       createdBy: userId,
     });
 
-    const creator = await this.userRepository.findById(userId);
-
-    if (!creator?.isPlatformUser) {
-      await this.memberRepository.addMember(org.id, userId, Role.ADMIN);
-    }
-
-    logger.info({ userId, orgId: org.id }, 'Organization created');
+    logger.info({ userId, orgId: org.id }, 'Organization created by Platform Super Admin');
 
     await auditService.log({
       organizationId: org.id,
       actorId: userId,
-      actorEmail: creator?.email || 'unknown@example.com',
-      actorRole: creator?.isPlatformUser ? 'SUPER_ADMIN' : 'ADMIN',
+      actorEmail: creator.email,
+      actorRole: 'SUPER_ADMIN',
       module: 'ORGANIZATION',
       action: 'CREATE_ORGANIZATION',
       entityType: 'ORGANIZATION',
@@ -104,8 +104,8 @@ export class OrganizationService {
 
     return {
       ...this.formatOrg(org),
-      membersCount: creator?.isPlatformUser ? 0 : 1,
-      userRole: creator?.isPlatformUser ? Role.SUPER_ADMIN : Role.ADMIN,
+      membersCount: 0,
+      userRole: Role.SUPER_ADMIN,
     };
   }
 
@@ -269,6 +269,237 @@ export class OrganizationService {
     }
     const orgs = await this.organizationRepository.findUserOrganizations(userId);
     return orgs.map((org) => this.formatOrg(org));
+  }
+
+  public async getOrganizationsMe(
+    userId: string,
+    currentOrgId?: string
+  ): Promise<{
+    organizations: Array<
+      OrganizationDto & {
+        role: Role;
+        status: string;
+        joinedAt: string;
+        isCurrent: boolean;
+      }
+    >;
+    currentOrganization: OrganizationDetailsDto | null;
+    isPlatformUser: boolean;
+  }> {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw ApiError.notFound('User not found');
+    }
+
+    if (user.isPlatformUser) {
+      const allOrgs = await prisma.organization.findMany({
+        orderBy: { createdAt: 'desc' },
+        include: {
+          members: {
+            where: { userId },
+          },
+          _count: { select: { members: true } },
+        },
+      });
+
+      const organizations = allOrgs.map((org) => {
+        const member = org.members[0];
+        const role = member ? (member.role as Role) : Role.SUPER_ADMIN;
+        const isCurrent = currentOrgId ? org.id === currentOrgId : false;
+        return {
+          ...this.formatOrg(org),
+          role,
+          status: 'ACTIVE',
+          joinedAt: member ? member.joinedAt.toISOString() : org.createdAt.toISOString(),
+          isCurrent,
+        };
+      });
+
+      let currentOrganization: OrganizationDetailsDto | null = null;
+      if (currentOrgId && currentOrgId !== 'platform') {
+        try {
+          currentOrganization = await this.getOrganizationDetails(currentOrgId, userId);
+        } catch {
+          currentOrganization = null;
+        }
+      }
+
+      return {
+        organizations,
+        currentOrganization,
+        isPlatformUser: true,
+      };
+    }
+
+    const memberships = await prisma.organizationMember.findMany({
+      where: { userId, isActive: true },
+      include: {
+        organization: {
+          include: {
+            _count: { select: { members: true } },
+          },
+        },
+      },
+      orderBy: { joinedAt: 'desc' },
+    });
+
+    const activeId = currentOrgId || (memberships.length > 0 ? memberships[0].organizationId : undefined);
+
+    const organizations = memberships.map((m) => {
+      const isCurrent = Boolean(activeId && m.organizationId === activeId);
+      return {
+        ...this.formatOrg(m.organization),
+        role: m.role as Role,
+        status: m.isActive ? 'ACTIVE' : 'INACTIVE',
+        joinedAt: m.joinedAt.toISOString(),
+        isCurrent,
+      };
+    });
+
+    let currentOrganization: OrganizationDetailsDto | null = null;
+    if (activeId) {
+      try {
+        currentOrganization = await this.getOrganizationDetails(activeId, userId);
+      } catch {
+        currentOrganization = null;
+      }
+    }
+
+    return {
+      organizations,
+      currentOrganization,
+      isPlatformUser: false,
+    };
+  }
+
+  public async switchOrganizationContext(
+    userId: string,
+    targetOrgId: string,
+    previousOrgId?: string
+  ): Promise<{
+    activeOrganization: OrganizationDetailsDto | null;
+    role: Role | null;
+    token: string;
+    isPlatformView: boolean;
+  }> {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw ApiError.notFound('User not found');
+    }
+
+    // Case 1: Switching to Platform View
+    if (targetOrgId === 'platform') {
+      if (!user.isPlatformUser) {
+        await auditService.log({
+          actorId: userId,
+          actorEmail: user.email,
+          actorRole: 'GUEST',
+          module: 'ORGANIZATION',
+          action: 'FAILED_SWITCH_ATTEMPT',
+          entityType: 'ORGANIZATION',
+          entityId: 'platform',
+          newState: { reason: 'Non-platform user attempted to enter Platform View' },
+        });
+        throw ApiError.forbidden('Platform View is restricted to Platform Super Admins');
+      }
+
+      await auditService.log({
+        actorId: userId,
+        actorEmail: user.email,
+        actorRole: 'SUPER_ADMIN',
+        module: 'ORGANIZATION',
+        action: 'PLATFORM_VIEW_ENTERED',
+        entityType: 'ORGANIZATION',
+        entityId: 'platform',
+        previousState: previousOrgId ? { organizationId: previousOrgId } : null,
+      });
+
+      const token = generateAccessToken({
+        sub: userId,
+        userId: userId,
+        email: user.email,
+        role: Role.SUPER_ADMIN,
+        activeOrgId: null,
+      });
+
+      return {
+        activeOrganization: null,
+        role: Role.SUPER_ADMIN,
+        token,
+        isPlatformView: true,
+      };
+    }
+
+    // Case 2: Switching into an Organization
+    const org = await this.organizationRepository.findById(targetOrgId);
+    if (!org) {
+      await auditService.log({
+        actorId: userId,
+        actorEmail: user.email,
+        actorRole: user.isPlatformUser ? 'SUPER_ADMIN' : 'USER',
+        module: 'ORGANIZATION',
+        action: 'FAILED_SWITCH_ATTEMPT',
+        entityType: 'ORGANIZATION',
+        entityId: targetOrgId,
+        newState: { reason: 'Target organization does not exist' },
+      });
+      throw ApiError.notFound('Target organization not found');
+    }
+
+    let roleInOrg: Role;
+
+    if (user.isPlatformUser) {
+      const membership = await this.memberRepository.findMembership(targetOrgId, userId);
+      roleInOrg = membership?.isActive ? (membership.role as Role) : Role.SUPER_ADMIN;
+    } else {
+      const membership = await this.memberRepository.findMembership(targetOrgId, userId);
+      if (!membership || !membership.isActive) {
+        await auditService.log({
+          actorId: userId,
+          actorEmail: user.email,
+          actorRole: 'USER',
+          module: 'ORGANIZATION',
+          action: 'FAILED_SWITCH_ATTEMPT',
+          entityType: 'ORGANIZATION',
+          entityId: targetOrgId,
+          newState: { reason: 'User is not an active member of this organization' },
+        });
+        throw ApiError.forbidden('You are not an active member of this organization');
+      }
+      roleInOrg = membership.role as Role;
+    }
+
+    const orgDetails = await this.getOrganizationDetails(targetOrgId, userId);
+
+    const action = previousOrgId === 'platform' ? 'PLATFORM_VIEW_EXITED' : 'ORGANIZATION_SWITCHED';
+
+    await auditService.log({
+      organizationId: targetOrgId,
+      actorId: userId,
+      actorEmail: user.email,
+      actorRole: roleInOrg,
+      module: 'ORGANIZATION',
+      action,
+      entityType: 'ORGANIZATION',
+      entityId: targetOrgId,
+      previousState: previousOrgId ? { organizationId: previousOrgId } : null,
+      newState: { organizationId: targetOrgId, role: roleInOrg },
+    });
+
+    const token = generateAccessToken({
+      sub: userId,
+      userId: userId,
+      email: user.email,
+      role: roleInOrg,
+      activeOrgId: targetOrgId,
+    });
+
+    return {
+      activeOrganization: orgDetails,
+      role: roleInOrg,
+      token,
+      isPlatformView: false,
+    };
   }
 
   public async getOrganizationDetails(

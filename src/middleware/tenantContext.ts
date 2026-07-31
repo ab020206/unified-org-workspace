@@ -15,27 +15,48 @@ export const tenantContext: RequestHandler = async (req, _res, next) => {
     return next(ApiError.unauthorized('User context is missing prior to organization resolution'));
   }
 
-  if (appReq.user.isPlatformUser) {
-    appReq.organization = undefined;
-    appReq.membership = {
-      id: `platform-${appReq.user.id}`,
-      organizationId: '',
-      userId: appReq.user.id,
-      role: Role.SUPER_ADMIN,
-      joinedAt: new Date().toISOString(),
-      isActive: true,
-    };
-    return next();
-  }
-
   try {
-    // 1. Resolve Org ID from Header, Query, or Param
+    // 1. Resolve Org ID from Header, Cookie, Query, or Param
     let orgId =
       (req.headers['x-organization-id'] as string | undefined) ||
+      (req.cookies?.active_org_id as string | undefined) ||
       (req.query.organizationId as string | undefined);
 
-    // 2. Fallback to user's first available organization if no header was supplied
-    if (!orgId) {
+    // Platform Super Admin logic
+    if (appReq.user.isPlatformUser) {
+      if (orgId && orgId !== 'platform') {
+        try {
+          const orgDetails = await organizationService.getOrganizationDetails(orgId, appReq.user.id);
+          const membership = await memberRepository.findMembership(orgId, appReq.user.id);
+          appReq.organization = orgDetails as any;
+          appReq.membership = {
+            id: membership?.id || `platform-${appReq.user.id}`,
+            organizationId: orgId,
+            userId: appReq.user.id,
+            role: (membership?.role as Role) || Role.SUPER_ADMIN,
+            joinedAt: membership?.joinedAt ? membership.joinedAt.toISOString() : new Date().toISOString(),
+            isActive: true,
+          };
+          return next();
+        } catch {
+          // Fall through to platform default if org not found
+        }
+      }
+
+      appReq.organization = undefined;
+      appReq.membership = {
+        id: `platform-${appReq.user.id}`,
+        organizationId: '',
+        userId: appReq.user.id,
+        role: Role.SUPER_ADMIN,
+        joinedAt: new Date().toISOString(),
+        isActive: true,
+      };
+      return next();
+    }
+
+    // 2. Fallback to user's first available organization if no header/cookie was supplied
+    if (!orgId || orgId === 'platform') {
       const userOrgs = await organizationService.getUserOrganizations(appReq.user.id);
       if (userOrgs.length === 0) {
         throw ApiError.forbidden('User does not belong to any active organization');

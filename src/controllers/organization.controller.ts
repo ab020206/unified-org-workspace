@@ -61,21 +61,60 @@ export class OrganizationController {
       );
   };
 
+  public getMe = async (req: Request, res: Response): Promise<void> => {
+    const appReq = req as AppRequest;
+    if (!appReq.user) throw new Error('User missing');
+    const currentOrgId =
+      (req.headers['x-organization-id'] as string | undefined) ||
+      (req.cookies?.active_org_id as string | undefined) ||
+      appReq.organization?.id;
+
+    const data = await this.organizationService.getOrganizationsMe(appReq.user.id, currentOrgId);
+    res
+      .status(200)
+      .json(createSuccessResponse(data, 'User organization context retrieved', appReq.requestId || 'N/A'));
+  };
+
   public switch = async (req: Request, res: Response): Promise<void> => {
     const appReq = req as AppRequest;
     if (!appReq.user) throw new Error('User missing');
 
-    const org = await this.organizationService.getOrganizationDetails(
-      req.body.organizationId,
-      appReq.user.id
+    const targetOrgId = req.body.organizationId || req.body.orgId;
+    if (!targetOrgId) {
+      res.status(400).json({ success: false, message: 'organizationId is required' });
+      return;
+    }
+
+    const previousOrgId = appReq.organization?.id || (req.headers['x-organization-id'] as string);
+
+    const result = await this.organizationService.switchOrganizationContext(
+      appReq.user.id,
+      targetOrgId,
+      previousOrgId
     );
+
+    if (targetOrgId === 'platform' || result.isPlatformView) {
+      res.clearCookie('active_org_id');
+    } else if (result.activeOrganization?.id) {
+      res.cookie('active_org_id', result.activeOrganization.id, {
+        httpOnly: true,
+        sameSite: 'lax',
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
+    }
 
     res
       .status(200)
       .json(
         createSuccessResponse(
-          org,
-          'Switched active organization context',
+          {
+            activeOrganization: result.activeOrganization,
+            role: result.role,
+            token: result.token,
+            accessToken: result.token,
+            isPlatformView: result.isPlatformView,
+          },
+          'Switched active organization context successfully',
           appReq.requestId || 'N/A'
         )
       );

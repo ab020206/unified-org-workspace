@@ -28,10 +28,12 @@ interface AuthContextType {
   user: UserPayload | null;
   activeOrganization: OrganizationDetailsDto | null;
   userOrganizations: OrganizationDto[];
+  recentlyUsedOrgs: string[];
   members: OrganizationMemberDto[];
   permissions: Permission[];
   accessToken: string | null;
   isLoading: boolean;
+  isSwitchingOrg: boolean;
   hasPermission: (permission: Permission | Permission[]) => boolean;
   hasRole: (role: Role | Role[]) => boolean;
   login: (data: LoginRequest) => Promise<void>;
@@ -66,9 +68,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserPayload | null>(null);
   const [activeOrganization, setActiveOrganization] = useState<OrganizationDetailsDto | null>(null);
   const [userOrganizations, setUserOrganizations] = useState<OrganizationDto[]>([]);
+  const [recentlyUsedOrgs, setRecentlyUsedOrgs] = useState<string[]>([]);
   const [members, setMembers] = useState<OrganizationMemberDto[]>([]);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSwitchingOrg, setIsSwitchingOrg] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('recentlyUsedOrgs');
+        if (stored) setRecentlyUsedOrgs(JSON.parse(stored));
+      } catch {
+        // ignore parse error
+      }
+    }
+  }, []);
 
   // Derive effective role (Platform Super Admin vs Tenant Role)
   const effectiveRole = useMemo(() => {
@@ -270,19 +285,53 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const switchOrganization = async (orgId: string) => {
-    const json: ApiResponse<OrganizationDetailsDto> = await authFetch('/organizations/switch', {
-      method: 'PATCH',
-      body: JSON.stringify({ organizationId: orgId }),
-    });
+    setIsSwitchingOrg(true);
+    try {
+      const json: ApiResponse<any> = await authFetch('/organizations/switch', {
+        method: 'POST',
+        body: JSON.stringify({ organizationId: orgId }),
+      });
 
-    if (json.success) {
-      setActiveOrganization(json.data);
-      localStorage.setItem('activeOrgId', json.data.id);
-      const token =
-        accessToken || (typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null);
-      if (token) {
-        await fetchActiveOrgAndMembers(token, json.data.id);
+      if (json.success) {
+        const data = json.data;
+        const newAccessToken = data.token || data.accessToken;
+        if (newAccessToken) {
+          setAccessToken(newAccessToken);
+          localStorage.setItem('accessToken', newAccessToken);
+        }
+
+        if (orgId === 'platform' || data.isPlatformView) {
+          setActiveOrganization(null);
+          localStorage.removeItem('activeOrgId');
+        } else if (data.activeOrganization || data.id) {
+          const orgDetails = data.activeOrganization || data;
+          setActiveOrganization(orgDetails);
+          localStorage.setItem('activeOrgId', orgDetails.id);
+
+          setRecentlyUsedOrgs((prev) => {
+            const filtered = prev.filter((id) => id !== orgDetails.id);
+            const updated = [orgDetails.id, ...filtered].slice(0, 5);
+            try {
+              localStorage.setItem('recentlyUsedOrgs', JSON.stringify(updated));
+            } catch {
+              // ignore storage errors
+            }
+            return updated;
+          });
+        }
+
+        const effectiveToken = newAccessToken || accessToken || (typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null);
+        if (effectiveToken) {
+          await fetchActiveOrgAndMembers(effectiveToken, orgId === 'platform' ? undefined : orgId);
+        }
+      } else {
+        throw new Error(json.message || 'Failed to switch organization');
       }
+    } catch (err: any) {
+      console.error('Organization switch error:', err);
+      throw err;
+    } finally {
+      setIsSwitchingOrg(false);
     }
   };
 
@@ -455,10 +504,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         activeOrganization,
         userOrganizations,
+        recentlyUsedOrgs,
         members,
         permissions,
         accessToken,
         isLoading,
+        isSwitchingOrg,
         hasPermission,
         hasRole,
         login,

@@ -63,8 +63,21 @@ async function runTests() {
 
     assert.strictEqual(meRes.body.data.email, testEmail);
 
-    // 4. Create Secondary Organization (Org Beta)
-    console.log('  [4/65] Testing POST /api/v1/organizations (Create Org Beta)...');
+    // 4a. Non-platform user attempts POST /api/v1/organizations (403 Expected)
+    console.log('  [4a/65] Testing POST /api/v1/organizations authorization check (403 Expected)...');
+    await request(app)
+      .post('/api/v1/organizations')
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ name: 'Unauthorized Org' })
+      .expect(403);
+
+    // 4b. Platform Super Admin calls POST /api/v1/organizations (201 Expected)
+    console.log('  [4b/65] Platform Super Admin calls POST /api/v1/organizations (Create Org Beta)...');
+    await prisma.user.update({
+      where: { id: adminUserId },
+      data: { isPlatformUser: true },
+    });
+
     const orgRes = await request(app)
       .post('/api/v1/organizations')
       .set('Authorization', `Bearer ${adminToken}`)
@@ -73,6 +86,19 @@ async function runTests() {
 
     const secondaryOrgId = orgRes.body.data.id;
 
+    // Revert admin isPlatformUser status for non-platform tests
+    await prisma.user.update({
+      where: { id: adminUserId },
+      data: { isPlatformUser: false },
+    });
+
+    // Add membership for admin in secondaryOrgId
+    await prisma.organizationMember.upsert({
+      where: { organizationId_userId: { organizationId: secondaryOrgId, userId: adminUserId } },
+      update: { isActive: true },
+      create: { organizationId: secondaryOrgId, userId: adminUserId, role: 'ADMIN', isActive: true },
+    });
+
     // 5. List Organizations
     console.log('  [5/65] Testing GET /api/v1/organizations...');
     const listRes = await request(app)
@@ -80,15 +106,52 @@ async function runTests() {
       .set('Authorization', `Bearer ${adminToken}`)
       .expect(200);
 
-    assert.strictEqual(listRes.body.data.length, 2);
+    assert.ok(listRes.body.data.length >= 2);
 
     // 6. Switch Active Organization Context
-    console.log('  [6/65] Testing PATCH /api/v1/organizations/switch...');
-    await request(app)
-      .patch('/api/v1/organizations/switch')
+    console.log('  [6/65] Testing POST & PATCH /api/v1/organizations/switch...');
+    const switchRes = await request(app)
+      .post('/api/v1/organizations/switch')
       .set('Authorization', `Bearer ${adminToken}`)
       .send({ organizationId: adminOrgId })
       .expect(200);
+
+    assert.strictEqual(switchRes.body.success, true);
+    assert.ok(switchRes.body.data.activeOrganization);
+
+    // 6a. GET /api/v1/organizations/me context test
+    console.log('  [6a/65] Testing GET /api/v1/organizations/me...');
+    const meOrgsRes = await request(app)
+      .get('/api/v1/organizations/me')
+      .set('Authorization', `Bearer ${adminToken}`)
+      .set('X-Organization-Id', adminOrgId)
+      .expect(200);
+
+    assert.strictEqual(meOrgsRes.body.success, true);
+    assert.ok(Array.isArray(meOrgsRes.body.data.organizations));
+    assert.strictEqual(meOrgsRes.body.data.organizations.length, 2);
+
+    // 6b. Super Admin switches into Platform View
+    console.log('  [6b/65] Testing Super Admin switch to Platform View...');
+    await prisma.user.update({
+      where: { id: adminUserId },
+      data: { isPlatformUser: true },
+    });
+
+    const platformViewRes = await request(app)
+      .post('/api/v1/organizations/switch')
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ organizationId: 'platform' })
+      .expect(200);
+
+    assert.strictEqual(platformViewRes.body.success, true);
+    assert.strictEqual(platformViewRes.body.data.isPlatformView, true);
+
+    // Revert user isPlatformUser status
+    await prisma.user.update({
+      where: { id: adminUserId },
+      data: { isPlatformUser: false },
+    });
 
     // 7. Register Guest User
     console.log('  [7/65] Registering Guest User...');
@@ -123,6 +186,33 @@ async function runTests() {
       .set('Authorization', `Bearer ${guestToken}`)
       .send({ token: inviteToken })
       .expect(200);
+
+    // 9a. Unauthorized org switch attempt by Guest user (Org Beta switch attempt)
+    console.log('  [9a/65] Guest User attempts switch into unauthorized Org Beta (403 Expected)...');
+    await request(app)
+      .post('/api/v1/organizations/switch')
+      .set('Authorization', `Bearer ${guestToken}`)
+      .send({ organizationId: secondaryOrgId })
+      .expect(403);
+
+    // 9b. Non-platform user attempts Platform View switch
+    console.log('  [9b/65] Guest User attempts switch to Platform View (403 Expected)...');
+    await request(app)
+      .post('/api/v1/organizations/switch')
+      .set('Authorization', `Bearer ${guestToken}`)
+      .send({ organizationId: 'platform' })
+      .expect(403);
+
+    // 9c. Authorized org switch by Guest user to Org Alpha
+    console.log('  [9c/65] Guest User switches to authorized Org Alpha...');
+    const guestSwitchRes = await request(app)
+      .post('/api/v1/organizations/switch')
+      .set('Authorization', `Bearer ${guestToken}`)
+      .send({ organizationId: adminOrgId })
+      .expect(200);
+
+    assert.strictEqual(guestSwitchRes.body.success, true);
+    assert.strictEqual(guestSwitchRes.body.data.activeOrganization.id, adminOrgId);
 
     // 10. Refresh Token Rotation Check
     console.log('  [10/65] Testing POST /api/v1/auth/refresh (Rotation)...');

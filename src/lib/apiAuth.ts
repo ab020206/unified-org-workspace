@@ -19,7 +19,8 @@ export function getAuthContext(request: NextRequest): AuthContext {
   const token = authHeader.split(' ')[1];
   try {
     const payload = verifyAccessToken(token);
-    const orgId = request.headers.get('x-organization-id') || payload.activeOrgId || payload.organizationId;
+    const cookieOrgId = request.cookies.get('active_org_id')?.value;
+    const orgId = request.headers.get('x-organization-id') || cookieOrgId || payload.activeOrgId || payload.organizationId;
     return {
       userId: payload.userId || payload.sub || payload.id,
       email: payload.email,

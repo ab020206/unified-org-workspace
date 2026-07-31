@@ -17,7 +17,7 @@ export const acceptInvitationSchema = z.object({
 });
 
 export const switchOrganizationSchema = z.object({
-  organizationId: z.string().uuid('Invalid organization ID format'),
+  organizationId: z.string().uuid('Invalid organization ID format').or(z.literal('platform')),
 });
 
 export const updateOrganizationSchema = z.object({

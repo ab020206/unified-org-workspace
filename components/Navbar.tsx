@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { NotificationBell } from './notifications/NotificationBell';
 import { ThemeToggle } from './ThemeToggle';
+import { OrgSwitcher } from './OrgSwitcher';
 import { useAuth } from '@/context/AuthContext';
 import { GlobalCommandPalette } from './ui/GlobalCommandPalette';
 import { LogOut, Search, Building2, Zap, Lock, Ticket, GitPullRequest, Users } from 'lucide-react';
@@ -83,12 +84,13 @@ export function Navbar() {
     <>
       <header className="sticky top-0 z-30 h-14 border-b border-border bg-surface px-6 flex items-center justify-between shadow-xs">
         <div className="flex items-center gap-4">
+          {user && <OrgSwitcher className="w-auto" />}
           {user ? (
             getScopeBadge()
           ) : (
             <div className="flex items-center gap-2 font-mono font-bold text-sm text-text-primary">
-              <img src="/logo.png" alt="Froncort.ai" className="w-5 h-5 object-contain" />
-              Froncort.ai Workspace
+              <img src="/logo.png" alt="Froncort.Ai" className="w-5 h-5 object-contain" />
+              Froncort.Ai Workspace
             </div>
           )}
 

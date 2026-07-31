@@ -25,13 +25,19 @@ const getHeaders = (activeOrgId?: string, token?: string) => {
 };
 
 async function handleResponse<T>(res: Response): Promise<T> {
-  const json: ApiResponse<T> = await res.json().catch(() => ({
-    success: false,
-    message: 'Network response was not valid JSON',
-  }));
+  let json: ApiResponse<T> | null = null;
+  try {
+    const text = await res.text();
+    json = text ? JSON.parse(text) : { success: true, data: {} as T };
+  } catch {
+    json = {
+      success: false,
+      message: `HTTP Error ${res.status}: Invalid response format`,
+    } as any;
+  }
 
-  if (!res.ok || !json.success) {
-    throw new Error(json.message || 'API request failed');
+  if (!res.ok || !json?.success) {
+    throw new Error(json?.message || `API request failed with status ${res.status}`);
   }
 
   return json.data;

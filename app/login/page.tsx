@@ -10,6 +10,8 @@ import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { DemoCredentialsPanel } from '@/components/auth/DemoCredentialsPanel';
 
+import { ArrowLeft } from 'lucide-react';
+
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
@@ -44,23 +46,34 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-background text-text-primary p-4 md:p-8 font-sans relative overflow-x-hidden flex flex-col justify-between items-center select-none">
-      {/* Brand Header & Theme Toggle */}
+      {/* Brand Header & Navigation Controls */}
       <header className="w-full max-w-5xl flex items-center justify-between pt-4 pb-2 relative z-10">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-surface border border-border flex items-center justify-center overflow-hidden shadow-xs shrink-0">
-            <img src="/logo.png" alt="Froncort.ai" className="w-full h-full object-contain p-1" />
+        <Link href="/" title="Go to Home Landing Page" className="flex items-center gap-3 group cursor-pointer hover:opacity-90 transition-opacity">
+          <div className="w-9 h-9 rounded-lg bg-surface border border-border flex items-center justify-center overflow-hidden shadow-xs shrink-0 group-hover:border-primary/50 transition-colors">
+            <img src="/logo.png" alt="Froncort.Ai" className="w-full h-full object-contain p-1" />
           </div>
           <div>
-            <span className="font-semibold text-base tracking-tight text-text-primary block">
-              Froncort.ai Workspace
+            <span className="font-semibold text-base tracking-tight text-text-primary block group-hover:text-primary transition-colors">
+              Froncort.Ai Workspace
             </span>
             <span className="text-[10px] font-mono text-text-secondary font-medium tracking-wider uppercase">
               Enterprise Multi-Tenant Platform
             </span>
           </div>
-        </div>
+        </Link>
 
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-secondary text-xs font-mono text-text-secondary hover:text-text-primary transition-all cursor-pointer shadow-xs"
+            title="Go to previous page"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back</span>
+          </button>
+          <ThemeToggle />
+        </div>
       </header>
 
       {/* Main Container - Responsive 2-column layout on large screens */}
@@ -142,7 +155,7 @@ export default function LoginPage() {
 
       {/* Footer */}
       <footer className="w-full max-w-5xl text-center text-xs font-mono text-text-secondary pb-4 relative z-10">
-        Froncort.ai Workspace &copy; 2026. Enterprise Edition.
+        Froncort.Ai Workspace &copy; 2026. Enterprise Edition.
       </footer>
     </div>
   );

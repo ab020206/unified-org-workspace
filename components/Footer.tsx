@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
                 className="w-full h-full object-contain p-0.5"
               />
             </div>
-            <span className="font-semibold text-xs tracking-tight">Froncort.ai Workspace</span>
+            <span className="font-semibold text-xs tracking-tight">Froncort.Ai Workspace</span>
           </div>
 
           <span className="text-border hidden sm:inline">&bull;</span>
@@ -61,7 +61,7 @@ export const Footer: React.FC = () => {
             <span>SOC2 Type II</span>
           </div>
           <span className="text-border">&bull;</span>
-          <span>© 2026 Froncort.ai Inc.</span>
+          <span>© 2026 Froncort.Ai Inc.</span>
         </div>
       </div>
     </footer>

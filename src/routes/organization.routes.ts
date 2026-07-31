@@ -37,12 +37,20 @@ router.post(
 
 router.get('/', asyncHandler(orgController.list));
 
+router.get('/me', asyncHandler(orgController.getMe));
+
 router.get(
   '/current',
   tenantContext,
   resolvePermissions,
   requirePermission(Permission.ORG_READ),
   asyncHandler(orgController.getCurrent)
+);
+
+router.post(
+  '/switch',
+  validateRequest({ body: switchOrganizationSchema }),
+  asyncHandler(orgController.switch)
 );
 
 router.patch(

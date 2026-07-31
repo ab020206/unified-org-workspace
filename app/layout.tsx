@@ -3,8 +3,8 @@ import '@/styles/globals.css';
 import { AppProviders } from '@/providers/AppProviders';
 
 export const metadata = {
-  title: 'Froncort.ai | Unified Workspace',
-  description: 'Production-ready unified organizational platform for Froncort.ai',
+  title: 'Froncort.Ai | Unified Workspace',
+  description: 'Production-ready unified organizational platform for Froncort.Ai',
   icons: {
     icon: '/logo.png',
     shortcut: '/favicon.ico',

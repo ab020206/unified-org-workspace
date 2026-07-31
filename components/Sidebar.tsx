@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext';
+import { OrgSwitcher } from './OrgSwitcher';
 import { Role } from '@workspace/shared-types';
 
 interface NavItem {
@@ -107,17 +108,26 @@ export function Sidebar() {
   return (
     <aside className="w-64 shrink-0 border-r border-border bg-surface text-text-primary flex flex-col justify-between h-screen sticky top-0 z-40 select-none shadow-xs">
       <div>
-        {/* Brand Logo */}
-        <div className="h-16 border-b border-border flex items-center px-5 gap-3">
-          <div className="w-8 h-8 rounded-lg bg-surface border border-border flex items-center justify-center overflow-hidden shadow-xs shrink-0">
-            <img src="/logo.png" alt="Froncort.ai" className="w-full h-full object-contain p-1" />
+        {/* Brand Logo & Organization Switcher */}
+        <div className="h-16 border-b border-border flex items-center px-4 justify-between gap-2">
+          <div className="flex items-center gap-2.5 overflow-hidden">
+            <div className="w-7 h-7 rounded-lg bg-surface border border-border flex items-center justify-center overflow-hidden shadow-xs shrink-0">
+              <img src="/logo.png" alt="Froncort.ai" className="w-full h-full object-contain p-1" />
+            </div>
+            <div className="truncate">
+              <h1 className="font-bold text-xs tracking-tight text-text-primary truncate">Froncort.Ai</h1>
+              <p className="text-[10px] text-text-secondary font-mono tracking-tight truncate">
+                Multi-Tenant Enterprise
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="font-bold text-sm tracking-tight text-text-primary">Froncort.ai</h1>
-            <p className="text-[11px] text-text-secondary font-mono tracking-tight">
-              Unified Workspace
-            </p>
+        </div>
+
+        <div className="px-3 pt-3 pb-1 border-b border-border/50">
+          <div className="text-[10px] font-mono font-medium text-text-secondary uppercase tracking-wider mb-1.5 px-1">
+            Active Scope
           </div>
+          <OrgSwitcher />
         </div>
 
         {/* Dynamic Navigation List */}
