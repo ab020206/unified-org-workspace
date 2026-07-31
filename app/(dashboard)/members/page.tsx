@@ -107,14 +107,21 @@ export default function MembersPage() {
   const handleRemoveMember = async (memberId: string, email: string) => {
     if (!confirm(`Are you sure you want to remove member ${email}?`)) return;
     try {
-      await fetch(`${API_BASE_URL}/organizations/${activeOrganization?.id}/members/${memberId}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders(undefined, activeOrganization?.id),
-      });
+      const res = await fetch(
+        `${API_BASE_URL}/organizations/${activeOrganization?.id}/members/${memberId}`,
+        {
+          method: 'DELETE',
+          headers: getAuthHeaders(undefined, activeOrganization?.id),
+        }
+      );
+      const data = await res.json().catch(() => ({ success: res.ok }));
+      if (!res.ok || (data && data.success === false)) {
+        throw new Error(data?.message || 'Failed to remove member');
+      }
       setMessage({ text: `Member ${email} removed.`, type: 'success' });
       fetchMembers();
-    } catch {
-      setMessage({ text: 'Failed to remove member.', type: 'error' });
+    } catch (err: any) {
+      setMessage({ text: err?.message || 'Failed to remove member.', type: 'error' });
     }
   };
 
@@ -426,6 +433,7 @@ export default function MembersPage() {
         onClose={() => setIsAddModalOpen(false)}
         onSuccess={(data) => {
           setCreatedMemberData(data);
+          fetchMembers();
           fetchInvs();
         }}
       />

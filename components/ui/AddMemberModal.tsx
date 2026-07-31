@@ -61,7 +61,7 @@ export function AddMemberModal({ isOpen, onClose, onSuccess }: Props) {
           headers,
           body: JSON.stringify(payload),
         });
-        const data = await res.json();
+        const data = await res.json().catch(() => ({ success: false, message: `Server error (${res.status}): Unable to parse response` }));
         if (!data.success) throw new Error(data.message || 'Failed to add member');
 
         onSuccess({
@@ -75,7 +75,7 @@ export function AddMemberModal({ isOpen, onClose, onSuccess }: Props) {
           headers,
           body: JSON.stringify({ email, role, organizationId: activeOrganization.id }),
         });
-        const data = await res.json();
+        const data = await res.json().catch(() => ({ success: false, message: `Server error (${res.status}): Unable to parse response` }));
         if (!data.success) throw new Error(data.message || 'Failed to send invitation');
 
         onSuccess({

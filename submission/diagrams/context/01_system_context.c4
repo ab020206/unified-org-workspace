@@ -1,0 +1,29 @@
+workspace "Unified Organization Workspace" "C4 System Context Architecture" {
+    model {
+        user = person "Workspace User" "Users across 6 personas (SuperAdmin, Admin, Support, Reviewer, Guest, Auditor)."
+        
+        system = softwareSystem "Unified Organization Workspace" "Multi-tenant SaaS platform for ticketing, code review, AI digests & compliance." {
+            webApp = container "Web Presentation & API Server" "Next.js 15 App Router + Express Services" "TypeScript, React 19, Node.js"
+            database = container "Relational Database" "PostgreSQL / Neon" "Stores Users, Tenants, Tickets, PRs, Audits"
+            cache = container "Cache & Rate Limiter" "Redis / Upstash" "Session cache, rate limiting counters"
+            worker = container "Async Job Worker" "Node.js Worker Engine" "Processes AI Digest jobs asynchronously"
+        }
+
+        github = softwareSystem "GitHub Platform" "External Git repository service for PR metadata & webhooks."
+        gemini = softwareSystem "Google Gemini AI" "External LLM service for activity digest summarization."
+
+        user -> webApp "Uses application UI & REST APIs via HTTPS"
+        webApp -> database "Reads/Writes relational data via Prisma ORM"
+        webApp -> cache "Validates session activity & rate limits"
+        webApp -> worker "Enqueues background digest jobs"
+        worker -> gemini "Generates personalized activity briefings"
+        webApp -> github "Synchronizes PR status & webhooks"
+    }
+
+    views {
+        systemContext system "SystemContext" {
+            include *
+            autoLayout lr
+        }
+    }
+}

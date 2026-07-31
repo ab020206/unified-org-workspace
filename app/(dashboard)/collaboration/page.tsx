@@ -118,7 +118,7 @@ export default function CollaborationPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <Share2 className="w-5 h-5 text-indigo-500" />
+            <Share2 className="w-5 h-5 text-primary" />
             Cross-Organization Collaboration
           </h1>
           <p className="text-xs text-muted-foreground mt-1">
@@ -129,7 +129,7 @@ export default function CollaborationPage() {
 
         <button
           onClick={() => setIsShareModalOpen(true)}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 transition-all shadow-xs cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-bold text-primary-foreground bg-primary hover:bg-primary-hover transition-all shadow-xs cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Share Resource Externally</span>
@@ -139,10 +139,10 @@ export default function CollaborationPage() {
       {/* Connect Box */}
       <div className="forge-panel p-6 space-y-3">
         <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-          <Building2 className="w-4 h-4 text-blue-500" />
+          <Building2 className="w-4 h-4 text-primary" />
           Connect to an External Organization
         </h3>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-muted-foreground">
           Enter the Organization ID or Organization Slug to send a trusted connection request.
         </p>
 
@@ -153,12 +153,12 @@ export default function CollaborationPage() {
             value={connectInput}
             onChange={(e) => setConnectInput(e.target.value)}
             placeholder="Organization Slug or UUID (e.g. acme-corp)..."
-            className="flex-1 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-2.5 text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none"
+            className="flex-1 rounded-xl border border-border bg-surface-secondary p-2.5 text-xs text-text-primary placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-ring/20"
           />
           <button
             type="submit"
             disabled={isConnecting}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 transition-all cursor-pointer shadow-sm"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold text-primary-foreground bg-primary hover:bg-primary-hover disabled:opacity-50 transition-all cursor-pointer shadow-sm"
           >
             {isConnecting ? 'Sending...' : 'Send Request'}
           </button>
@@ -166,13 +166,13 @@ export default function CollaborationPage() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-3">
+      <div className="flex items-center gap-2 border-b border-border pb-3">
         <button
           onClick={() => setActiveTab('CONNECTIONS')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'CONNECTIONS'
-              ? 'bg-indigo-600 text-white shadow-sm'
-              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              ? 'bg-primary text-primary-foreground shadow-sm'
+              : 'text-text-secondary hover:bg-surface-secondary'
           }`}
         >
           Trusted Connections ({allConnections.length})
@@ -181,8 +181,8 @@ export default function CollaborationPage() {
           onClick={() => setActiveTab('INCOMING')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'INCOMING'
-              ? 'bg-indigo-600 text-white shadow-sm'
-              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              ? 'bg-primary text-primary-foreground shadow-sm'
+              : 'text-text-secondary hover:bg-surface-secondary'
           }`}
         >
           Shared With My Org ({feed?.incomingShares.length || 0})
@@ -191,8 +191,8 @@ export default function CollaborationPage() {
           onClick={() => setActiveTab('OUTGOING')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'OUTGOING'
-              ? 'bg-indigo-600 text-white shadow-sm'
-              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              ? 'bg-primary text-primary-foreground shadow-sm'
+              : 'text-text-secondary hover:bg-surface-secondary'
           }`}
         >
           Shared By My Org ({feed?.outgoingShares.length || 0})
@@ -201,7 +201,7 @@ export default function CollaborationPage() {
 
       {/* Tab Content */}
       {isLoading ? (
-        <div className="p-8 text-center animate-pulse text-xs text-gray-400">
+        <div className="p-8 text-center animate-pulse text-xs text-muted-foreground">
           Loading collaboration data...
         </div>
       ) : (
@@ -210,7 +210,7 @@ export default function CollaborationPage() {
             <div className="space-y-4">
               {allConnections.length === 0 ? (
                 <div className="forge-panel p-8 text-center space-y-2">
-                  <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-500 mx-auto flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
                     <Building2 className="w-5 h-5" />
                   </div>
                   <p className="text-xs text-muted-foreground font-medium">

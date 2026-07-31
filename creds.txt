@@ -1,9 +1,7 @@
-acme admin : AdminPass!ob72po#2026
+emily : UserPass!v7th9k#2026
 
-nova : AdminPass!l2zgg0#2026
+david : UserPass!v7o5vt#2026
 
-support@acme.demo : UserPass!ewHxNkUAW8
+sarah : UserPass!wm58b7#2026
 
-reviewer@acme.demo : ReviewerPass!xaalhl#2026
-
-auditor@acme.demo : TempPass!e2b8ec01#2026
+john : John@Apex2026

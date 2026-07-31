@@ -1,0 +1,60 @@
+@startuml Database_ER_Diagram
+entity User {
+    + id: UUID
+    + email: String
+    + passwordHash: String
+    + firstName: String
+    + lastName: String
+    + isPlatformUser: Boolean
+}
+
+entity Organization {
+    + id: UUID
+    + name: String
+    + slug: String
+}
+
+entity OrganizationMember {
+    + id: UUID
+    + organizationId: FK
+    + userId: FK
+    + role: Enum
+}
+
+entity PermissionOverride {
+    + id: UUID
+    + memberId: FK
+    + permission: String
+    + allowed: Boolean
+}
+
+entity Ticket {
+    + id: UUID
+    + organizationId: FK
+    + title: String
+    + status: Enum
+    + priority: Enum
+}
+
+entity PullRequest {
+    + id: UUID
+    + organizationId: FK
+    + title: String
+    + status: Enum
+}
+
+entity AuditLog {
+    + id: UUID
+    + organizationId: FK
+    + actorId: FK
+    + action: String
+}
+
+User ||--o{ OrganizationMember
+Organization ||--o{ OrganizationMember
+OrganizationMember ||--o{ PermissionOverride
+Organization ||--o{ Ticket
+Organization ||--o{ PullRequest
+Organization ||--o{ AuditLog
+User ||--o{ AuditLog
+@enduml

@@ -19,11 +19,19 @@ export class PullRequestService {
   }
 
   private calculateApprovalCount(
-    decisions: Array<{ reviewerId: string; decision: string }>
+    decisions: Array<{ reviewerId: string; decision: string; createdAt?: Date | string }>
   ): number {
+    // Sort decisions descending by createdAt so the newest decision per reviewer takes precedence
+    const sortedDecisions = [...(decisions || [])].sort((a, b) => {
+      if (a.createdAt && b.createdAt) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      return 0;
+    });
+
     // Map reviewer ID to their latest decision
     const latestDecisions = new Map<string, string>();
-    for (const d of decisions) {
+    for (const d of sortedDecisions) {
       if (!latestDecisions.has(d.reviewerId)) {
         latestDecisions.set(d.reviewerId, d.decision);
       }

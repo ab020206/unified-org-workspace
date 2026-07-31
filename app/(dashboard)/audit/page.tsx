@@ -105,19 +105,19 @@ export default function AuditConsolePage() {
           title="Auth Events"
           value={stats?.authEvents || 0}
           icon="🔑"
-          gradient="bg-indigo-500/10 text-indigo-600 border border-indigo-500/20"
+          gradient="bg-primary/10 text-primary border border-primary/20"
         />
         <StatCard
           title="Ticket Events"
           value={stats?.ticketEvents || 0}
           icon="🎫"
-          gradient="bg-purple-500/10 text-purple-600 border border-purple-500/20"
+          gradient="bg-primary/10 text-primary border border-primary/20"
         />
         <StatCard
           title="Review Events"
           value={stats?.reviewEvents || 0}
           icon="🔍"
-          gradient="bg-cyan-500/10 text-cyan-600 border border-cyan-500/20"
+          gradient="bg-primary/10 text-primary border border-primary/20"
         />
       </div>
 

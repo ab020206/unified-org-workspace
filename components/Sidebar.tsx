@@ -22,6 +22,7 @@ import {
   Clock,
   Share2,
   FileSpreadsheet,
+  PlusCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext';
@@ -48,6 +49,8 @@ export function Sidebar() {
           { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
           { name: 'Organizations', href: '/organizations', icon: Building2 },
           { name: 'Platform Users', href: '/users', icon: Users },
+          { name: 'Support', href: '/tickets', icon: Ticket },
+          { name: 'Create Ticket', href: '/tickets/new', icon: PlusCircle },
           { name: 'Global Audit', href: '/audit', icon: Shield },
           { name: 'Feature Flags', href: '/feature-flags', icon: ToggleLeft },
           { name: 'Health', href: '/health', icon: Activity },
@@ -60,6 +63,7 @@ export function Sidebar() {
           { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
           { name: 'Members', href: '/members', icon: Users },
           { name: 'Support', href: '/tickets', icon: Ticket },
+          { name: 'Create Ticket', href: '/tickets/new', icon: PlusCircle },
           { name: 'Reviews', href: '/pull-requests', icon: GitPullRequest },
           { name: 'Reports', href: '/reports', icon: Sparkles },
           { name: 'Settings', href: '/settings', icon: Settings },
@@ -68,6 +72,8 @@ export function Sidebar() {
       case Role.SUPPORT_AGENT:
         return [
           { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+          { name: 'Support Hub', href: '/tickets', icon: Ticket },
+          { name: 'Create Ticket', href: '/tickets/new', icon: PlusCircle },
           { name: 'My Tickets', href: '/tickets?queue=mine', icon: Clock },
           { name: 'Search', href: '/tickets?search=true', icon: Search },
           { name: 'Notifications', href: '/notifications', icon: Bell },
@@ -84,6 +90,8 @@ export function Sidebar() {
       case Role.GUEST:
         return [
           { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+          { name: 'Support', href: '/tickets', icon: Ticket },
+          { name: 'Create Ticket', href: '/tickets/new', icon: PlusCircle },
           { name: 'Shared Resources', href: '/collaboration', icon: Share2 },
         ];
 
@@ -97,6 +105,8 @@ export function Sidebar() {
       default:
         return [
           { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+          { name: 'Support', href: '/tickets', icon: Ticket },
+          { name: 'Create Ticket', href: '/tickets/new', icon: PlusCircle },
           { name: 'Notifications', href: '/notifications', icon: Bell },
         ];
     }
@@ -144,6 +154,15 @@ export function Sidebar() {
             const [basePath, itemQuery] = item.href.split('?');
             const isExactBase = pathname === basePath;
 
+            const hasMoreSpecificMatch = visibleNavItems.some((other) => {
+              if (other === item) return false;
+              const [otherBase] = other.href.split('?');
+              return (
+                pathname === otherBase ||
+                (otherBase.length > basePath.length && pathname.startsWith(otherBase))
+              );
+            });
+
             let isActive = false;
             if (isExactBase) {
               if (itemQuery) {
@@ -162,7 +181,11 @@ export function Sidebar() {
                 });
                 isActive = !siblingWithQueryMatches;
               }
-            } else if (basePath !== '/dashboard' && pathname.startsWith(basePath + '/')) {
+            } else if (
+              basePath !== '/dashboard' &&
+              pathname.startsWith(basePath + '/') &&
+              !hasMoreSpecificMatch
+            ) {
               isActive = !itemQuery;
             }
 

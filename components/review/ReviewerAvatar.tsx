@@ -32,7 +32,7 @@ export function ReviewerAvatar({ reviewer, decision, onRemove }: Props) {
       default:
         return {
           icon: <Clock className="w-2.5 h-2.5 text-white" />,
-          bg: 'bg-slate-500',
+          bg: 'bg-text-secondary/60',
           title: 'Pending Review',
         };
     }
@@ -43,7 +43,7 @@ export function ReviewerAvatar({ reviewer, decision, onRemove }: Props) {
   return (
     <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg border border-border bg-card shadow-2xs text-xs font-semibold">
       <div className="relative">
-        <span className="h-6 w-6 rounded-md bg-purple-500/20 text-purple-600 font-bold flex items-center justify-center text-[10px] border border-purple-500/30">
+        <span className="h-6 w-6 rounded-md bg-primary/10 text-primary font-bold flex items-center justify-center text-[10px] border border-primary/20">
           {reviewer.firstName[0]}
           {reviewer.lastName[0]}
         </span>

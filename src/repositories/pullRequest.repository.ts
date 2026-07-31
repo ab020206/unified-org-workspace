@@ -116,7 +116,10 @@ export class PullRequestRepository {
           creator: { select: userSelect },
           merger: { select: userSelect },
           reviewers: { include: { reviewer: { select: userSelect } } },
-          decisions: { include: { reviewer: { select: userSelect } } },
+          decisions: {
+            include: { reviewer: { select: userSelect } },
+            orderBy: { createdAt: 'desc' },
+          },
         },
       }),
       prisma.pullRequest.count({ where }),
@@ -144,7 +147,10 @@ export class PullRequestRepository {
         creator: { select: userSelect },
         merger: { select: userSelect },
         reviewers: { include: { reviewer: { select: userSelect } } },
-        decisions: { include: { reviewer: { select: userSelect } } },
+        decisions: {
+          include: { reviewer: { select: userSelect } },
+          orderBy: { createdAt: 'desc' },
+        },
       },
     });
   }
@@ -288,7 +294,10 @@ export class PullRequestRepository {
           include: {
             creator: { select: userSelect },
             reviewers: { include: { reviewer: { select: userSelect } } },
-            decisions: { include: { reviewer: { select: userSelect } } },
+            decisions: {
+              include: { reviewer: { select: userSelect } },
+              orderBy: { createdAt: 'desc' },
+            },
           },
         }),
       ]);

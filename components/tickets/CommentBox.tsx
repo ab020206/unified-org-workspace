@@ -54,8 +54,8 @@ export function CommentBox({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2 text-sm font-bold text-foreground">
-        <MessageSquare className="w-4 h-4 text-purple-500" />
+      <div className="flex items-center gap-2 text-sm font-bold text-text-primary">
+        <MessageSquare className="w-4 h-4 text-primary" />
         <span>Comments ({comments.length})</span>
       </div>
 
@@ -66,13 +66,13 @@ export function CommentBox({
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Add a comment... (Supports markdown/text formatting)"
-          className="w-full rounded-2xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 p-4 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none shadow-xs"
+          className="w-full rounded-2xl border border-border bg-surface p-4 text-sm text-text-primary placeholder:text-muted-text focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20 transition-all resize-none shadow-xs"
         />
         <div className="flex justify-end">
           <button
             type="submit"
             disabled={!newMessage.trim() || isSubmitting}
-            className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 transition-all shadow-sm cursor-pointer"
+            className="px-5 py-2 rounded-xl text-xs font-semibold text-primary-foreground bg-primary hover:bg-primary-hover disabled:opacity-50 transition-all shadow-sm cursor-pointer"
           >
             {isSubmitting ? 'Posting...' : 'Post Comment'}
           </button>
@@ -82,7 +82,7 @@ export function CommentBox({
       {/* Comments List */}
       <div className="space-y-4">
         {comments.length === 0 ? (
-          <p className="text-xs text-gray-500 dark:text-gray-400 italic">No comments yet.</p>
+          <p className="text-xs text-text-secondary italic">No comments yet.</p>
         ) : (
           comments.map((comment) => {
             const isAuthor = currentUser?.id === comment.userId;
@@ -91,22 +91,22 @@ export function CommentBox({
             return (
               <div
                 key={comment.id}
-                className="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-xs space-y-2"
+                className="p-4 rounded-2xl border border-border bg-surface shadow-xs space-y-2"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <span className="h-7 w-7 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold text-xs flex items-center justify-center border border-indigo-200 dark:border-indigo-800">
+                    <span className="h-7 w-7 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center border border-primary/20">
                       {comment.user
                         ? `${comment.user.firstName[0]}${comment.user.lastName[0]}`
                         : 'U'}
                     </span>
                     <div>
-                      <span className="text-xs font-bold text-gray-900 dark:text-white">
+                      <span className="text-xs font-bold text-text-primary">
                         {comment.user
                           ? `${comment.user.firstName} ${comment.user.lastName}`
                           : 'User'}
                       </span>
-                      <span className="text-[11px] text-gray-400 ml-2">
+                      <span className="text-[11px] text-text-secondary ml-2">
                         {new Date(comment.createdAt).toLocaleString(undefined, {
                           month: 'short',
                           day: 'numeric',
@@ -121,7 +121,7 @@ export function CommentBox({
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleStartEdit(comment)}
-                        className="text-xs text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+                        className="text-xs text-text-secondary hover:text-primary transition-colors"
                       >
                         Edit
                       </button>
@@ -129,7 +129,7 @@ export function CommentBox({
                         onClick={() => {
                           if (confirm('Delete this comment?')) onDeleteComment(comment.id);
                         }}
-                        className="text-xs text-gray-500 hover:text-red-600"
+                        className="text-xs text-text-secondary hover:text-error transition-colors"
                       >
                         Delete
                       </button>
@@ -143,25 +143,25 @@ export function CommentBox({
                       rows={2}
                       value={editMessage}
                       onChange={(e) => setEditMessage(e.target.value)}
-                      className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-2.5 text-xs text-gray-900 dark:text-white focus:outline-none"
+                      className="w-full rounded-xl border border-border bg-surface-secondary p-2.5 text-xs text-text-primary focus:outline-none focus:ring-2 focus:ring-ring/20"
                     />
                     <div className="flex justify-end gap-2">
                       <button
                         onClick={() => setEditingId(null)}
-                        className="px-3 py-1 text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 rounded-lg"
+                        className="px-3 py-1 text-xs text-text-secondary hover:bg-surface-secondary rounded-lg transition-colors"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={() => handleSaveEdit(comment.id)}
-                        className="px-3 py-1 text-xs text-white bg-indigo-600 rounded-lg font-medium"
+                        className="px-3 py-1 text-xs text-primary-foreground bg-primary hover:bg-primary-hover rounded-lg font-medium transition-colors"
                       >
                         Save
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap pl-9.5">
+                  <p className="text-sm text-text-secondary whitespace-pre-wrap pl-9.5">
                     {comment.message}
                   </p>
                 )}

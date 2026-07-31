@@ -14,22 +14,26 @@ import {
   ShieldCheck,
   Clock,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { API_BASE_URL, getAuthHeaders } from '@/lib/api';
 
 export function GuestDashboard() {
+  const router = useRouter();
   const { user, activeOrganization } = useAuth();
   const [shares, setShares] = useState<any[]>([]);
 
   useEffect(() => {
     if (!activeOrganization?.id) return;
-    fetch(`${API_BASE_URL}/collaboration/shared-with-me`, {
-      headers: getAuthHeaders(activeOrganization.id),
+    fetch(`${API_BASE_URL}/sharing`, {
+      headers: getAuthHeaders(undefined, activeOrganization.id),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.data)) {
-          setShares(data.data);
+        if (data.success && data.data) {
+          const owned = data.data.ownedShares || [];
+          const received = data.data.receivedShares || [];
+          setShares([...owned, ...received]);
         }
       })
       .catch((err) => console.error('Error fetching guest shared items:', err));
@@ -48,7 +52,7 @@ export function GuestDashboard() {
         breadcrumbs={['Partner Portal', 'Shared Resources']}
         searchPlaceholder="Search shared ticket IDs, shared reviews, or partner comments..."
         primaryActionLabel="View Shared Items"
-        onPrimaryAction={() => (window.location.href = '/collaboration')}
+        onPrimaryAction={() => router.push('/collaboration')}
       />
 
       {/* Personalized Welcome Banner */}

@@ -296,9 +296,9 @@ export default function SettingsPage() {
                           m.role === Role.ADMIN
                             ? 'bg-rose-500/10 text-rose-500 border-rose-500/20'
                             : m.role === Role.REVIEWER
-                              ? 'bg-purple-500/10 text-purple-500 border-purple-500/20'
+                              ? 'bg-primary/10 text-primary border-primary/20'
                               : m.role === Role.SUPPORT_AGENT
-                                ? 'bg-blue-500/10 text-blue-500 border-blue-500/20'
+                                ? 'bg-primary/15 text-primary border-primary/30'
                                 : 'bg-secondary text-muted-foreground border-border'
                         }`}
                       >

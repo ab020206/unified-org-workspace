@@ -120,10 +120,10 @@ export default function AnalyticsPage() {
       />
 
       {/* AI Executive Insights Banner */}
-      <div className="forge-panel forge-accent-ai p-6 bg-gradient-to-r from-purple-950/40 via-surface to-indigo-950/30 border border-purple-800/30 relative overflow-hidden space-y-4">
+      <div className="forge-panel forge-accent-ai p-6 bg-gradient-to-r from-primary/20 via-surface to-primary/10 border border-primary/30 relative overflow-hidden space-y-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-purple-400 font-mono text-xs font-bold">
-            <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
+          <div className="flex items-center gap-2 text-primary font-mono text-xs font-bold">
+            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
             <span>AI Executive Audit Insights</span>
           </div>
           <span className="text-[10px] font-mono text-text-secondary bg-surface-secondary px-2 py-0.5 rounded border border-border">
@@ -135,9 +135,9 @@ export default function AnalyticsPage() {
             aiInsights.map((insight, idx) => (
               <div
                 key={idx}
-                className="flex items-start gap-2.5 p-3 rounded-lg bg-surface/80 border border-purple-900/40 text-xs text-text-primary"
+                className="flex items-start gap-2.5 p-3 rounded-lg bg-surface/80 border border-primary/20 text-xs text-text-primary"
               >
-                <TrendingUp className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                <TrendingUp className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <span>{insight}</span>
               </div>
             ))
@@ -235,12 +235,12 @@ export default function AnalyticsPage() {
         <div className="p-4 rounded-[10px] border border-border bg-surface shadow-xs space-y-1">
           <div className="flex items-center justify-between text-text-secondary">
             <span className="text-[11px] font-mono uppercase">PRs Reviewed</span>
-            <GitPullRequest className="w-4 h-4 text-purple-400" />
+            <GitPullRequest className="w-4 h-4 text-primary" />
           </div>
           <p className="text-[28px] font-semibold text-text-primary font-mono leading-tight">
             {isLoading ? '...' : analytics?.reviewsCreated || 0}
           </p>
-          <p className="text-[11px] text-purple-400 font-medium">
+          <p className="text-[11px] text-primary font-medium">
             {analytics?.reviewsApproved || 0} Approved
           </p>
         </div>
@@ -286,7 +286,7 @@ export default function AnalyticsPage() {
         {/* Most Frequent Actions */}
         <div className="forge-panel forge-accent-security p-6 space-y-4">
           <h3 className="text-xs font-bold text-text-primary font-mono uppercase tracking-wider flex items-center gap-2">
-            <BarChart3 className="w-4 h-4 text-purple-400" /> Top Audit Event Types
+            <BarChart3 className="w-4 h-4 text-primary" /> Top Audit Event Types
           </h3>
           <div className="space-y-2">
             {analytics?.mostFrequentActions?.length > 0 ? (
@@ -296,7 +296,7 @@ export default function AnalyticsPage() {
                   className="flex items-center justify-between p-2.5 rounded bg-surface-secondary/50 border border-border/60 text-xs"
                 >
                   <span className="font-mono text-text-primary">{a.action}</span>
-                  <span className="font-mono font-bold text-purple-400 px-2 py-0.5 bg-purple-950/40 rounded border border-purple-800/40">
+                  <span className="font-mono font-bold text-primary px-2 py-0.5 bg-primary/10 rounded border border-primary/20">
                     {a.count} occurrences
                   </span>
                 </div>

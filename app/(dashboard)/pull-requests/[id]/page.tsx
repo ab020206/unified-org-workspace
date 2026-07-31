@@ -312,7 +312,7 @@ export default function PRDetailPage() {
           <div className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 p-6 shadow-xs space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-1 rounded-lg border border-indigo-200 dark:border-indigo-800">
+                <span className="text-sm font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-lg border border-primary/20">
                   #{pr.prNumber}
                 </span>
                 <PRStatusBadge status={pr.status} size="lg" />
@@ -330,24 +330,24 @@ export default function PRDetailPage() {
                   type="text"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full text-xl font-bold rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-2.5"
+                  className="w-full text-xl font-bold rounded-xl border border-border bg-surface-secondary p-2.5 text-text-primary focus:outline-none focus:ring-2 focus:ring-ring/20"
                 />
                 <textarea
                   rows={4}
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
-                  className="w-full text-xs rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-2.5"
+                  className="w-full text-xs rounded-xl border border-border bg-surface-secondary p-2.5 text-text-primary focus:outline-none focus:ring-2 focus:ring-ring/20"
                 />
                 <div className="flex justify-end gap-2">
                   <button
                     onClick={() => setIsEditingContent(false)}
-                    className="px-3 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl"
+                    className="px-3 py-1.5 text-xs font-semibold text-text-secondary hover:bg-surface-secondary rounded-xl transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSaveContentEdit}
-                    className="px-4 py-1.5 text-xs font-bold text-white bg-indigo-600 rounded-xl"
+                    className="px-4 py-1.5 text-xs font-bold text-primary-foreground bg-primary hover:bg-primary-hover rounded-xl transition-colors cursor-pointer"
                   >
                     Save & Create New Version
                   </button>
@@ -382,7 +382,7 @@ export default function PRDetailPage() {
                   {pr.mergedAt && (
                     <>
                       <div>•</div>
-                      <div className="text-purple-600 font-semibold">
+                      <div className="text-primary font-semibold">
                         Merged by {pr.merger ? `${pr.merger.firstName}` : 'User'} at{' '}
                         {new Date(pr.mergedAt).toLocaleTimeString()}
                       </div>
@@ -491,7 +491,7 @@ export default function PRDetailPage() {
                 disabled={!isApproved || !canMerge || isMerging}
                 className={`w-full py-2.5 rounded-lg text-xs font-bold tracking-wide transition-all shadow-xs flex items-center justify-center gap-2 ${
                   isApproved && canMerge
-                    ? 'bg-purple-600 hover:bg-purple-700 text-white cursor-pointer'
+                    ? 'bg-primary hover:bg-primary-hover text-primary-foreground cursor-pointer'
                     : 'bg-secondary text-muted-foreground cursor-not-allowed border border-border'
                 }`}
               >
@@ -596,7 +596,7 @@ export default function PRDetailPage() {
                 <button
                   onClick={handleAddReviewer}
                   disabled={!selectedReviewerToAdd}
-                  className="px-3 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 transition-all cursor-pointer"
+                  className="px-3 py-2 rounded-xl text-xs font-bold text-primary-foreground bg-primary hover:bg-primary-hover disabled:opacity-40 transition-all cursor-pointer"
                 >
                   Add
                 </button>

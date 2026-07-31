@@ -124,11 +124,11 @@ export default function AIWorkspacePage() {
       />
 
       {/* Greeting Banner & Risk Overview */}
-      <div className="p-6 rounded-2xl border border-cyan-500/30 bg-cyan-500/5 space-y-4 module-accent-ai shadow-2xs">
+      <div className="p-6 rounded-2xl border border-primary/30 bg-primary/5 space-y-4 module-accent-ai shadow-2xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <Brain className="w-5 h-5 text-cyan-400" />
+              <Brain className="w-5 h-5 text-primary" />
               <h2 className="text-lg font-extrabold text-foreground">
                 Good afternoon, {user?.firstName || 'Engineer'}
               </h2>
@@ -150,7 +150,7 @@ export default function AIWorkspacePage() {
               <span className="block text-[10px] font-mono text-muted-foreground uppercase">
                 Velocity
               </span>
-              <span className="text-sm font-extrabold text-cyan-400 font-mono">+18% High</span>
+              <span className="text-sm font-extrabold text-primary font-mono">+18% High</span>
             </div>
           </div>
         </div>
@@ -162,9 +162,9 @@ export default function AIWorkspacePage() {
         <div className="lg:col-span-2 panel-card p-6 flex flex-col justify-between h-[650px] space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-border">
             <div className="flex items-center gap-2">
-              <Bot className="w-4 h-4 text-cyan-400" />
+              <Bot className="w-4 h-4 text-primary" />
               <span className="font-bold text-sm text-foreground">AI Intelligence Chat</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-primary/10 text-primary border border-primary/20">
                 Gemini Model
               </span>
             </div>
@@ -183,7 +183,7 @@ export default function AIWorkspacePage() {
                 }`}
               >
                 {msg.sender === 'ai' && (
-                  <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
                     <Sparkles className="w-3.5 h-3.5" />
                   </div>
                 )}
@@ -227,7 +227,7 @@ export default function AIWorkspacePage() {
 
             {isTyping && (
               <div className="flex gap-3 text-xs justify-start">
-                <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+                <div className="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
                   <Sparkles className="w-3.5 h-3.5 animate-spin" />
                 </div>
                 <div className="p-3.5 rounded-2xl bg-muted/40 border border-border text-muted-foreground text-xs font-mono animate-pulse">
@@ -247,7 +247,7 @@ export default function AIWorkspacePage() {
                 <button
                   key={idx}
                   onClick={() => handleSend(p.query)}
-                  className="px-2.5 py-1 rounded-lg border border-border bg-card hover:bg-secondary hover:border-cyan-500/40 text-[11px] font-medium text-foreground transition-all cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg border border-border bg-card hover:bg-secondary hover:border-primary/40 text-[11px] font-medium text-foreground transition-all cursor-pointer"
                 >
                   {p.label}
                 </button>
@@ -267,11 +267,11 @@ export default function AIWorkspacePage() {
                 placeholder="Ask AI about tickets, PRs, audit events, or security rules..."
                 value={inputQuery}
                 onChange={(e) => setInputQuery(e.target.value)}
-                className="flex-1 rounded-xl border border-border bg-card p-3 text-xs text-foreground focus:outline-none focus:border-cyan-500"
+                className="flex-1 rounded-xl border border-border bg-card p-3 text-xs text-foreground focus:outline-none focus:border-primary"
               />
               <button
                 type="submit"
-                className="p-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-all shadow-xs flex items-center justify-center"
+                className="p-3 rounded-xl bg-primary hover:bg-primary-hover text-primary-foreground font-bold transition-all shadow-xs flex items-center justify-center cursor-pointer"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -284,7 +284,7 @@ export default function AIWorkspacePage() {
           <div className="panel-card p-5 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-border">
               <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <Activity className="w-4 h-4 text-cyan-400" />
+                <Activity className="w-4 h-4 text-primary" />
                 Executive Briefing
               </h3>
               <span className="text-[10px] font-mono text-muted-foreground">Live Feed</span>
@@ -292,7 +292,7 @@ export default function AIWorkspacePage() {
 
             <div className="space-y-3 text-xs">
               <div className="p-3 rounded-xl border border-border bg-muted/20 space-y-1">
-                <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase">
+                <span className="text-[10px] font-mono font-bold text-primary uppercase">
                   Today&apos;s Work
                 </span>
                 <p className="font-semibold text-foreground">14 Tickets Triage • 3 PRs Merged</p>
@@ -302,7 +302,7 @@ export default function AIWorkspacePage() {
               </div>
 
               <div className="p-3 rounded-xl border border-border bg-muted/20 space-y-1">
-                <span className="text-[10px] font-mono font-bold text-purple-400 uppercase">
+                <span className="text-[10px] font-mono font-bold text-primary uppercase">
                   Pending Code Reviews
                 </span>
                 <p className="font-semibold text-foreground">2 PRs awaiting secondary approval</p>

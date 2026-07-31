@@ -14,22 +14,26 @@ import {
   ArrowUpRight,
   GitBranch,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { API_BASE_URL, getAuthHeaders } from '@/lib/api';
 
 export function ReviewerDashboard() {
+  const router = useRouter();
   const { user, activeOrganization } = useAuth();
   const [pullRequests, setPullRequests] = useState<any[]>([]);
 
   useEffect(() => {
     if (!activeOrganization?.id) return;
     fetch(`${API_BASE_URL}/pull-requests?organizationId=${activeOrganization.id}`, {
-      headers: getAuthHeaders(activeOrganization.id),
+      headers: getAuthHeaders(undefined, activeOrganization.id),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.data?.items)) {
           setPullRequests(data.data.items);
+        } else if (data.success && Array.isArray(data.data)) {
+          setPullRequests(data.data);
         }
       })
       .catch((err) => console.error('Error fetching reviewer PRs:', err));
@@ -55,7 +59,7 @@ export function ReviewerDashboard() {
         breadcrumbs={['Review Console', 'My Review Queue']}
         searchPlaceholder="Search PR titles, branch names, authors, or diff lines..."
         primaryActionLabel="New Pull Request"
-        onPrimaryAction={() => (window.location.href = '/pull-requests/new')}
+        onPrimaryAction={() => router.push('/pull-requests/new')}
       />
 
       {/* Personalized Welcome Banner */}

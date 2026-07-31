@@ -29,12 +29,12 @@ export function FilterPanel({ filters, onChange, members, currentUserId }: Props
   const activeCount = Object.values(filters).filter(Boolean).length;
 
   return (
-    <div className="flex flex-wrap items-center gap-3 bg-white dark:bg-gray-900 p-3 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xs">
+    <div className="flex flex-wrap items-center gap-3 bg-surface p-3 rounded-2xl border border-border shadow-xs">
       {/* Status Filter */}
       <select
         value={typeof filters.status === 'string' ? filters.status : 'ALL'}
         onChange={(e) => handleSelect('status', e.target.value)}
-        className="rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+        className="rounded-xl border border-border bg-surface-secondary px-3 py-1.5 text-xs font-medium text-text-primary focus:outline-none focus:ring-2 focus:ring-ring/20 transition-colors"
       >
         <option value="ALL">All Statuses</option>
         <option value={TicketStatus.OPEN}>Open</option>
@@ -49,7 +49,7 @@ export function FilterPanel({ filters, onChange, members, currentUserId }: Props
       <select
         value={typeof filters.priority === 'string' ? filters.priority : 'ALL'}
         onChange={(e) => handleSelect('priority', e.target.value)}
-        className="rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+        className="rounded-xl border border-border bg-surface-secondary px-3 py-1.5 text-xs font-medium text-text-primary focus:outline-none focus:ring-2 focus:ring-ring/20 transition-colors"
       >
         <option value="ALL">All Priorities</option>
         <option value={TicketPriority.LOW}>Low</option>
@@ -62,7 +62,7 @@ export function FilterPanel({ filters, onChange, members, currentUserId }: Props
       <select
         value={typeof filters.category === 'string' ? filters.category : 'ALL'}
         onChange={(e) => handleSelect('category', e.target.value)}
-        className="rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+        className="rounded-xl border border-border bg-surface-secondary px-3 py-1.5 text-xs font-medium text-text-primary focus:outline-none focus:ring-2 focus:ring-ring/20 transition-colors"
       >
         <option value="ALL">All Categories</option>
         <option value={TicketCategory.GENERAL}>General</option>
@@ -78,7 +78,7 @@ export function FilterPanel({ filters, onChange, members, currentUserId }: Props
       <select
         value={filters.assignedTo || 'ALL'}
         onChange={(e) => handleSelect('assignedTo', e.target.value)}
-        className="rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+        className="rounded-xl border border-border bg-surface-secondary px-3 py-1.5 text-xs font-medium text-text-primary focus:outline-none focus:ring-2 focus:ring-ring/20 transition-colors"
       >
         <option value="ALL">All Assignees</option>
         <option value="unassigned">Unassigned</option>
@@ -101,7 +101,7 @@ export function FilterPanel({ filters, onChange, members, currentUserId }: Props
             sortOrder: sortOrder as any,
           });
         }}
-        className="rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 ml-auto"
+        className="rounded-xl border border-border bg-surface-secondary px-3 py-1.5 text-xs font-medium text-text-primary focus:outline-none focus:ring-2 focus:ring-ring/20 ml-auto transition-colors"
       >
         <option value="createdAt-desc">Newest First</option>
         <option value="createdAt-asc">Oldest First</option>
@@ -113,7 +113,7 @@ export function FilterPanel({ filters, onChange, members, currentUserId }: Props
       {activeCount > 0 && (
         <button
           onClick={handleReset}
-          className="px-2.5 py-1 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-lg transition-all"
+          className="px-2.5 py-1 text-xs font-medium text-primary hover:bg-primary/10 rounded-lg transition-all"
         >
           Reset ({activeCount})
         </button>

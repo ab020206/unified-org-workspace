@@ -1,7 +1,6 @@
 import React from 'react';
 import { Sidebar } from '@/components/Sidebar';
 import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 import { ProtectedLayoutPlaceholder } from '@/components/ProtectedLayoutPlaceholder';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { InspectorProvider } from '@/providers/InspectorProvider';
@@ -23,7 +22,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <ErrorBoundary>{children}</ErrorBoundary>
             </ProtectedLayoutPlaceholder>
           </main>
-          <Footer />
         </div>
         <InspectorDrawer />
       </div>

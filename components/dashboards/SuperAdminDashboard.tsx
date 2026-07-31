@@ -21,10 +21,12 @@ import {
   HardDrive,
   AlertTriangle,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { API_BASE_URL, getAuthHeaders } from '@/lib/api';
 
 export function SuperAdminDashboard() {
+  const router = useRouter();
   const { user } = useAuth();
   const [stats, setStats] = useState<any>(null);
 
@@ -71,8 +73,8 @@ export function SuperAdminDashboard() {
         breadcrumbs={['Platform Administration', 'Global System Overview']}
         searchPlaceholder="Search across platform organizations, global users, feature flags, or audit logs..."
         primaryActionLabel="New Tenant Org"
-        onPrimaryAction={() => (window.location.href = '/organizations/create')}
-        onAiQuickAction={() => (window.location.href = '/digest')}
+        onPrimaryAction={() => router.push('/organizations/create')}
+        onAiQuickAction={() => router.push('/digest')}
       />
 
       {/* Personalized Welcome Banner */}

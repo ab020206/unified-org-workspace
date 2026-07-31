@@ -179,7 +179,7 @@ export default function TicketDetailPage() {
           {/* Header Card */}
           <div className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 p-6 shadow-xs space-y-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-sm font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-1 rounded-lg border border-indigo-200 dark:border-indigo-800">
+              <span className="text-sm font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-lg border border-primary/20">
                 #{ticket.ticketNumber}
               </span>
               <StatusBadge status={ticket.status} size="lg" />
@@ -309,7 +309,7 @@ export default function TicketDetailPage() {
                 {ticket.status === TicketStatus.CLOSED && (
                   <button
                     onClick={() => handleStatusChange(TicketStatus.REOPENED)}
-                    className="flex-1 px-3 py-2 rounded-lg text-xs font-bold text-blue-500 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 transition-all cursor-pointer inline-flex items-center justify-center gap-1.5"
+                    className="flex-1 px-3 py-2 rounded-lg text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 transition-all cursor-pointer inline-flex items-center justify-center gap-1.5"
                   >
                     <Unlock className="w-3.5 h-3.5" />
                     <span>Reopen Ticket</span>

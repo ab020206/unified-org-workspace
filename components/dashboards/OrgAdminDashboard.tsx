@@ -20,10 +20,12 @@ import {
   Send,
   Trash2,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { API_BASE_URL, getAuthHeaders } from '@/lib/api';
 
 export function OrgAdminDashboard() {
+  const router = useRouter();
   const { user, activeOrganization } = useAuth();
   const [members, setMembers] = useState<any[]>([]);
   const [tickets, setTickets] = useState<any[]>([]);
@@ -113,8 +115,8 @@ export function OrgAdminDashboard() {
         breadcrumbs={[activeOrganization?.name || 'Organization', 'Workspace Management']}
         searchPlaceholder="Search members, tickets, pending invitations, or security policies..."
         primaryActionLabel="Add / Invite Member"
-        onPrimaryAction={() => (window.location.href = '/members')}
-        onAiQuickAction={() => (window.location.href = '/digest')}
+        onPrimaryAction={() => router.push('/members')}
+        onAiQuickAction={() => router.push('/digest')}
       />
 
       {/* Personalized Welcome Banner */}

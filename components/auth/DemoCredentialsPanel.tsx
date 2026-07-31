@@ -49,65 +49,100 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
   };
 
   const filteredUsers = DEMO_USERS.filter((u) => {
-    if (filterRole === 'ADMIN') return u.roleBadge === 'SUPER_ADMIN' || u.roleBadge === 'ADMIN';
-    if (filterRole === 'DEV') return u.roleBadge === 'DEVELOPER' || u.roleBadge === 'MANAGER';
-    if (filterRole === 'AUDIT') return u.roleBadge === 'SECURITY' || u.roleBadge === 'AUDITOR';
-    if (filterRole === 'OTHER') return u.roleBadge === 'SUPPORT' || u.roleBadge === 'VIEWER';
+    if (filterRole === 'MULTI-ORG')
+      return u.roleBadge === 'MULTI_MEMBERSHIP' || u.roleBadge === 'SUPER_ADMIN';
+    if (filterRole === 'ADMIN')
+      return (
+        u.roleBadge === 'SUPER_ADMIN' ||
+        u.roleBadge === 'ADMIN' ||
+        u.role === 'ADMIN' ||
+        u.role === 'SUPER_ADMIN'
+      );
+    if (filterRole === 'SUPPORT')
+      return u.roleBadge === 'SUPPORT' || u.role === 'SUPPORT_AGENT';
+    if (filterRole === 'REVIEWER')
+      return u.roleBadge === 'REVIEWER' || u.role === 'REVIEWER';
+    if (filterRole === 'AUDIT/GUEST')
+      return (
+        u.roleBadge === 'AUDITOR' ||
+        u.roleBadge === 'GUEST' ||
+        u.role === 'AUDITOR' ||
+        u.role === 'GUEST'
+      );
     return true;
   });
 
+  const filterTabs = [
+    { label: 'All Accounts', value: 'ALL' },
+    { label: 'Multi-Org', value: 'MULTI-ORG' },
+    { label: 'Admins', value: 'ADMIN' },
+    { label: 'Support', value: 'SUPPORT' },
+    { label: 'Reviewers', value: 'REVIEWER' },
+    { label: 'Audit & Guests', value: 'AUDIT/GUEST' },
+  ];
+
   return (
-    <div className="w-full rounded-xl border border-border bg-surface shadow-sm overflow-hidden p-4 space-y-3.5">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
-            <Zap className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-text-primary">Demo Credentials</h3>
-            <p className="text-xs text-text-secondary">Click any role to autofill login details</p>
+    <div className="w-full h-full min-h-[440px] max-h-[50vh] rounded-xl border border-border bg-surface shadow-sm p-4 flex flex-col justify-between space-y-3 overflow-hidden">
+      <div className="space-y-3">
+        {/* Header Title */}
+        <div className="flex items-center justify-between border-b border-border pb-2.5">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20">
+              <Zap className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-text-primary tracking-tight">
+                Demo Credentials
+              </h3>
+              <p className="text-[11px] text-text-secondary">
+                Click any role below to autofill login inputs
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-1 bg-surface-secondary p-1 rounded-lg border border-border text-[10px] font-mono">
-          {['ALL', 'ADMIN', 'DEV', 'AUDIT', 'OTHER'].map((cat) => (
+        {/* Filter Categories Bar */}
+        <div className="flex items-center gap-1 overflow-x-auto pb-0.5 text-[10px] font-mono scrollbar-none">
+          {filterTabs.map((tab) => (
             <button
-              key={cat}
+              key={tab.value}
               type="button"
-              onClick={() => setFilterRole(cat)}
-              className={`px-2 py-0.5 rounded transition-colors font-medium cursor-pointer ${
-                filterRole === cat
-                  ? 'bg-primary text-primary-foreground font-semibold'
-                  : 'text-text-secondary hover:text-text-primary'
+              onClick={() => setFilterRole(tab.value)}
+              className={`px-2 py-0.5 rounded transition-all font-medium whitespace-nowrap cursor-pointer ${
+                filterRole === tab.value
+                  ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
+                  : 'bg-surface-secondary text-text-secondary hover:text-text-primary border border-border'
               }`}
             >
-              {cat}
+              {tab.label}
             </button>
           ))}
         </div>
-      </div>
 
-      {/* Password Notice */}
-      <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-secondary border border-border text-xs">
-        <div className="flex items-center gap-2 text-text-secondary font-mono">
-          <KeyRound className="w-3.5 h-3.5 text-primary shrink-0" />
-          <span>Shared Password:</span>
-          <strong className="text-text-primary font-bold">{DEMO_PASSWORD}</strong>
+        {/* Shared Password Notice */}
+        <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-surface-secondary/70 border border-border text-[11px]">
+          <div className="flex items-center gap-1.5 text-text-secondary font-mono">
+            <KeyRound className="w-3 h-3 text-primary shrink-0" />
+            <span>Shared Password:</span>
+            <strong className="text-text-primary font-bold">{DEMO_PASSWORD}</strong>
+          </div>
+          <button
+            type="button"
+            onClick={(e) => handleCopy(e, DEMO_PASSWORD, 'shared-pass')}
+            className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline font-mono cursor-pointer"
+          >
+            {copiedField === 'shared-pass' ? (
+              <Check className="w-3 h-3 text-success" />
+            ) : (
+              <Copy className="w-3 h-3" />
+            )}
+            <span>{copiedField === 'shared-pass' ? 'Copied!' : 'Copy Pass'}</span>
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={(e) => handleCopy(e, DEMO_PASSWORD, 'shared-pass')}
-          className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline font-mono cursor-pointer"
-        >
-          {copiedField === 'shared-pass' ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3" />}
-          <span>{copiedField === 'shared-pass' ? 'Copied!' : 'Copy Pass'}</span>
-        </button>
       </div>
 
       {/* Demo Users List */}
-      <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+      <div className="space-y-2 flex-1 min-h-0 overflow-y-auto pr-1">
         {filteredUsers.map((user: DemoUserConfig) => {
           const IconComponent = getRoleIcon(user.iconName);
           const emailCopied = copiedField === `email-${user.id}`;
@@ -116,23 +151,32 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
             <div
               key={user.id}
               onClick={() => onSelectCredential(user.email, user.password || DEMO_PASSWORD)}
-              className="group p-3 rounded-lg border border-border bg-surface hover:bg-surface-secondary/80 hover:border-primary/40 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-2xs"
+              className="group p-3 rounded-lg border border-border bg-surface hover:bg-surface-secondary/80 hover:border-primary/40 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs"
             >
+              {/* Employee & Role Information */}
               <div className="flex items-center gap-3 min-w-0">
-                <div className="p-2 rounded-lg bg-surface-secondary border border-border text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                <div className="p-2.5 rounded-lg bg-surface-secondary border border-border text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                   <IconComponent className="w-4 h-4" />
                 </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-text-primary truncate">{user.roleTitle}</span>
-                    <span className="px-1.5 py-0.2 rounded bg-surface-secondary text-[10px] font-mono font-medium text-text-secondary border border-border">
+                <div className="min-w-0 space-y-0.5">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-xs font-bold text-text-primary">
+                      {user.firstName} {user.lastName}
+                    </span>
+                    <span className="text-[11px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20">
+                      {user.roleTitle}
+                    </span>
+                    <span className="text-[10px] font-mono text-text-secondary bg-surface-secondary px-2 py-0.5 rounded border border-border">
                       {user.organizationName}
                     </span>
                   </div>
-                  <div className="text-[11px] font-mono text-text-secondary truncate">{user.email}</div>
+                  <div className="text-[11px] font-mono text-text-secondary truncate">
+                    {user.email}
+                  </div>
                 </div>
               </div>
 
+              {/* Action Buttons */}
               <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
                 <button
                   type="button"
@@ -140,7 +184,11 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
                   onClick={(e) => handleCopy(e, user.email, `email-${user.id}`)}
                   className="p-1.5 rounded bg-surface-secondary hover:bg-surface border border-border text-text-secondary hover:text-text-primary transition-colors text-xs inline-flex items-center gap-1 font-mono cursor-pointer"
                 >
-                  {emailCopied ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3" />}
+                  {emailCopied ? (
+                    <Check className="w-3 h-3 text-success" />
+                  ) : (
+                    <Copy className="w-3 h-3" />
+                  )}
                   <span className="hidden md:inline">{emailCopied ? 'Copied' : 'Email'}</span>
                 </button>
 
@@ -149,7 +197,7 @@ export function DemoCredentialsPanel({ onSelectCredential }: Props) {
                   className="px-2.5 py-1.5 rounded bg-primary text-primary-foreground font-medium text-xs inline-flex items-center gap-1.5 shadow-xs group-hover:opacity-90 transition-opacity cursor-pointer"
                 >
                   <LogIn className="w-3 h-3" />
-                  <span>Login as</span>
+                  <span>Autofill</span>
                 </button>
               </div>
             </div>

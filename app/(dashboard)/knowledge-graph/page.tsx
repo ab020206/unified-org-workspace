@@ -100,7 +100,7 @@ export default function KnowledgeGraphPage() {
         <div className="lg:col-span-2 panel-card p-6 min-h-[500px] flex flex-col justify-between relative overflow-hidden bg-slate-950/40">
           <div className="flex items-center justify-between pb-4 border-b border-border z-10">
             <div className="flex items-center gap-2">
-              <Network className="w-4 h-4 text-purple-400" />
+              <Network className="w-4 h-4 text-primary" />
               <span className="font-bold text-sm text-foreground">
                 Interactive Knowledge Topology
               </span>
@@ -120,26 +120,26 @@ export default function KnowledgeGraphPage() {
                   onClick={() => setSelectedNodeId(node.id)}
                   className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2 ${
                     isSelected
-                      ? 'bg-purple-500/10 border-purple-500 text-foreground ring-2 ring-purple-500/30 shadow-lg'
+                      ? 'bg-primary/10 border-primary text-foreground ring-2 ring-primary/30 shadow-lg'
                       : 'bg-card border-border hover:border-slate-700 text-muted-foreground'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
                       {node.type === 'organization' && (
-                        <Building2 className="w-4 h-4 text-blue-400" />
+                        <Building2 className="w-4 h-4 text-primary" />
                       )}
                       {node.type === 'ticket' && <Ticket className="w-4 h-4 text-rose-400" />}
-                      {node.type === 'pr' && <GitPullRequest className="w-4 h-4 text-purple-400" />}
+                      {node.type === 'pr' && <GitPullRequest className="w-4 h-4 text-primary" />}
                       {node.type === 'audit' && <Shield className="w-4 h-4 text-emerald-400" />}
-                      {node.type === 'user' && <User className="w-4 h-4 text-cyan-400" />}
+                      {node.type === 'user' && <User className="w-4 h-4 text-primary" />}
                     </div>
                     <span
                       className={`w-2.5 h-2.5 rounded-full ${
                         node.status === 'risk'
                           ? 'bg-rose-500 animate-ping'
                           : node.status === 'active'
-                            ? 'bg-cyan-400'
+                            ? 'bg-primary'
                             : 'bg-emerald-500'
                       }`}
                     />
@@ -164,7 +164,7 @@ export default function KnowledgeGraphPage() {
         {/* Node Inspector Side Panel (1 Col) */}
         <div className="panel-card module-accent-reviews p-6 space-y-4">
           <div className="pb-3 border-b border-border">
-            <span className="text-[10px] font-mono font-bold uppercase text-purple-400">
+            <span className="text-[10px] font-mono font-bold uppercase text-primary">
               Inspecting Entity
             </span>
             <h3 className="text-base font-bold text-foreground mt-0.5">{selectedNode.label}</h3>

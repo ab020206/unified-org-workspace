@@ -1,0 +1,33 @@
+@startuml Deployment_Diagram
+node "Client Device" {
+    [Web Browser] as Browser
+}
+
+node "Vercel / Render Cloud Platform" {
+    node "Next.js App Server Pod" {
+        [Next.js App Router]
+        [Express Sub-App Container]
+    }
+    
+    node "Worker Pod" {
+        [Digest Queue Worker Engine]
+    }
+}
+
+node "Neon Managed Database Cloud" {
+    database "PostgreSQL Instance (Pooler)" as DB
+}
+
+node "Upstash Managed Cloud" {
+    database "Redis Cache Instance" as Redis
+}
+
+node "Google Cloud Platform" {
+    [Gemini AI API] as Gemini
+}
+
+Browser --> [Next.js App Router] : HTTPS / WSS
+[Express Sub-App Container] --> DB : TCP / Port 5432
+[Express Sub-App Container] --> Redis : TLS / Port 6379
+[Digest Queue Worker Engine] --> Gemini : HTTPS REST
+@enduml

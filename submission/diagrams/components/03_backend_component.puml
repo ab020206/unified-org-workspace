@@ -1,0 +1,21 @@
+@startuml Backend_Component_Diagram
+package "Express & Next.js Backend System" {
+    [Routes Layer] as Routes
+    [Middleware Chain] as Middlewares
+    [Controllers Layer] as Controllers
+    [Services Layer] as Services
+    [Repositories Layer] as Repositories
+    [Prisma Client] as Prisma
+}
+
+database "PostgreSQL" as DB
+database "Redis" as Cache
+
+Routes --> Middlewares : Inbound HTTP Request
+Middlewares --> Controllers : Validated Context (req.user, req.organization)
+Controllers --> Services : Invoke Business Logic
+Services --> Repositories : Query Data
+Repositories --> Prisma : Execute Database Calls
+Prisma --> DB : SQL Statements
+Services --> Cache : Read Session / Cache Data
+@enduml

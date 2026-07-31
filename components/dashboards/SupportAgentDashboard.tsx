@@ -15,10 +15,12 @@ import {
   ArrowUpRight,
   Flame,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { API_BASE_URL, getAuthHeaders } from '@/lib/api';
 
 export function SupportAgentDashboard() {
+  const router = useRouter();
   const { user } = useAuth();
   const [tickets, setTickets] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -57,7 +59,7 @@ export function SupportAgentDashboard() {
         breadcrumbs={['Support Hub', 'My Queue & SLA Scored Tickets']}
         searchPlaceholder="Search assigned tickets by title, category, priority, or customer payload..."
         primaryActionLabel="Create Ticket"
-        onPrimaryAction={() => (window.location.href = '/tickets/new')}
+        onPrimaryAction={() => router.push('/tickets/new')}
       />
 
       {/* Personalized Welcome Banner */}

@@ -185,8 +185,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const refreshContext = useCallback(async () => {
-    setIsLoading(true);
+  const isInitialized = React.useRef(false);
+
+  const refreshContext = useCallback(async (showLoader = false) => {
+    if (showLoader) {
+      setIsLoading(true);
+    }
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
       if (!token) {
@@ -214,7 +218,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [fetchActiveOrgAndMembers]);
 
   useEffect(() => {
-    refreshContext();
+    if (!isInitialized.current) {
+      isInitialized.current = true;
+      refreshContext(true);
+    }
   }, [refreshContext]);
 
   const login = async (data: LoginRequest) => {

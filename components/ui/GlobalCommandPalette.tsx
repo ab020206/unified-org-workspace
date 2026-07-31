@@ -24,6 +24,7 @@ import {
   Activity,
   PlusCircle,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface CommandItem {
   id: string;
@@ -42,6 +43,7 @@ export function GlobalCommandPalette({
   isOpen: boolean;
   onClose: () => void;
 }) {
+  const router = useRouter();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -60,7 +62,7 @@ export function GlobalCommandPalette({
             title: 'Open AI Workspace & Assistant',
             category: 'ai',
             icon: Sparkles,
-            href: '/ai-workspace',
+            href: '/digest',
             badge: 'Primary AI',
           },
           {
@@ -348,10 +350,10 @@ export function GlobalCommandPalette({
       if (item.action) {
         item.action();
       } else if (item.href) {
-        window.location.href = item.href;
+        router.push(item.href);
       }
     },
-    [onClose]
+    [onClose, router]
   );
 
   useEffect(() => {

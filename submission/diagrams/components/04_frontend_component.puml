@@ -1,0 +1,24 @@
+@startuml Frontend_Component_Diagram
+package "React / Next.js Presentation Layer" {
+    [App Layout] as Layout
+    [AuthContext Provider] as AuthContext
+    [OrgSwitcher Dropdown] as OrgSwitcher
+    [Sidebar Navigation] as Sidebar
+    [Navbar] as Navbar
+    
+    package "Persona Dashboards" {
+        [SuperAdminDashboard]
+        [OrgAdminDashboard]
+        [SupportAgentDashboard]
+        [ReviewerDashboard]
+        [GuestDashboard]
+        [AuditorDashboard]
+    }
+}
+
+Layout --> AuthContext : Wraps Context
+Layout --> Navbar
+Layout --> Sidebar
+Sidebar --> OrgSwitcher : Embeds Dropdown
+Layout --> "Persona Dashboards" : Renders View based on activeRole
+@enduml

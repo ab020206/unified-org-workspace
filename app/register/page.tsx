@@ -47,15 +47,14 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col justify-center items-center p-6 text-text-primary relative">
-      <button
-        type="button"
-        onClick={() => router.back()}
+      <Link
+        href="/"
         className="absolute top-6 left-6 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-secondary text-xs font-mono text-text-secondary hover:text-text-primary transition-all cursor-pointer shadow-xs"
-        title="Go to previous page"
+        title="Navigate to Landing Page"
       >
         <ArrowLeft className="w-3.5 h-3.5" />
         <span>Back</span>
-      </button>
+      </Link>
 
       <div className="w-full max-w-md space-y-6">
         {/* Header Branding */}

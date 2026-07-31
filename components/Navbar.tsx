@@ -82,7 +82,7 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 h-14 border-b border-border bg-surface px-6 flex items-center justify-between shadow-xs">
+      <header className="sticky top-0 z-30 h-16 border-b border-border bg-surface px-6 flex items-center justify-between shadow-xs">
         <div className="flex items-center gap-4">
           {user && <OrgSwitcher className="w-auto" />}
           {user ? (

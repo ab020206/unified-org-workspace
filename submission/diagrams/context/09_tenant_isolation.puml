@@ -1,0 +1,24 @@
+@startuml Tenant_Isolation_Diagram
+package "Tenant Boundaries" {
+    database "Acme Technologies (Tenant A)" as OrgA {
+        [Tickets (Org A)]
+        [Pull Requests (Org A)]
+        [Audit Logs (Org A)]
+    }
+    
+    database "Nova Healthcare (Tenant B)" as OrgB {
+        [Tickets (Org B)]
+        [Pull Requests (Org B)]
+        [Audit Logs (Org B)]
+    }
+}
+
+package "Cross-Organization Connection Bridge" {
+    [OrganizationConnection] as Conn
+    [SharedResource] as Share
+}
+
+OrgA ..> Conn : Request Connection
+OrgB ..> Conn : Accept Connection
+Conn ..> Share : Grant Cross-Tenant Read Access (Ticket/PR)
+@enduml

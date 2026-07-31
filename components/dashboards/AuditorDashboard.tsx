@@ -14,64 +14,30 @@ import {
   Code,
   Key,
 } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
+import { API_BASE_URL, getAuthHeaders } from '@/lib/api';
 
 export function AuditorDashboard() {
-  const { user } = useAuth();
+  const { user, activeOrganization } = useAuth();
   const [selectedLog, setSelectedLog] = useState<any>(null);
   const [filterModule, setFilterModule] = useState<string>('ALL');
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Simulated Audit Logs Stream for Auditor
-  const auditLogs = [
-    {
-      id: 'aud-001',
-      module: 'AUTHENTICATION',
-      action: 'USER_LOGIN',
-      actorEmail: 'auditor@acme.demo',
-      entityType: 'User',
-      entityId: 'usr-901',
-      ipAddress: '192.168.1.1',
-      previousState: { session: null },
-      newState: { session: 'active', ip: '192.168.1.1' },
-      createdAt: '2026-07-29T10:15:00Z',
-    },
-    {
-      id: 'aud-002',
-      module: 'SUPPORT_HUB',
-      action: 'TICKET_UPDATED',
-      actorEmail: 'support@acme.demo',
-      entityType: 'Ticket',
-      entityId: 'tck-402',
-      ipAddress: '10.0.4.12',
-      previousState: { status: 'OPEN', priority: 'MEDIUM' },
-      newState: { status: 'IN_PROGRESS', priority: 'HIGH' },
-      createdAt: '2026-07-29T09:40:00Z',
-    },
-    {
-      id: 'aud-003',
-      module: 'REVIEW_CONSOLE',
-      action: 'PR_VERSION_CREATED',
-      actorEmail: 'reviewer@acme.demo',
-      entityType: 'PullRequest',
-      entityId: 'pr-801',
-      ipAddress: '172.16.0.4',
-      previousState: { version: 1 },
-      newState: { version: 2, title: 'Updated API validation schema' },
-      createdAt: '2026-07-29T08:20:00Z',
-    },
-    {
-      id: 'aud-004',
-      module: 'SECURITY',
-      action: 'TEMP_PASSWORD_GENERATED',
-      actorEmail: 'admin@acme.demo',
-      entityType: 'User',
-      entityId: 'usr-104',
-      ipAddress: '192.168.1.5',
-      previousState: { passwordMustChange: false },
-      newState: { passwordMustChange: true },
-      createdAt: '2026-07-29T07:10:00Z',
-    },
-  ];
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/audit`, {
+      headers: getAuthHeaders(undefined, activeOrganization?.id),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.data?.items)) {
+          setAuditLogs(data.data.items);
+        } else if (data.success && Array.isArray(data.data)) {
+          setAuditLogs(data.data);
+        }
+      })
+      .catch((err) => console.error('Failed to fetch audit logs:', err))
+      .finally(() => setIsLoading(false));
+  }, [activeOrganization?.id]);
 
   const filteredLogs = auditLogs.filter(
     (log) => filterModule === 'ALL' || log.module === filterModule

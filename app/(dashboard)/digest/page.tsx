@@ -77,7 +77,7 @@ export default function DigestPage() {
       {/* Digest History */}
       <div className="space-y-3 pt-4">
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
-          <History className="w-4 h-4 text-cyan-500" />
+          <History className="w-4 h-4 text-primary" />
           <span>Historical AI Briefings</span>
         </div>
 
@@ -94,7 +94,7 @@ export default function DigestPage() {
                 className="p-3.5 rounded-xl border border-border bg-card hover:bg-muted/40 transition-colors flex items-center justify-between text-xs cursor-pointer"
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-1.5 rounded bg-cyan-500/10 text-cyan-500">
+                  <div className="p-1.5 rounded bg-primary/10 text-primary">
                     <Sparkles className="w-3.5 h-3.5" />
                   </div>
                   <div>

@@ -1,0 +1,19 @@
+workspace "Unified Organization Workspace Containers" {
+    model {
+        user = person "Web User" "Interacts via browser"
+        
+        system = softwareSystem "Unified SaaS Platform" {
+            singlePageApp = container "React Presentation Layer" "Next.js 15 Client Components, React 19, AuthContext, React Query" "TypeScript / React"
+            apiServer = container "API & Middleware Router" "Express sub-app + App Router API handlers" "Node.js / Express"
+            db = container "Relational Database" "PostgreSQL 15 / Neon" "SQL Database (21 Tables)"
+            cacheStore = container "Redis Cache & Limits" "Redis / Upstash" "Session activity & counters"
+            jobQueue = container "Background Job Queue" "DigestQueue Engine" "Node.js event loop worker"
+        }
+        
+        user -> singlePageApp "Navigates dashboards & UI components"
+        singlePageApp -> apiServer "Makes HTTP REST requests with x-organization-id & Bearer JWT"
+        apiServer -> db "Executes Prisma ORM transactions"
+        apiServer -> cacheStore "Queries active session status"
+        apiServer -> jobQueue "Enqueues AI digest generation jobs"
+    }
+}

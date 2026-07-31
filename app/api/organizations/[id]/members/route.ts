@@ -19,3 +19,20 @@ export async function GET(
     return handleApiError(error);
   }
 }
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const auth = requireAuth(request);
+    const { id } = await params;
+    const body = await request.json().catch(() => ({}));
+    const result = await orgService.createMemberDirect(id, auth.userId, body);
+    return NextResponse.json(createSuccessResponse(result, 'Member added successfully'), {
+      status: 201,
+    });
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
